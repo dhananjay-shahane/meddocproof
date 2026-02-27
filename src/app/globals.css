@@ -1,0 +1,349 @@
+@import "tailwindcss";
+
+/* ============================================
+   CSS Variables - Light Theme (Shadcn/UI)
+   ============================================ */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 210 20% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 210 20% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 20% 14%;
+  --primary: 212 94% 44%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 125 77% 95%;
+  --secondary-foreground: 125 77% 22%;
+  --muted: 210 20% 96%;
+  --muted-foreground: 210 10% 46%;
+  --accent: 125 77% 63%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 210 15% 90%;
+  --input: 210 15% 90%;
+  --ring: 212 94% 44%;
+  --radius: 0.5rem;
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 240 5.9% 10%;
+}
+
+/* ============================================
+   CSS Variables - Dark Theme
+   ============================================ */
+.dark {
+  --background: 210 20% 6%;
+  --foreground: 0 0% 96%;
+  --card: 210 20% 8%;
+  --card-foreground: 0 0% 96%;
+  --popover: 210 20% 8%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 212 90% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 125 60% 15%;
+  --secondary-foreground: 125 77% 80%;
+  --muted: 210 15% 15%;
+  --muted-foreground: 210 10% 60%;
+  --accent: 125 70% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 210 15% 18%;
+  --input: 210 15% 18%;
+  --ring: 212 90% 55%;
+  --sidebar-background: 210 20% 8%;
+  --sidebar-foreground: 0 0% 90%;
+  --sidebar-primary: 212 90% 55%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 210 15% 15%;
+  --sidebar-accent-foreground: 0 0% 90%;
+  --sidebar-border: 210 15% 18%;
+  --sidebar-ring: 212 90% 55%;
+}
+
+/* ============================================
+   Tailwind v4 Theme Configuration
+   ============================================ */
+@theme inline {
+  /* Marquee animations */
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  /* Colors - Shadcn semantic tokens */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* Sidebar colors */
+  --color-sidebar-background: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Custom app colors */
+  --color-neubg: #f0f4f5;
+  --color-neutext: #1a2e35;
+
+  /* Brand colors */
+  --color-brand-light: hsl(212 94% 96%);
+  --color-brand-subtle: hsl(212 80% 92%);
+  --color-brand-accent: hsl(125 77% 63%);
+  --color-brand-primary: hsl(var(--primary));
+  --color-brand-primary-light: hsl(212 94% 96%);
+  --color-brand-primary-hover: hsl(212 94% 38%);
+  --color-brand-primary-dark: hsl(212 94% 32%);
+
+  /* Section backgrounds */
+  --color-section-light-blue: #f0f7fa;
+
+  /* Hero gradient */
+  --color-hero-from: hsl(212 94% 97%);
+  --color-hero-to: hsl(125 77% 97%);
+
+  /* Certificate type colors */
+  --color-cert-pink: #ec4899;
+  --color-cert-pink-light: #fce7f3;
+  --color-cert-pink-dark: #be185d;
+  --color-cert-green: #10b981;
+  --color-cert-green-light: #d1fae5;
+  --color-cert-green-dark: #047857;
+  --color-cert-orange: #f97316;
+  --color-cert-orange-light: #ffedd5;
+  --color-cert-orange-dark: #c2410c;
+  --color-cert-emerald: #14b8a6;
+  --color-cert-emerald-light: #ccfbf1;
+  --color-cert-emerald-dark: #0f766e;
+  --color-cert-purple: #a855f7;
+  --color-cert-purple-light: #f3e8ff;
+  --color-cert-purple-dark: #7c3aed;
+  --color-cert-blue: #3b82f6;
+  --color-cert-blue-light: #dbeafe;
+  --color-cert-blue-dark: #2563eb;
+  --color-cert-red: #f43f5e;
+  --color-cert-red-light: #ffe4e6;
+  --color-cert-red-dark: #e11d48;
+  --color-cert-amber: #f59e0b;
+  --color-cert-amber-light: #fef3c7;
+  --color-cert-amber-dark: #d97706;
+  --color-cert-indigo: #6366f1;
+  --color-cert-indigo-light: #e0e7ff;
+  --color-cert-indigo-dark: #4f46e5;
+  --color-cert-sky: #0ea5e9;
+  --color-cert-sky-light: #e0f2fe;
+  --color-cert-sky-dark: #0369a1;
+  --color-cert-cyan: #06b6d4;
+  --color-cert-cyan-light: #cffafe;
+  --color-cert-cyan-dark: #0e7490;
+
+  /* Success / Warning / Info */
+  --color-success: #22c55e;
+  --color-success-light: #f0fdf4;
+  --color-success-dark: #15803d;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fffbeb;
+  --color-warning-dark: #92400e;
+  --color-info: #3b82f6;
+  --color-info-light: #eff6ff;
+  --color-info-dark: #1d4ed8;
+  --color-destructive-light: #fef2f2;
+  --color-destructive-dark: #991b1b;
+
+  /* Status colors */
+  --color-status-submitted: #f59e0b;
+  --color-status-pending: #f59e0b;
+  --color-status-assigned: #3b82f6;
+  --color-status-in-progress: #3b82f6;
+  --color-status-under-review: #8b5cf6;
+  --color-status-approved: #22c55e;
+  --color-status-completed: #22c55e;
+  --color-status-rejected: #ef4444;
+  --color-status-cancelled: #6b7280;
+
+  /* Chart colors */
+  --color-chart-1: hsl(220 70% 50%);
+  --color-chart-2: hsl(160 60% 45%);
+  --color-chart-3: hsl(30 80% 55%);
+  --color-chart-4: hsl(280 65% 60%);
+  --color-chart-5: hsl(340 75% 55%);
+
+  /* Font family */
+  --font-inter: "Inter", sans-serif;
+
+  /* Border radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+body {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Admin/Doctor panel theme scoping - keep original dark primary */
+.admin-shell,
+.doctor-shell {
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --ring: 240 5.9% 10%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Marquee keyframes */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* ============================================
+   Auth Page Animated Gradient Background
+   ============================================ */
+.auth-gradient-bg {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background)) 0%,
+    hsl(212 94% 96%) 25%,
+    hsl(125 77% 96%) 50%,
+    hsl(212 80% 94%) 75%,
+    hsl(var(--background)) 100%
+  );
+  background-size: 400% 400%;
+  animation: auth-gradient-shift 15s ease infinite;
+}
+
+.dark .auth-gradient-bg {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--background)) 0%,
+    hsl(212 40% 10%) 25%,
+    hsl(125 30% 10%) 50%,
+    hsl(212 35% 12%) 75%,
+    hsl(var(--background)) 100%
+  );
+  background-size: 400% 400%;
+  animation: auth-gradient-shift 15s ease infinite;
+}
+
+@keyframes auth-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================
+   Hero Section Blob Animations
+   ============================================ */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}

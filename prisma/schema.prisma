@@ -1,0 +1,661 @@
+// schema.prisma
+// MediProofDocs - Medical Certificate CRM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  user
+  admin
+  super_admin
+  support
+}
+
+enum DoctorStatus {
+  pending
+  approved
+  rejected
+  suspended
+}
+
+enum ApplicationStatus {
+  in_progress
+  incomplete
+  dormant
+  submitted
+  pending
+  pending_review
+  pending_doctor_review
+  assigned
+  doctor_assigned
+  consultation_scheduled
+  certificate_in_progress
+  under_review
+  processing
+  approved
+  consultation_completed
+  completed
+  certificate_delivered
+  delivered
+  rejected
+  cancelled
+  refunded
+}
+
+enum CertificateType {
+  sick_leave
+  fitness
+  work_from_home
+  caretaker
+  recovery
+  fit_to_fly
+  unfit_to_work
+  unfit_to_travel
+  medical_diagnosis
+}
+
+enum PaymentStatus {
+  pending
+  completed
+  failed
+  refunded
+}
+
+enum TransactionType {
+  payment
+  refund
+  doctor_payout
+  withdrawal
+  adjustment
+}
+
+enum WithdrawalStatus {
+  pending
+  approved
+  rejected
+  completed
+}
+
+enum TemplateType {
+  pregnancy
+  fever_flu
+  back_pain
+  fitness
+  general
+  custom
+}
+
+enum CourseOfIllness {
+  mild
+  moderate
+  severe
+  progressive
+  stable
+  improving
+}
+
+enum SeverityOfIllness {
+  mild
+  moderate
+  severe
+}
+
+// ============================================
+// USER & AUTH
+// ============================================
+
+model User {
+  id          String   @id @default(uuid())
+  fullName    String
+  phoneNumber String   @unique
+  email       String?  @unique
+  status      String   @default("active")
+  isVerified  Boolean  @default(false)
+  role        UserRole @default(user)
+
+  lastLoginAt DateTime?
+
+  applications Application[]
+  payments     Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([phoneNumber])
+  @@index([email])
+}
+
+model OtpVerification {
+  id          String   @id @default(uuid())
+  phoneNumber String
+  otp         String
+  expiresAt   DateTime
+  verified    Boolean  @default(false)
+  attempts    Int      @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([phoneNumber])
+}
+
+// ============================================
+// ADMIN USER
+// ============================================
+
+model AdminUser {
+  id          String   @id @default(uuid())
+  fullName    String
+  email       String   @unique
+  password    String
+  role        UserRole @default(admin)
+
+  permissions Json?
+
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+
+  passwordResetToken  String?   @unique
+  passwordResetExpiry DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// DOCTOR
+// ============================================
+
+model Doctor {
+  id                  String       @id @default(uuid())
+  fullName            String
+  email               String       @unique
+  password            String
+  phoneNumber         String?      @unique
+
+  registrationNumber  String       @unique
+  specialization      String
+  qualification       String
+  experience          Int
+  hospitalAffiliation String?
+
+  status              DoctorStatus @default(pending)
+  isActive            Boolean      @default(false)
+  isEmailVerified     Boolean      @default(false)
+
+  avgRating             Float @default(0)
+  totalRatings          Int   @default(0)
+  responseRate          Float @default(0)
+  avgCompletionTime     Float @default(0)
+  completedCertificates Int   @default(0)
+  consultationCount     Int   @default(0)
+  certificatesByType    Json?
+
+  lastActive DateTime?
+
+  passwordResetToken  String?   @unique
+  passwordResetExpiry DateTime?
+
+  applications Application[]
+  availability DoctorAvailability[]
+  wallet       DoctorWallet?
+  withdrawals  DoctorWithdrawal[]
+  payouts      DoctorPayout[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([registrationNumber])
+}
+
+model DoctorAvailability {
+  id        String  @id @default(uuid())
+  doctorId  String
+  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  dayOfWeek Int     // 0=Sunday, 1=Monday ... 6=Saturday
+  isActive  Boolean @default(false)
+  startTime String  @default("09:00")
+  endTime   String  @default("17:00")
+  maxSlots  Int     @default(5)
+
+  @@unique([doctorId, dayOfWeek])
+  @@index([doctorId])
+}
+
+model DoctorWallet {
+  id       String @id @default(uuid())
+  doctorId String @unique
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  balance            Float @default(0)
+  totalEarnings      Float @default(0)
+  totalWithdrawn     Float @default(0)
+  pendingWithdrawals Float @default(0)
+
+  updatedAt DateTime @updatedAt
+}
+
+model DoctorWithdrawal {
+  id       String @id @default(uuid())
+  doctorId String
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  amount Float
+  status WithdrawalStatus @default(pending)
+
+  bankDetails Json?
+  processedBy String?
+
+  requestedAt DateTime  @default(now())
+  processedAt DateTime?
+}
+
+model DoctorPayout {
+  id       String @id @default(uuid())
+  doctorId String
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  amount Float
+  status String @default("pending")
+
+  createdAt   DateTime  @default(now())
+  processedAt DateTime?
+}
+
+// ============================================
+// APPLICATION
+// ============================================
+
+model Application {
+  id            String @id @default(uuid())
+  applicationId String @unique
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  status ApplicationStatus @default(submitted)
+
+  certificateType   CertificateType
+  certificateNumber String?         @unique
+
+  formData Json
+
+  assignedDoctorId String?
+  assignedDoctor   Doctor?   @relation(fields: [assignedDoctorId], references: [id])
+  assignedAt       DateTime?
+  assignedBy       String?
+
+  consultationDate      DateTime?
+  consultationNotes     String?
+  consultationCompleted Boolean @default(false)
+
+  medicalAssessmentId  String?            @unique
+  medicalAssessment    MedicalAssessment? @relation(fields: [medicalAssessmentId], references: [id])
+  hasMedicalAssessment Boolean            @default(false)
+
+  paymentCompleted     Boolean @default(false)
+  conversionLikelihood Int?
+
+  // Phase 4 — Application form overhaul
+  paymentTier          String?
+  documentFormat       String?
+  specialFormatRequested Boolean @default(false)
+  specialFormatFee     Float   @default(0)
+  termsAcceptedAt      DateTime?
+  otpVerifiedPhone     String?
+  organizationLocatedIn String?
+
+  documents    Document[]
+  remarks      Remark[]
+  prescription Prescription?
+  payments     Payment[]
+  payouts      DoctorPayout[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([userId])
+  @@index([assignedDoctorId])
+  @@index([certificateType])
+  @@index([certificateNumber])
+}
+
+// ============================================
+// MEDICAL ASSESSMENT
+// ============================================
+
+model MedicalAssessment {
+  id String @id @default(uuid())
+
+  templateType TemplateType
+
+  complaintsOf         String
+  durationOfComplaints String
+  comorbidities        String
+  courseOfIllness       String
+  severityOfIllness    String
+
+  pastHistoryOfSimilarComplaints     Boolean @default(false)
+  pastHistoryDetails                 String?
+  anySubstanceIntake                 Boolean @default(false)
+  substanceIntakeDetails             String?
+  anySignificantPastHistoryOfDisease Boolean @default(false)
+  significantPastHistoryDetails      String?
+  anyHistoryOfSurgery                Boolean @default(false)
+  surgeryHistoryDetails              String?
+  historyOfTravel                    Boolean @default(false)
+  travelHistoryDetails               String?
+  familyHistoryOfSuchIllness         Boolean @default(false)
+  familyHistoryDetails               String?
+
+  tookAllopathicHomeopathicAyurvedicMedicine Boolean @default(false)
+  medicineDetails                            String?
+  tookSelfHelpAndUsedHomeRemedies            Boolean @default(false)
+  homeRemediesDetails                        String?
+  anyEmergencyMedicineTreatmentTaken         Boolean @default(false)
+  emergencyTreatmentDetails                  String?
+  anyCastBandageCreamApplied                 Boolean @default(false)
+  castBandageDetails                         String?
+
+  fullDiagnosisOfIllness                String
+  adviceByRegisteredMedicalPractitioner String
+
+  restPeriodFrom DateTime
+  restDuration   String
+  restPeriodTo   DateTime
+
+  prescription Json?
+
+  additionalRecommendations String?
+
+  vitalSigns Json?
+
+  noHeadInjuryOrSeizures          Boolean?
+  noFluLikeSymptomsLast15Days     Boolean?
+  vitalSignsWithinNormalLimits    Boolean?
+  noGaitAbnormalities             Boolean?
+  noPsychopathology               Boolean?
+  noChronicMedicalIllness         Boolean?
+
+  applicantName                 String?
+  relationOf                    String?
+  permanentAddress              String?
+  dateOfBirth                   DateTime?
+  identificationMark1           String?
+  identificationMark2           String?
+  visionDefect                  Boolean?
+  visionCorrectedBySpectacles   Boolean?
+  visionDefectDetails           String?
+  canDistinguishNumberPlate     Boolean?
+  numberPlateTestDetails        String?
+  hearingDeficiency             Boolean?
+  hearingDeficiencyDetails      String?
+  nightBlindness                Boolean?
+  nightBlindnessDetails         String?
+  physicalDefect                Boolean?
+  physicalDefectDetails         String?
+
+  application Application?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// DOCUMENTS
+// ============================================
+
+model Document {
+  id            String      @id @default(uuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  originalName String
+  fileName     String
+  filePath     String
+  fileType     String
+  category     String?
+  contentType  String
+  size         Int
+
+  createdAt DateTime @default(now())
+
+  @@index([applicationId])
+}
+
+// ============================================
+// REMARKS
+// ============================================
+
+model Remark {
+  id            String      @id @default(uuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  message     String
+  addedBy     String
+  addedByRole String
+  doctorId    String?
+
+  addedAt DateTime @default(now())
+
+  @@index([applicationId])
+}
+
+// ============================================
+// PRESCRIPTION
+// ============================================
+
+model Prescription {
+  id            String      @id @default(uuid())
+  applicationId String      @unique
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  medications Json
+  advice      String?
+  followUp    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// PAYMENTS
+// ============================================
+
+model Payment {
+  id String @id @default(uuid())
+
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  razorpayOrderId   String? @unique
+  razorpayPaymentId String? @unique
+  razorpaySignature String?
+
+  amount   Float
+  currency String        @default("INR")
+  status   PaymentStatus @default(pending)
+
+  couponCode String?
+  discount   Float  @default(0)
+
+  // Phase 4 — Payment tier info
+  paymentTier    String?
+  convenienceFee Float   @default(0)
+  isRefundable   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([applicationId])
+  @@index([status])
+}
+
+model Transaction {
+  id   String          @id @default(uuid())
+  type TransactionType
+
+  amount      Float
+  description String?
+
+  applicationId String?
+  userId        String?
+  doctorId      String?
+  paymentId     String?
+
+  status String @default("completed")
+
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@index([createdAt])
+}
+
+// ============================================
+// COUPONS
+// ============================================
+
+model Coupon {
+  id            String    @id @default(uuid())
+  code          String    @unique
+  discountType  String
+  discountValue Float
+  maxUses       Int       @default(0)
+  usedCount     Int       @default(0)
+  isActive      Boolean   @default(true)
+  expiresAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+model Notification {
+  id       String  @id @default(uuid())
+  userId   String?
+  doctorId String?
+  adminId  String?
+
+  title    String
+  message  String
+  type     String
+  isRead   Boolean @default(false)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([doctorId])
+  @@index([isRead])
+}
+
+// ============================================
+// WHATSAPP
+// ============================================
+
+model WhatsAppMessage {
+  id           String  @id @default(uuid())
+  phoneNumber  String
+  direction    String
+  message      String
+  templateName String?
+  status       String  @default("sent")
+
+  userId        String?
+  applicationId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([phoneNumber])
+  @@index([createdAt])
+}
+
+model WhatsAppTemplate {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  displayName String
+  description String?
+  body        String
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// SETTINGS
+// ============================================
+
+model Setting {
+  id          String @id @default(uuid())
+  key         String @unique
+  value       Json
+  description String?
+
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// REVIEWS (public leave-a-review page)
+// ============================================
+
+model Review {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  rating    Int      @default(5)
+  date      DateTime
+  approved  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// CONTACT MESSAGES (public contact page)
+// ============================================
+
+model ContactMessage {
+  id      String  @id @default(uuid())
+  name    String
+  email   String
+  message String
+  read    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// SAMPLE CERTIFICATES (admin-uploaded examples)
+// ============================================
+
+model SampleCertificate {
+  id              String  @id @default(uuid())
+  certificateType String  @unique
+  fileUrl         String
+  isActive        Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

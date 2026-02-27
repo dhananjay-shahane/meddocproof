@@ -14,40 +14,17 @@ import {
   ArrowRight,
   ArrowLeft,
   UserPlus,
-  Shield,
-  Clock,
-  Award,
   Sparkles,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/logo";
 
-const testimonials = [
-  {
-    name: "Priya Sharma",
-    role: "Verified User",
-    avatar: "PS",
-    text: "Got my sick leave certificate within 30 minutes. The process was seamless and professional!",
-  },
-  {
-    name: "Venkatesh Rao",
-    role: "Operations Manager",
-    avatar: "VR",
-    text: "The doctor consulted me promptly and issued the certificate within 30 minutes. Highly reliable service.",
-  },
-  {
-    name: "Ananya Patel",
-    role: "Software Engineer",
-    avatar: "AP",
-    text: "Best medical certificate service I've used. Quick, legitimate, and hassle-free documentation.",
-  },
-];
-
-const features = [
-  { icon: Clock, label: "30 Min Delivery", desc: "Quick processing" },
-  { icon: Shield, label: "Verified Doctors", desc: "Licensed professionals" },
-  { icon: Award, label: "100% Valid", desc: "Accepted everywhere" },
+const steps = [
+  { step: 1, title: "Create Account", desc: "Sign up with your phone number" },
+  { step: 2, title: "Choose Certificate", desc: "Select the type you need" },
+  { step: 3, title: "Doctor Consultation", desc: "Talk to a licensed doctor" },
+  { step: 4, title: "Get Certificate", desc: "Receive your valid certificate" },
 ];
 
 type Step = "details" | "otp";
@@ -204,59 +181,33 @@ export default function RegisterPage() {
                 </p>
               </motion.div>
 
-              {/* Feature Pills */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-wrap gap-3"
-              >
-                {features.map((feature, idx) => (
-                  <div
-                    key={idx}
-                    className="group flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all duration-300"
-                  >
-                    <feature.icon className="w-4 h-4 text-blue-400 group-hover:text-emerald-400 transition-colors" />
-                    <span className="text-sm font-medium">{feature.label}</span>
-                  </div>
-                ))}
-              </motion.div>
             </div>
 
-            {/* Testimonials */}
+            {/* Registration Steps */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               className="space-y-4"
             >
-             
-              <div className="grid gap-4">
-                {testimonials.map((testimonial, idx) => (
+              <p className="text-sm font-medium text-white/40 uppercase tracking-wider">
+                How It Works
+              </p>
+              <div className="space-y-3">
+                {steps.map((item, idx) => (
                   <motion.div
                     key={idx}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.8 + idx * 0.1 }}
-                    className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 group"
+                    transition={{ duration: 0.4, delay: 0.6 + idx * 0.1 }}
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300"
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-sm font-bold shrink-0">
-                        {testimonial.avatar}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-semibold text-sm">
-                            {testimonial.name}
-                          </h4>
-                          <span className="text-xs text-white/40">
-                            {testimonial.role}
-                          </span>
-                        </div>
-                        <p className="text-sm text-white/60 line-clamp-2 group-hover:text-white/80 transition-colors">
-                          &quot;{testimonial.text}&quot;
-                        </p>
-                      </div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-sm font-bold shrink-0">
+                      {item.step}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-sm">{item.title}</h4>
+                      <p className="text-sm text-white/50">{item.desc}</p>
                     </div>
                   </motion.div>
                 ))}

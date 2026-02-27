@@ -113,7 +113,7 @@ export function HeroSection() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 lg:py-0">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 sm:pt-28 lg:pt-24 py-16 lg:py-0">
         <div className="grid lg:grid-cols-[5fr_7fr] gap-8 lg:gap-8 xl:gap-12 items-center">
           {/* Left Content */}
           <FadeIn direction="up" className="max-w-2xl">
@@ -176,7 +176,7 @@ export function HeroSection() {
                 href="/certificates/apply"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-slate-900 text-white rounded-lg font-semibold text-sm sm:text-base shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/30 transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 hover:bg-blue-700 transition-all duration-300"
               >
                 Get Certificate Now
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -195,21 +195,14 @@ export function HeroSection() {
 
           {/* Right Content - Doctor Image */}
           <FadeIn direction="left" delay={0.2} className="relative">
-            {/* Mobile: Simple image without decorations */}
-            <div className="lg:hidden flex justify-center">
-              <img
-                src="/images/hero/doctor-team-hero.png"
-                alt="Professional Doctor Team"
-                className="w-full max-w-sm h-auto object-contain drop-shadow-xl"
-              />
-            </div>
-
-            {/* Desktop: Full decorations */}
-            <div className="hidden lg:block relative">
+            {/* Mobile & Desktop: Show cards with decorations */}
+            <div className="flex justify-center lg:block">
+              {/* Desktop: Full decorations with floating cards */}
+              <div className="relative w-full max-w-[320px] sm:max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
               {/* Decorative Rings - filled with light gray */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[560px] h-[560px] border border-slate-200/50 rounded-full bg-slate-100/40" />
-                <div className="absolute w-[450px] h-[450px] border border-slate-200/30 rounded-full bg-slate-50/60" />
+                <div className="w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] lg:w-[560px] lg:h-[560px] border border-slate-200/50 rounded-full bg-slate-100/40" />
+                <div className="absolute w-[220px] h-[220px] sm:w-[320px] sm:h-[320px] lg:w-[450px] lg:h-[450px] border border-slate-200/30 rounded-full bg-slate-50/60" />
               </div>
 
               {/* Floating Phone Icon - Top Left */}
@@ -217,11 +210,11 @@ export function HeroSection() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5, duration: 0.4 }}
-                className="absolute top-8 left-2 z-20"
+                className="absolute top-4 left-0 lg:top-8 lg:left-2 z-20"
               >
                 <Float duration={5} distance={8}>
-                  <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                    <Phone className="w-5 h-5" />
+                  <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                    <Phone className="w-4 h-4 lg:w-5 lg:h-5" />
                   </div>
                 </Float>
               </motion.div>
@@ -231,11 +224,11 @@ export function HeroSection() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.4 }}
-                className="absolute top-4 right-4 z-20"
+                className="absolute top-2 right-2 lg:top-4 lg:right-4 z-20"
               >
                 <Float duration={4} distance={6}>
-                  <div className="w-11 h-11 rounded-lg bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
-                    <MessageCircle className="w-5 h-5" />
+                  <div className="w-8 h-8 lg:w-11 lg:h-11 rounded-lg bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                    <MessageCircle className="w-4 h-4 lg:w-5 lg:h-5" />
                   </div>
                 </Float>
               </motion.div>
@@ -245,11 +238,11 @@ export function HeroSection() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7, duration: 0.4 }}
-                className="absolute top-1/3 -left-4 z-20"
+                className="absolute top-1/3 -left-2 lg:-left-4 z-20"
               >
                 <Float duration={6} distance={10}>
-                  <div className="w-12 h-12 rounded-full bg-slate-100 border-2 border-white shadow-lg flex items-center justify-center">
-                    <Stethoscope className="w-5 h-5 text-orange-500" />
+                  <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-full bg-slate-100 border-2 border-white shadow-lg flex items-center justify-center">
+                    <Stethoscope className="w-4 h-4 lg:w-5 lg:h-5 text-orange-500" />
                   </div>
                 </Float>
               </motion.div>
@@ -259,15 +252,15 @@ export function HeroSection() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="absolute top-1/4 -right-4 z-20 bg-white/90 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl border border-white/50"
+                className="absolute top-1/4 -right-2 lg:-right-4 z-20 bg-white/90 backdrop-blur-md rounded-xl lg:rounded-2xl px-2 py-1.5 lg:px-4 lg:py-3 shadow-xl border border-white/50"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
-                    <Heart className="w-5 h-5 text-red-500 fill-red-500" />
+                <div className="flex items-center gap-2 lg:gap-3">
+                  <div className="w-7 h-7 lg:w-10 lg:h-10 rounded-full bg-red-50 flex items-center justify-center">
+                    <Heart className="w-3.5 h-3.5 lg:w-5 lg:h-5 text-red-500 fill-red-500" />
                   </div>
                   <div>
-                    <p className="font-bold text-slate-900 text-base leading-tight">2500+</p>
-                    <p className="text-xs text-slate-500 leading-tight">Happy Patients</p>
+                    <p className="font-bold text-slate-900 text-xs lg:text-base leading-tight">2500+</p>
+                    <p className="text-[10px] lg:text-xs text-slate-500 leading-tight">Happy Patients</p>
                   </div>
                 </div>
               </motion.div>
@@ -276,7 +269,7 @@ export function HeroSection() {
                 <img
                   src="/images/hero/doctor-team-hero.png"
                   alt="Professional Doctor Team"
-                  className="relative z-10 w-full h-auto max-h-[680px] object-contain drop-shadow-2xl"
+                  className="relative z-10 w-full h-auto max-h-[320px] sm:max-h-[450px] lg:max-h-[680px] object-contain drop-shadow-2xl"
                 />
               </Float>
 
@@ -285,17 +278,17 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.5 }}
-                className="absolute bottom-28 -left-2 z-20 bg-white/90 backdrop-blur-md rounded-2xl px-4 py-3 shadow-xl border border-white/50"
+                className="absolute bottom-16 lg:bottom-28 left-0 lg:-left-2 z-20 bg-white/90 backdrop-blur-md rounded-xl lg:rounded-2xl px-2 py-1.5 lg:px-4 lg:py-3 shadow-xl border border-white/50"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">R</div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">S</div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 border-2 border-white flex items-center justify-center text-white text-[10px] font-bold">M</div>
+                <div className="flex items-center gap-2 lg:gap-3">
+                  <div className="flex -space-x-1.5 lg:-space-x-2">
+                    <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white text-[8px] lg:text-[10px] font-bold">R</div>
+                    <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white flex items-center justify-center text-white text-[8px] lg:text-[10px] font-bold">S</div>
+                    <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 border-2 border-white flex items-center justify-center text-white text-[8px] lg:text-[10px] font-bold">M</div>
                   </div>
                   <div className="flex items-center gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+                      <Star key={i} className="w-3 h-3 lg:w-3.5 lg:h-3.5 text-yellow-400 fill-yellow-400" />
                     ))}
                   </div>
                 </div>
@@ -306,15 +299,16 @@ export function HeroSection() {
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1, duration: 0.4 }}
-                className="absolute bottom-16 right-8 z-20"
+                className="absolute bottom-12 right-4 lg:bottom-16 lg:right-8 z-20"
               >
                 <Float duration={5} distance={7}>
-                  <div className="w-10 h-10 rounded-full bg-slate-100 border-2 border-white shadow-md flex items-center justify-center">
-                    <ShieldCheck className="w-4 h-4 text-cyan-500" />
+                  <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-slate-100 border-2 border-white shadow-md flex items-center justify-center">
+                    <ShieldCheck className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-cyan-500" />
                   </div>
                 </Float>
               </motion.div>
             </div>
+          </div>
           </FadeIn>
         </div>
       </div>

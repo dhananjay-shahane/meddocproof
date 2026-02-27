@@ -11,37 +11,16 @@ import {
   Copy,
   Check,
   ArrowRight,
-  ShieldCheck,
   ChevronLeft,
   Lock,
-  Zap,
-  Stethoscope,
-  Activity,
   Sparkles,
+  Activity,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/logo";
 
-const features = [
-  { icon: Zap, label: "30-Min Delivery", color: "from-amber-400 to-orange-500" },
-  { icon: ShieldCheck, label: "Legally Valid", color: "from-emerald-400 to-teal-500" },
-];
 
-const testimonials = [
-  {
-    name: "Dr. Sarah Chen",
-    role: "General Physician",
-    text: "The most efficient platform for issuing medical certificates. Saves hours of paperwork.",
-    avatar: "SC",
-  },
-  {
-    name: "Rahul Mehta",
-    role: "HR Manager",
-    text: "We verify certificates instantly. This platform has streamlined our leave management.",
-    avatar: "RM",
-  },
-];
 
 type Step = "phone" | "otp";
 
@@ -167,11 +146,6 @@ function LoginForm() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-                  <Activity className="w-4 h-4 text-emerald-400" />
-                  <span className="text-sm font-medium">Live Platform</span>
-                </div>
-                
                 <h1 className="text-5xl xl:text-6xl font-bold leading-[1.1] tracking-tight">
                   Welcome
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400">
@@ -183,67 +157,42 @@ function LoginForm() {
                   Access your verified medical certificates instantly. 
                   Secure, fast, and legally compliant documentation at your fingertips.
                 </p>
-              </motion.div>
 
-              {/* Feature Pills */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-wrap gap-3"
-              >
-                {features.map((feature, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + idx * 0.1 }}
-                    className="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-default"
-                  >
-                    <div className={`p-1.5 rounded-lg bg-gradient-to-br ${feature.color} shadow-lg`}>
-                      <feature.icon className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <span className="text-sm font-semibold">{feature.label}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Testimonials */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="space-y-4"
-            >
-              <p className="text-sm font-medium text-white/40 uppercase tracking-wider">
-                Trusted by Professionals
-              </p>
-              <div className="grid gap-3">
-                {testimonials.map((item, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.8 + idx * 0.1 }}
-                    className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-sm font-bold shrink-0">
-                        {item.avatar}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-semibold text-sm">{item.name}</h4>
-                          <span className="text-xs text-white/40">{item.role}</span>
+                {/* Login Steps for Users */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="mt-8 space-y-3"
+                >
+                  <p className="text-sm font-medium text-white/40 uppercase tracking-wider">
+                    Quick Steps
+                  </p>
+                  <div className="space-y-2">
+                    {[
+                      { step: 1, text: "Login with your phone number" },
+                      { step: 2, text: "Select certificate type" },
+                      { step: 3, text: "Consult with doctor" },
+                      { step: 4, text: "Download certificate" },
+                    ].map((item, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 + idx * 0.1 }}
+                        className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-md border border-white/10"
+                      >
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-xs font-bold">
+                          {item.step}
                         </div>
-                        <p className="text-sm text-white/50 line-clamp-2">&quot;{item.text}&quot;</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                        <span className="text-sm text-white/70">{item.text}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+
+            </div>
           </div>
         </div>
 

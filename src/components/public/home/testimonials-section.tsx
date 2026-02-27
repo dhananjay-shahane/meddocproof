@@ -213,7 +213,7 @@ export function TestimonialsSection() {
               The Trust We&apos;ve Earned
             </h2>
             <p className="text-base lg:text-lg font-semibold text-gray-700">
-              MedDocProof Google Reviews
+              MediProofDocs Google Reviews
             </p>
           </div>
         </SectionReveal>

@@ -34,11 +34,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
     name: "Leave Certificates",
     items: [
       {
-        name: "Sick Leave Certificate",
+        name: "Sick Leave Medical Certificate",
         slug: "sick-leave",
         enumValue: "sick_leave",
         description:
-          "When health issues prevent you from attending work, school, or college, a Sick Leave Medical Certificate provides official medical confirmation of your condition. You can consult a certified doctor online and receive the required certificate without the need to visit a clinic. This certificate helps organizations and institutions understand that your absence is medically advised. Our efficient process ensures timely delivery, allowing you to rest and recover without added pressure or formal hassles.",
+          "When health issues prevent you from attending work, school, or college, a Sick Leave Medical Certificate provides official medical confirmation of your condition. You can consult a certified doctor online and receive the required certificate without the need to visit a clinic.\n\nThis certificate helps organizations and institutions understand that your absence is medically advised. Our efficient process ensures timely delivery, allowing you to rest and recover without added pressure or formal hassles.",
         shortDescription:
           "Obtain a medically verified certificate for workplace or academic sick leave.",
         icon: FileText,
@@ -51,11 +51,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         ],
       },
       {
-        name: "Work From Home Certificate",
+        name: "Work From Home Medical Certificate",
         slug: "work-from-home",
         enumValue: "work_from_home",
         description:
-          "Certain medical conditions may allow you to work but make office attendance difficult. A Work from Home Medical Certificate supports remote working arrangements based on medical advice. After an online consultation, the doctor may recommend work from home for a specified period, helping you continue your responsibilities while prioritizing your health and recovery.",
+          "Certain medical conditions may allow you to work but make office attendance difficult. A Work from Home Medical Certificate supports remote working arrangements based on medical advice.\n\nAfter an online consultation, the doctor may recommend work from home for a specified period, helping you continue your responsibilities while prioritizing your health and recovery.",
         shortDescription:
           "Get medical support for remote working arrangements.",
         icon: Home,
@@ -68,11 +68,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         ],
       },
       {
-        name: "Caretaker Certificate",
+        name: "Caretaker Medical Certificate",
         slug: "caretaker",
         enumValue: "caretaker",
         description:
-          "When a family member requires medical care, a Caretaker Medical Certificate confirms the need for your presence as a caregiver during their recovery. This document supports leave or work-from-home requests and helps employers or institutions understand your caregiving responsibility during the specified period.",
+          "When a family member requires medical care, a Caretaker Medical Certificate confirms the need for your presence as a caregiver during their recovery.\n\nThis document supports leave or work-from-home requests and helps employers or institutions understand your caregiving responsibility during the specified period.",
         shortDescription:
           "Confirm your need to care for a family member during recovery.",
         icon: Users,
@@ -85,11 +85,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         ],
       },
       {
-        name: "Recovery Certificate",
+        name: "Recovery Medical Certificate",
         slug: "recovery",
         enumValue: "recovery",
         description:
-          "A Recovery Medical Certificate confirms that an individual has recovered from a medical condition and is fit to resume regular activities such as work, studies, or travel. Doctors issue this certificate after reviewing the current health status to ensure a safe and appropriate return to daily routines.",
+          "A Recovery Medical Certificate confirms that an individual has recovered from a medical condition and is fit to resume regular activities such as work, studies, or travel.\n\nDoctors issue this certificate after reviewing the current health status to ensure a safe and appropriate return to daily routines.",
         shortDescription:
           "Confirm your recovery and fitness to resume activities.",
         icon: Activity,
@@ -107,11 +107,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
     name: "Fitness & Work Status",
     items: [
       {
-        name: "Fitness Certificate",
+        name: "Medical Fitness Certificate",
         slug: "fitness",
         enumValue: "fitness",
         description:
-          "A Medical Fitness Certificate is often required before starting a job, academic program, sports activity, or travel plan. Through an online consultation, our doctors review your health details and issue a fitness certificate where appropriate. The certificate confirms that you are medically fit to carry out specific responsibilities. Each assessment is handled carefully to ensure the document meets standard professional and institutional expectations.",
+          "A Medical Fitness Certificate is often required before starting a job, academic program, sports activity, or travel plan. Through an online consultation, our doctors review your health details and issue a fitness certificate where appropriate.\n\nThe certificate confirms that you are medically fit to carry out specific responsibilities. Each assessment is handled carefully to ensure the document meets standard professional and institutional expectations.",
         shortDescription:
           "Health & fitness clearance for employment, sports, or admissions.",
         icon: Heart,
@@ -128,7 +128,7 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         slug: "fit-to-fly",
         enumValue: "fit_to_fly",
         description:
-          "A Fit-to-Fly Medical Certificate confirms that an individual is medically safe to travel by air. Doctors assess your current health condition to ensure that flying will not pose any risk to you or others during the journey. The certificate is issued after an online consultation and is accepted by airlines, travel authorities, and immigration officials.",
+          "A Fit-to-Fly Medical Certificate confirms that an individual is medically safe to travel by air. Doctors assess your current health condition to ensure that flying will not pose any risk to you or others during the journey.\n\nThe certificate is issued after an online consultation and is accepted by airlines, travel authorities, and immigration officials.",
         shortDescription:
           "Medical clearance confirming you are safe to travel by air.",
         icon: PlaneTakeoff,
@@ -141,11 +141,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         ],
       },
       {
-        name: "Unfit To Work Certificate",
+        name: "Unfit To Work Medical Certificate",
         slug: "unfit-to-work",
         enumValue: "unfit_to_work",
         description:
-          "When illness or injury affects your ability to perform work duties safely, an Unfit To Work Medical Certificate provides clear medical documentation of your condition. Doctors assess your health status and issue the certificate only when medically necessary, helping ensure personal well-being and workplace safety.",
+          "When illness or injury affects your ability to perform work duties safely, an Unfit To Work Medical Certificate provides clear medical documentation of your condition.\n\nDoctors assess your health status and issue the certificate only when medically necessary, helping ensure personal well-being and workplace safety.",
         shortDescription:
           "Medical documentation when illness prevents work duties.",
         icon: BriefcaseMedical,
@@ -158,11 +158,11 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         ],
       },
       {
-        name: "Unfit To Travel Certificate",
+        name: "Unfit To Travel Medical Certificate",
         slug: "unfit-to-travel",
         enumValue: "unfit_to_travel",
         description:
-          "Medical conditions or recovery phases may make travel unsafe or inadvisable. An Unfit To Travel Medical Certificate formally states that travel should be avoided for a defined duration. This certificate is commonly used for travel postponements, cancellations, or official communication with employers and travel authorities and is issued only after medical evaluation.",
+          "Medical conditions or recovery phases may make travel unsafe or inadvisable. An Unfit To Travel Medical Certificate formally states that travel should be avoided for a defined duration.\n\nThis certificate is commonly used for travel postponements, cancellations, or official communication with employers and travel authorities and is issued only after medical evaluation.",
         shortDescription:
           "Formal medical advice against travel for a defined period.",
         icon: Plane,
@@ -184,7 +184,7 @@ export const CERTIFICATE_CATEGORIES: CertificateCategory[] = [
         slug: "medical-diagnosis",
         enumValue: "medical_diagnosis",
         description:
-          "A Medical Diagnosis Certificate serves as official documentation of a diagnosed medical condition following professional medical assessment. It is commonly required for insurance purposes, academic submissions, workplace records, or administrative and legal documentation. Each certificate is issued responsibly based on clinical findings.",
+          "A Medical Diagnosis Certificate serves as official documentation of a diagnosed medical condition following professional medical assessment.\n\nIt is commonly required for insurance purposes, academic submissions, workplace records, or administrative and legal documentation. Each certificate is issued responsibly based on clinical findings.",
         shortDescription:
           "Official documentation of a diagnosed medical condition.",
         icon: ClipboardList,
@@ -515,72 +515,72 @@ export const FAQ_ITEMS = [
   {
     question: "When will I receive my medical certificate?",
     answer:
-      "You will receive your digital medical certificate within 30–90 minutes after completing the online doctor consultation. If you choose a physical copy, it will be delivered within 8–10 business days.",
+      "You will receive your **digital medical certificate within 30–90 minutes** after completing the online doctor consultation. If you choose a **physical copy**, it will be delivered within **8–10 business days**.",
   },
   {
     question: "Are online medical certificates valid in India?",
     answer:
-      "Yes, all our medical notes are as per NMC & WHO guidelines. If your employer or education institute has any clarifications, they could reach out to the doctor whose coordinates are on the medical certificate issued.",
+      "Yes, all our medical notes are as per **NMC & WHO guidelines**. If your employer or education institute has any clarifications, they could reach out to the **Doctor** on the medical certificate issued.",
   },
   {
     question: "Will my employer or educational institution accept this certificate?",
     answer:
-      "Yes, all our certificates adhere to NMC and WHO guidelines and are accepted by most organizations. For any clarifications, they can contact the doctor whose details are on the certificate.",
+      "Yes, all our certificates adhere to **NMC and WHO guidelines** and are accepted by most organizations. For any clarifications, they can contact the doctor whose details are on the certificate.",
   },
   {
     question: "Are the medical certificates genuine?",
     answer:
-      "Absolutely. All certificates are issued after a proper medical consultation and are legally valid. These medical certificates are generated following all protocols of the NMC & WHO and given by certified Indian doctors. They are 100% legitimate.",
+      "Absolutely. All certificates are issued after a **proper medical consultation** and are legally valid. These medical certificates are generated following all protocols of the **NMC & WHO** and given by **certified Indian doctors**. They are **100% legitimate**. We do not provide fake medical certificates or make any reports. For more details on the validity of a medical certificate issued by us, visit **MY WEBSITE CERTIFICATE PAGE**.",
   },
   {
     question: "Which cities or states do you operate in?",
     answer:
-      "Our service is available across India, including major cities and towns. We serve Hyderabad, Bangalore, Chennai, Mumbai, Delhi, Kolkata, and 50+ more cities nationwide.",
+      "Our service is available **across India**, including major cities and towns. We serve **Hyderabad, Bangalore, Chennai, Mumbai, Delhi, Kolkata**, and **50+ more cities** nationwide.",
   },
   {
     question: "When do I need to visit a doctor physically?",
     answer:
-      "A physical visit may be required if the doctor feels an in-person examination is necessary, or if your condition cannot be assessed online.",
+      "A physical visit may be required if: the **doctor feels in-person examination is necessary**, or your **condition cannot be assessed online**.",
   },
   {
     question: "Can a doctor from another state issue my medical certificate?",
     answer:
-      "Yes. A doctor registered with a recognized Medical Council in India can issue a medical certificate even if the patient is in another state. Online consultations and certificate issuance are permitted under the Telemedicine Practice Guidelines issued by the Government of India (under NMC).",
+      "Yes. A doctor who is registered with a recognized **Medical Council in India** can issue a medical certificate even if the patient is located in another state. Online consultation and certificate issuance are permitted under the **Telemedicine Practice Guidelines** issued by the Government of India (under the **Medical Council of India / National Medical Commission**).",
+  },
+  {
+    question: "Are these medical certificates genuine?",
+    answer:
+      "These medical certificates are generated following all protocols of the **NMC & WHO** and given by **certified Indian doctors**. They are **100% legit**. We do not provide fake medical certificates or make any reports.",
   },
   {
     question: "How can I check the validity of my certificate?",
     answer:
-      "For any concerns about the validity of your certificate, your employer or institution can contact the issuing doctor directly using the contact details provided on the certificate. We maintain the highest standards of authenticity and transparency.",
+      "For any concerns about the validity of your certificate, your **employer or institution** can contact the issuing doctor directly using the **contact details provided on the certificate**. We maintain the highest standards of **authenticity and transparency**. Email: **contact@medidocproof.com**",
   },
   {
     question: "What is a medical certificate?",
     answer:
-      "A medical certificate is a document issued by a registered medical doctor after confirming the patient's health condition. It serves as an official statement about a person's health status, required for work, school, travel, sports, adoption, and other legal or professional purposes.",
+      "A medical certificate is a document issued by a **registered medical doctor** or licensed medical practitioner after confirming the details of the patient through a thorough examination of the patient's health condition. It serves as an **official statement** about a person's health status, required for various **legal, professional, and personal purposes**.",
   },
   {
     question: "How do I validate a medical certificate?",
     answer:
-      "A medical certificate can be validated by checking the doctor's registration number, doctor's signature or stamp, date and medical details, and the patient's information. You can also use our online verification tool.",
+      "A medical certificate can be validated by checking: **Doctor's registration number**, **Doctor's signature or stamp**, **Date and medical details**. Certificates issued through our platform include all required verification details.",
   },
   {
     question: "How can I identify a fake medical certificate?",
     answer:
-      "A fake certificate may not include a doctor's registration number, may be issued without consultation, or have missing/incorrect doctor details. Certificates issued through our platform include all required verification details.",
+      "A fake certificate may: **Not include a doctor's registration number**, be **issued without consultation**, or have **missing or incorrect doctor details**. Certificates issued through our platform include all required verification details.",
   },
   {
     question: "What services are non-refundable?",
     answer:
-      "Consultation and medical review services are non-refundable once the doctor consultation has started. Please review the refund policy before applying.",
+      "Consultation and medical review services are **non-refundable** once the doctor consultation has started. Please review the **refund policy** before applying.",
   },
   {
-    question: "How long does the online consultation take?",
+    question: "How to Validate a Medical Certificate?",
     answer:
-      "The online consultation typically takes 5–15 minutes. The doctor will review your request, ask relevant questions, and issue the certificate promptly after approval.",
-  },
-  {
-    question: "What payment methods are accepted?",
-    answer:
-      "We accept all major payment methods including UPI, credit/debit cards, net banking, and wallets through our secure Razorpay payment gateway.",
+      "Validating a medical certificate involves verifying that the certificate is genuine and that it was issued by a **registered medical practitioner**. To do this, check the following: **Full Name and Address of the Patient** — Ensure the certificate includes the patient's full name and address. **Organisation Addressed** — Verify that the certificate is addressed to the correct organisation. **Validity Dates** — Check the dates from which the certificate is valid and its duration. **Diagnosis** — Ensure a clear outline of the diagnosis. **Doctor's Contact Details** — Verify the contact details, seal, and signature of the doctor. **Patient's Signature** — Ensure the patient's signature is on the certificate.",
   },
 ];
 

@@ -389,7 +389,7 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               <Link
                 key={index}
                 href={link.href}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all hover:border-white hover:text-white hover:bg-white/10 backdrop-blur-sm"
+                className={`flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:text-white hover:scale-110 active:scale-95 backdrop-blur-sm ${(link as any).hoverBg || 'hover:bg-white/10 hover:border-white'}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -427,12 +427,41 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
 
       {serviceAreas.length > 0 && (
         <div className="border-t border-white/10 py-6 px-6 md:px-10 max-w-[90rem] mx-auto">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/60">
-            Our Service Areas
-          </p>
-          <p className="text-xs leading-relaxed text-white/50">
-            {serviceAreas.join(" • ")}
-          </p>
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+            {/* Service Areas - Left */}
+            <div className="flex-1">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/60">
+                Our Service Areas
+              </p>
+              <div className="flex flex-wrap gap-x-1 gap-y-0.5">
+                {serviceAreas.map((city, index) => (
+                  <a
+                    key={index}
+                    href="/#certificates"
+                    className="text-xs font-medium text-blue-400 border-b border-blue-400 hover:text-blue-300 hover:border-blue-300 transition-all duration-200 leading-relaxed"
+                  >
+                    {city}
+                  </a>
+                  ))}
+              </div>
+            </div>
+
+            {/* Secure Payment - Right */}
+            <div className="lg:shrink-0">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/60">
+                Secure Payment
+              </p>
+              <div className="flex flex-wrap items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-blue-400/30 w-fit">
+                <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/payment-icons@master/icons/mastercard.svg" alt="Mastercard" className="h-8 object-contain" />
+                <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/payment-icons@master/icons/paypal.svg" alt="PayPal" className="h-7 object-contain" />
+                <img src="https://cdn.razorpay.com/static/assets/logo/payment.svg" alt="Razorpay" className="h-6 object-contain brightness-0 invert" />
+                <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/payment-icons@master/icons/visa.svg" alt="Visa" className="h-7 object-contain" />
+                <span className="text-sm font-bold text-cyan-400 tracking-wide">stripe</span>
+                <span className="text-sm font-bold text-white/90 tracking-wide">UPI</span>
+                <span className="text-xs font-semibold text-yellow-400 tracking-wide">RuPay</span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import PublicHeader from "@/components/public/header";
 import PublicFooter from "@/components/public/footer";
 import { PageTransitionWrapper } from "@/components/public/page-transition-wrapper";
+import { FloatingActionButtons } from "@/components/public/floating-action-buttons";
 
 export default function PublicLayout({
   children,
@@ -14,6 +15,7 @@ export default function PublicLayout({
         <PageTransitionWrapper>{children}</PageTransitionWrapper>
       </main>
       <PublicFooter />
+      <FloatingActionButtons />
     </div>
   );
 }

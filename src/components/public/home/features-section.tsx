@@ -9,25 +9,25 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 
 const features = [
   {
-    icon: Sparkles,
-    title: "Easy And Convenient Process",
-    description: "Complete the entire process from the comfort of your home without clinic visits or long waits",
+    icon: Lock,
+    title: "Data Privacy and Protection",
+    description: "We respect your privacy and treat your personal and medical details with care. All information is securely handled and used only for doctor consultation and issuing your medical certificate. Our system is built to protect your details at every step.",
   },
   {
     icon: ShieldCheck,
     title: "Genuine And Verified Certificates",
-    description: "All certificates are issued by registered medical practitioners following proper protocols",
+    description: "Medical certificates are provided only after consultation with a registered Indian medical practitioner. Each certificate carries the doctor\u2019s name and registration number, ensuring it is genuine and acceptable for official and professional use across India.",
   },
   {
-    icon: Lock,
-    title: "Data Privacy and Protection",
-    description: "Your personal and medical information is encrypted and kept completely confidential",
+    icon: Sparkles,
+    title: "Easy And Convenient Process",
+    description: "Our online service is designed to be simple and easy to use. You can submit your request, speak with a doctor, and receive your medical certificate smoothly, without delays or complicated steps.",
   },
 ];
 
 export function FeaturesSection() {
   return (
-    <section className="py-20 lg:py-28 bg-linear-to-b from-primary/30 via-primary/30 to-secondary/30 relative overflow-hidden">
+    <section className="py-14 lg:py-20 xl:py-24 bg-linear-to-b from-primary/30 via-primary/30 to-secondary/30 relative overflow-hidden">
       <GridPattern
         width={32}
         height={32}
@@ -37,18 +37,14 @@ export function FeaturesSection() {
       />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionReveal blur={true} scale={true}>
-          <div className="text-center mb-14">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Get Reliable Online Medical Certificates Conveniently
+          <div className="text-center mb-10 lg:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3">
+              Why Trust Us?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Fast, secure, and hassle-free medical certificates from registered
-              doctors
-            </p>
           </div>
         </SectionReveal>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-5 lg:gap-6">
           {features.map((feature, index) => (
             <CardReveal key={index} delay={index * 0.1}>
               <div className="bg-linear-to-br from-brand-primary-light to-card p-8 rounded-3xl border border-brand-primary-light hover:shadow-xl transition-all duration-300">

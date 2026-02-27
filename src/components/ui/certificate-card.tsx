@@ -67,7 +67,7 @@ export function CertificateCard({
           <h3 className="text-lg font-semibold text-foreground mb-2 leading-tight">
             {title}
           </h3>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-6 grow">
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6 grow whitespace-pre-line">
             {description}
           </p>
 
@@ -77,7 +77,7 @@ export function CertificateCard({
               className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-300 group-hover:gap-3"
               style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
             >
-              Apply Now
+              Get Certificate
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </span>
           </div>

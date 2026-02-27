@@ -23,9 +23,9 @@ import {
 const certificates = [
   {
     key: "SICK_LEAVE",
-    title: "Sick Leave Certificate",
+    title: "Sick Leave Medical Certificate",
     description:
-      "When health issues prevent you from attending work, school, or college, a Sick Leave Medical Certificate provides official medical confirmation of your condition. Consult a certified doctor online and receive the required certificate.",
+      "When health issues prevent you from attending work, school, or college, a Sick Leave Medical Certificate provides official medical confirmation of your condition. You can consult a certified doctor online and receive the required certificate without the need to visit a clinic.\n\nThis certificate helps organizations and institutions understand that your absence is medically advised. Our efficient process ensures timely delivery, allowing you to rest and recover without added pressure or formal hassles.",
     icon: <FileText className="w-full h-full" />,
     category: "Medical",
     bestFor: "Employees & Students",
@@ -40,9 +40,9 @@ const certificates = [
   },
   {
     key: "WORK_FROM_HOME",
-    title: "Work From Home Certificate",
+    title: "Work From Home Medical Certificate",
     description:
-      "Certain medical conditions may allow you to work but make office attendance difficult. A Work from Home Medical Certificate supports remote working arrangements based on medical advice.",
+      "Certain medical conditions may allow you to work but make office attendance difficult. A Work from Home Medical Certificate supports remote working arrangements based on medical advice.\n\nAfter an online consultation, the doctor may recommend work from home for a specified period, helping you continue your responsibilities while prioritizing your health and recovery.",
     icon: <Home className="w-full h-full" />,
     category: "Employment",
     bestFor: "Remote Workers",
@@ -57,9 +57,9 @@ const certificates = [
   },
   {
     key: "CARETAKER",
-    title: "Caretaker Certificate",
+    title: "Caretaker Medical Certificate",
     description:
-      "When a family member requires medical care, a Caretaker Medical Certificate confirms the need for your presence as a caregiver during their recovery. This document supports leave or work-from-home requests.",
+      "When a family member requires medical care, a Caretaker Medical Certificate confirms the need for your presence as a caregiver during their recovery.\n\nThis document supports leave or work-from-home requests and helps employers or institutions understand your caregiving responsibility during the specified period.",
     icon: <Heart className="w-full h-full" />,
     category: "Family",
     bestFor: "Family Caregivers",
@@ -74,9 +74,9 @@ const certificates = [
   },
   {
     key: "RECOVERY",
-    title: "Recovery Certificate",
+    title: "Recovery Medical Certificate",
     description:
-      "A Recovery Medical Certificate confirms that an individual has recovered from a medical condition and is fit to resume regular activities such as work, studies, or travel.",
+      "A Recovery Medical Certificate confirms that an individual has recovered from a medical condition and is fit to resume regular activities such as work, studies, or travel.\n\nDoctors issue this certificate after reviewing the current health status to ensure a safe and appropriate return to daily routines.",
     icon: <Activity className="w-full h-full" />,
     category: "Medical Clearance",
     bestFor: "Post Recovery",
@@ -91,9 +91,9 @@ const certificates = [
   },
   {
     key: "FITNESS",
-    title: "Fitness Certificate",
+    title: "Medical Fitness Certificate",
     description:
-      "A Medical Fitness Certificate is often required before starting a job, academic program, sports activity, or travel plan. Our doctors review your health details and issue a fitness certificate.",
+      "A Medical Fitness Certificate is often required before starting a job, academic program, sports activity, or travel plan. Through an online consultation, our doctors review your health details and issue a fitness certificate where appropriate.\n\nThe certificate confirms that you are medically fit to carry out specific responsibilities. Each assessment is handled carefully to ensure the document meets standard professional and institutional expectations.",
     icon: <Dumbbell className="w-full h-full" />,
     category: "Health & Lifestyle",
     bestFor: "Employment & Sports",
@@ -108,9 +108,9 @@ const certificates = [
   },
   {
     key: "FIT_TO_FLY",
-    title: "Fit to Fly Certificate",
+    title: "Fit-to-Fly Medical Certificate",
     description:
-      "A Fit-to-Fly Certificate is medical clearance for air travel, required by airlines and immigration authorities for certain health conditions. Our doctors assess your fitness to travel safely.",
+      "A Fit-to-Fly Medical Certificate confirms that an individual is medically safe to travel by air. Doctors assess your current health condition to ensure that flying will not pose any risk to you or others during the journey.\n\nThe certificate is issued after an online consultation and is accepted by airlines, travel authorities, and immigration officials.",
     icon: <Plane className="w-full h-full" />,
     category: "Travel",
     bestFor: "Air Travelers",
@@ -125,9 +125,9 @@ const certificates = [
   },
   {
     key: "UNFIT_TO_WORK",
-    title: "Unfit to Work Certificate",
+    title: "Unfit To Work Medical Certificate",
     description:
-      "When illness or injury affects your ability to perform work duties safely, an Unfit To Work Medical Certificate provides clear medical documentation. Issued only when medically necessary.",
+      "When illness or injury affects your ability to perform work duties safely, an Unfit To Work Medical Certificate provides clear medical documentation of your condition.\n\nDoctors assess your health status and issue the certificate only when medically necessary, helping ensure personal well-being and workplace safety.",
     icon: <Briefcase className="w-full h-full" />,
     category: "Medical",
     bestFor: "Medical Leave",
@@ -142,9 +142,9 @@ const certificates = [
   },
   {
     key: "UNFIT_TO_TRAVEL",
-    title: "Unfit to Travel Certificate",
+    title: "Unfit To Travel Medical Certificate",
     description:
-      "Medical conditions or recovery phases may make travel unsafe or inadvisable. An Unfit To Travel Medical Certificate formally states that travel should be avoided.",
+      "Medical conditions or recovery phases may make travel unsafe or inadvisable. An Unfit To Travel Medical Certificate formally states that travel should be avoided for a defined duration.\n\nThis certificate is commonly used for travel postponements, cancellations, or official communication with employers and travel authorities and is issued only after medical evaluation.",
     icon: <Car className="w-full h-full" />,
     category: "Travel",
     bestFor: "Travel Postponement",
@@ -161,7 +161,7 @@ const certificates = [
     key: "MEDICAL_DIAGNOSIS",
     title: "Medical Diagnosis Certificate",
     description:
-      "A Medical Diagnosis Certificate serves as official documentation of a diagnosed medical condition. Commonly required for insurance purposes, academic submissions, or workplace records.",
+      "A Medical Diagnosis Certificate serves as official documentation of a diagnosed medical condition following professional medical assessment.\n\nIt is commonly required for insurance purposes, academic submissions, workplace records, or administrative and legal documentation. Each certificate is issued responsibly based on clinical findings.",
     icon: <Stethoscope className="w-full h-full" />,
     category: "Personal Record",
     bestFor: "Documentation",
@@ -178,7 +178,7 @@ const certificates = [
 
 export function CertificateTypesSection() {
   return (
-    <section className="py-24 lg:py-32 bg-gradient-to-b from-background via-background to-muted/20 relative overflow-hidden">
+    <section id="certificates" className="py-16 lg:py-20 xl:py-28 bg-gradient-to-b from-background via-background to-muted/20 relative overflow-hidden">
       {/* Modern geometric background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
@@ -187,20 +187,20 @@ export function CertificateTypesSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionReveal blur={true} scale={true}>
-          <div className="text-center mb-16 lg:mb-20">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-6 tracking-wide backdrop-blur-sm border border-primary/20">
+          <div className="text-center mb-10 lg:mb-14">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4 tracking-wide backdrop-blur-sm border border-primary/20">
               Wide Range of Options
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-6 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 tracking-tight">
               Types of Certificates We Offer
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               We provide a variety of medical certificates, including Sick Leave, Fitness, Work From Home (WFH), Fit-to-Fly, and custom certificates. All certificates are issued by certified doctors through a quick and convenient online consultation.
             </p>
           </div>
         </SectionReveal>
 
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-7xl mx-auto">
           {certificates.map((cert) => (
             <StaggerItem key={cert.key}>
               <CertificateCard
@@ -223,10 +223,10 @@ export function CertificateTypesSection() {
         </StaggerContainer>
 
         <FadeIn delay={0.2}>
-          <div className="text-center mt-16 lg:mt-20">
+          <div className="text-center mt-10 lg:mt-14">
             <Link
               href="/certificates"
-              className="group inline-flex items-center justify-center gap-3 bg-foreground text-background hover:bg-foreground/90 font-semibold py-4 px-10 rounded-full transition-all duration-300 shadow-2xl hover:shadow-foreground/25 hover:-translate-y-1"
+              className="group inline-flex items-center justify-center gap-3 bg-primary text-white hover:bg-primary/90 font-semibold py-4 px-10 rounded-full transition-all duration-300 shadow-2xl hover:shadow-primary/25 hover:-translate-y-1"
             >
               View All Certificate Types
               <svg

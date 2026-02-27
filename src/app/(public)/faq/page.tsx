@@ -11,6 +11,17 @@ import {
 import { InView } from "@/components/ui/in-view";
 import { FAQ_ITEMS } from "@/lib/certificate-types";
 
+// Parse **bold** markers into <strong> elements
+function renderBoldText(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i} className="font-bold">{part.slice(2, -2)}</strong>;
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default function FAQPage() {
   return (
     <>
@@ -41,7 +52,7 @@ export default function FAQPage() {
               {FAQ_ITEMS.map((item, idx) => (
                 <AccordionItem key={idx} value={`item-${idx}`}>
                   <AccordionTrigger>{item.question}</AccordionTrigger>
-                  <AccordionContent>{item.answer}</AccordionContent>
+                  <AccordionContent>{renderBoldText(item.answer)}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

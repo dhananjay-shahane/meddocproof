@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { PageLoader } from "@/components/ui/loading-spinner";
-import { formatDate, formatCurrency, getInitials, formatRelativeDate } from "@/lib/utils";
+import { formatDate, getInitials, formatRelativeDate } from "@/lib/utils";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import type { Application, Doctor } from "@/types";

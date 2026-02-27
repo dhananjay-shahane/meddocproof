@@ -25,20 +25,20 @@ export const CTASection = ({
   },
 }: CTASectionProps) => {
   return (
-    <section className="relative overflow-visible bg-primary/80">
+    <section className="relative overflow-visiable bg-linear-to-b from-primary/40 via-primary/40 to-teal-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex min-h-[300px] items-center lg:min-h-[350px]">
-          <div className="grid w-full items-center gap-8 lg:grid-cols-2">
+        <div className="relative flex min-h-[280px] items-center lg:min-h-[350px]">
+          <div className="grid w-full items-center gap-6 lg:grid-cols-2">
             {/* Left Content */}
             <FadeIn direction="left">
-              <div className="max-w-xl py-12 lg:py-16">
-                <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+              <div className="max-w-xl py-10 sm:py-12 lg:py-16 text-center sm:text-left">
+                <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-5xl">
                   {title}
                 </h2>
-                <p className="mt-4 text-lg text-white/90">
+                <p className="mt-3 text-base text-white/90 sm:mt-4 sm:text-lg">
                   {description}
                 </p>
-                <div className="mt-8">
+                <div className="mt-6 sm:mt-8 flex justify-center sm:justify-start">
                   <AnimatedLinkButton
                     href={buttonPrimary.href}
                     variant="outline-white"
@@ -52,9 +52,8 @@ export const CTASection = ({
             </FadeIn>
           </div>
 
-          {/* Right Image - Positioned Absolute to overflow */}
-          <FadeIn direction="right" className="hidden lg:block">
-            <div className="absolute -right-20 -top-60 bottom-0 z-10 w-[500px]">
+          {/* Right Image - Hidden on mobile, positioned absolute on desktop */}
+          <div className="hidden lg:block absolute -right-20 -top-60 bottom-0 z-10 w-[500px]">
               <Image
                 src={doctorImage}
                 alt="Medical professional"
@@ -63,7 +62,6 @@ export const CTASection = ({
                 priority
               />
             </div>
-          </FadeIn>
         </div>
       </div>
     </section>

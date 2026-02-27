@@ -175,9 +175,8 @@ export default function DoctorFinancialsPage() {
                   tick={{ fontSize: 12 }}
                   tickFormatter={(v) => `₹${v}`}
                 />
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <Tooltip
-                  formatter={((value?: number) => [formatCurrency(value ?? 0), "Earnings"]) as any}
+                  formatter={((value?: number) => [formatCurrency(value ?? 0), "Earnings"]) as never}
                 />
                 <Area
                   type="monotone"

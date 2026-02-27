@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { validateAdminRequest } from "@/lib/api-auth";
-import { isAuthError } from "@/lib/api-auth";
 
 export async function GET(request: NextRequest) {
   const auth = await validateAdminRequest(request);

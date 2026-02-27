@@ -380,7 +380,6 @@ export function Counter({
 function CounterAnimation({
   from,
   to,
-  duration,
 }: {
   from: number;
   to: number;
@@ -392,7 +391,7 @@ function CounterAnimation({
     offset: ["start end", "end start"],
   });
   
-  const count = useTransform(scrollYProgress, [0, 0.5], [from, to]);
+  useTransform(scrollYProgress, [0, 0.5], [from, to]);
 
   return (
     <motion.span ref={ref}>

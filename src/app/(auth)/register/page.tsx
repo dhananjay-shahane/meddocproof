@@ -254,7 +254,7 @@ export default function RegisterPage() {
                           </span>
                         </div>
                         <p className="text-sm text-white/60 line-clamp-2 group-hover:text-white/80 transition-colors">
-                          "{testimonial.text}"
+                          &quot;{testimonial.text}&quot;
                         </p>
                       </div>
                     </div>
@@ -496,16 +496,6 @@ export default function RegisterPage() {
                   Sign In
                 </Link>
               </p>
-              
-              <div className="flex items-center justify-center gap-6 text-xs text-white/30 lg:text-gray-400">
-                <Link href="/admin/login" className="hover:text-white lg:hover:text-gray-600 transition-colors">
-                  Admin Login
-                </Link>
-                <span className="w-1 h-1 rounded-full bg-current" />
-                <Link href="/doctor/login" className="hover:text-white lg:hover:text-gray-600 transition-colors">
-                  Doctor Login
-                </Link>
-              </div>
 
               <p className="text-xs text-white/20 lg:text-gray-400">
                 © 2024 MediProofDocs — Trusted Medical Certificates

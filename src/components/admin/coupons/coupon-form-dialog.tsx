@@ -36,6 +36,7 @@ export function CouponFormDialog({
 
   const isEditing = !!coupon;
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (coupon) {
       setCode(coupon.code);
@@ -55,6 +56,7 @@ export function CouponFormDialog({
       setExpiresAt("");
     }
   }, [coupon, open]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

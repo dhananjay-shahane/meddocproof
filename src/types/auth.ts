@@ -1,4 +1,4 @@
-import type { AdminUser, Doctor, User, UserRole } from "@/types";
+import type { UserRole } from "@/types";
 
 // Auth state for the context
 export interface AuthState {

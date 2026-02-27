@@ -28,9 +28,11 @@ export default function AdminDashboardPage() {
     }
   }, []);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    fetchActivities();
+    void fetchActivities();
   }, [fetchActivities]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   if (loading) {
     return (

@@ -149,9 +149,8 @@ export function MedicalAssessmentForm({
     setValue,
     reset,
     formState: { errors },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useForm<MedicalAssessmentFormData>({
-    resolver: zodResolver(medicalAssessmentSchema) as any,
+    resolver: zodResolver(medicalAssessmentSchema) as never,
     defaultValues: defaults,
   });
 

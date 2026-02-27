@@ -2,9 +2,6 @@
 
 import { Sparkles, ShieldCheck, Lock } from "lucide-react";
 import {
-  FadeIn,
-  StaggerContainer,
-  StaggerItem,
   SectionReveal,
   CardReveal,
 } from "@/components/ui/fade-in";

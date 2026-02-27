@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
 import {
@@ -21,6 +21,13 @@ import {
 import { useAuth } from "@/contexts/auth-context";
 import { useCertificateApply } from "@/hooks/use-certificate-apply";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   ALL_CERTIFICATE_TYPES,
   MEDICAL_PROBLEMS,
   LEAVE_DURATIONS,
@@ -28,8 +35,6 @@ import {
   GUARDIAN_RELATIONSHIPS,
   CARETAKER_RELATIONSHIPS,
   COUNTRIES,
-  DOCUMENT_FORMATS,
-  PAYMENT_OPTIONS,
   getLabelFromEnum,
 } from "@/lib/certificate-types";
 import type { CertificateType, DocumentFormat, PaymentTierId } from "@/types";
@@ -38,6 +43,11 @@ import { OtpVerification } from "@/components/certificate-apply/otp-verification
 import { FileUploadField } from "@/components/certificate-apply/file-upload-field";
 import { DocumentFormatSelector } from "@/components/certificate-apply/document-format-selector";
 import { PaymentTierSelector } from "@/components/certificate-apply/payment-tier-selector";
+
+// Pre-computed at module load to avoid impure function calls during render
+const MAX_DOB_18 = new Date(Date.now() - 18 * 365.25 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .split("T")[0];
 import { SpecialAttestationField } from "@/components/certificate-apply/special-attestation-field";
 import { TermsCheckbox } from "@/components/certificate-apply/terms-checkbox";
 import { PriceBreakdown } from "@/components/certificate-apply/price-breakdown";
@@ -83,6 +93,7 @@ export default function CertificateApplyPage() {
 
 function CertificateApplyForm() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   const {
@@ -90,12 +101,9 @@ function CertificateApplyForm() {
     formData,
     applicationId,
     coupon,
-    baseFee,
-    specialFee,
     couponDiscount,
     finalAmount,
     certGroup,
-    selectedTier,
     submitting,
     paying,
     couponLoading,
@@ -115,8 +123,12 @@ function CertificateApplyForm() {
   } = useCertificateApply();
 
   const [couponInput, setCouponInput] = useState("");
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
 
-  // Pre-select certificate type from URL param
+  // Pre-compute the max DOB for 18+ age requirement (computed once at module load)
+  const maxDob18 = MAX_DOB_18;
+
+  // Pre-select certificate type from URL param (stay on step 0 so user sees their selection)
   useEffect(() => {
     const typeParam = searchParams.get("type");
     if (typeParam) {
@@ -125,15 +137,19 @@ function CertificateApplyForm() {
       );
       if (cert) {
         updateFormData({ certificateType: cert.enumValue as CertificateType });
-        goToStep(1);
       }
     }
-  }, [searchParams, updateFormData, goToStep]);
+  }, [searchParams, updateFormData]);
 
   // ─── Handlers ─────────────────────────────────────────
 
   const handleNextStep = () => {
     if (validateStep(currentStep)) {
+      // If user is not logged in, show login popup instead of proceeding
+      if (!isAuthenticated && !authLoading) {
+        setShowLoginDialog(true);
+        return;
+      }
       nextStep();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -157,35 +173,6 @@ function CertificateApplyForm() {
       await applyCoupon(couponInput.trim());
     }
   };
-
-  // ─── Auth Gate ────────────────────────────────────────
-
-  if (authLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4">
-        <ShieldCheck className="h-16 w-16 text-muted-foreground/40" />
-        <h2 className="text-2xl font-bold">Login Required</h2>
-        <p className="max-w-md text-center text-muted-foreground">
-          Please log in to apply for a medical certificate. Your application
-          will be securely processed after login.
-        </p>
-        <Link
-          href="/login"
-          className="mt-2 rounded-xl bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
-        >
-          Login to Continue
-        </Link>
-      </div>
-    );
-  }
 
   // ─── Success State ────────────────────────────────────
 
@@ -230,7 +217,7 @@ function CertificateApplyForm() {
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-      <div className="mx-auto max-w-4xl px-4 py-10">
+      <div className="mx-auto max-w-6xl px-4 pt-24 lg:pt-28 pb-10">
         {/* Stepper */}
         <nav className="mb-10">
           <ol className="flex items-center gap-2">
@@ -299,7 +286,7 @@ function CertificateApplyForm() {
               Choose the type of medical certificate you need.
             </p>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {ALL_CERTIFICATE_TYPES.map((cert) => {
                 const isSelected =
                   formData.certificateType === cert.enumValue;
@@ -311,29 +298,38 @@ function CertificateApplyForm() {
                         certificateType: cert.enumValue as CertificateType,
                       });
                     }}
-                    className={`flex flex-col items-start rounded-xl border-2 p-5 text-left transition-all ${
+                    className={`group relative flex flex-col items-start rounded-2xl border-2 p-5 text-left transition-all duration-200 ${
                       isSelected
-                        ? "border-primary bg-primary/5 shadow-md"
-                        : "border-transparent bg-card hover:border-primary/30 hover:shadow-sm"
+                        ? "border-primary bg-primary/5 shadow-lg ring-1 ring-primary/20"
+                        : "border-border bg-card hover:border-primary/40 hover:shadow-md"
                     }`}
                   >
+                    {/* Selected indicator */}
+                    {isSelected && (
+                      <div className="absolute top-3 right-3">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary">
+                          <CheckCircle className="h-4 w-4 text-primary-foreground" />
+                        </div>
+                      </div>
+                    )}
+
                     <div
-                      className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${
+                      className={`inline-flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${
                         isSelected
                           ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground"
+                          : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
                       }`}
                     >
                       <cert.icon className="h-5 w-5" />
                     </div>
-                    <h3 className="mt-3 font-semibold">{cert.name}</h3>
-                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                      {cert.shortDescription}
+                    <h3 className="mt-3 font-semibold text-foreground">{cert.name}</h3>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-3">
+                      {cert.description}
                     </p>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Starting from{" "}
-                      <span className="font-bold text-foreground">₹599</span>
-                    </p>
+                    <div className="mt-3 flex items-center gap-1.5">
+                      <span className="text-xs text-muted-foreground">Starting from</span>
+                      <span className="text-sm font-bold text-foreground">{cert.startingPrice}</span>
+                    </div>
                   </button>
                 );
               })}
@@ -342,7 +338,8 @@ function CertificateApplyForm() {
             <div className="mt-8 flex justify-end">
               <button
                 onClick={handleNextStep}
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
+                disabled={!formData.certificateType}
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Continue <ArrowRight className="h-4 w-4" />
               </button>
@@ -1027,13 +1024,7 @@ function CertificateApplyForm() {
                         onChange={(e) =>
                           updateFormData({ caretakerDob: e.target.value })
                         }
-                        max={
-                          new Date(
-                            Date.now() - 18 * 365.25 * 24 * 60 * 60 * 1000
-                          )
-                            .toISOString()
-                            .split("T")[0]
-                        }
+                        max={maxDob18}
                         className="w-full rounded-lg border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                       />
                       <FieldError error={validationErrors.caretakerDob} />
@@ -1234,6 +1225,23 @@ function CertificateApplyForm() {
                 Review the details you provided, then choose your document format and complete payment.
               </p>
             </div>
+
+            {/* Login prompt for unauthenticated users */}
+            {!authLoading && !isAuthenticated && (
+              <div className="rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 p-6 flex flex-col items-center gap-4 text-center">
+                <ShieldCheck className="h-12 w-12 text-amber-500" />
+                <h3 className="text-lg font-semibold">Login Required to Complete Payment</h3>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  You&apos;re almost there! Please log in or create an account to submit your application and complete payment. Your filled details will be preserved.
+                </p>
+                <Link
+                  href={`/login?redirect=${encodeURIComponent("/certificates/apply?type=" + (ALL_CERTIFICATE_TYPES.find(c => c.enumValue === formData.certificateType)?.slug || ""))}`}
+                  className="mt-1 inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
+                >
+                  <ShieldCheck className="h-4 w-4" /> Login to Continue
+                </Link>
+              </div>
+            )}
 
             {/* ─── Application Preview ─── */}
             <div className="space-y-6">
@@ -1529,6 +1537,7 @@ function CertificateApplyForm() {
                 disabled={
                   submitting ||
                   paying ||
+                  !isAuthenticated ||
                   !formData.termsAccepted ||
                   !formData.paymentTier ||
                   !formData.documentFormat ||
@@ -1553,6 +1562,41 @@ function CertificateApplyForm() {
           </div>
         )}
       </div>
+
+      {/* ─── Login Required Dialog ─── */}
+      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader className="items-center text-center">
+            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+              <ShieldCheck className="h-8 w-8 text-primary" />
+            </div>
+            <DialogTitle className="text-xl">Login to Continue</DialogTitle>
+            <DialogDescription className="text-center">
+              Please log in or create an account to proceed with your certificate application. Your selected certificate will be preserved.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-2 flex flex-col gap-3">
+            <Link
+              href={`/login?redirect=${encodeURIComponent("/certificates/apply?type=" + (ALL_CERTIFICATE_TYPES.find(c => c.enumValue === formData.certificateType)?.slug || ""))}`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              <ShieldCheck className="h-4 w-4" /> Login
+            </Link>
+            <Link
+              href={`/register?redirect=${encodeURIComponent("/certificates/apply?type=" + (ALL_CERTIFICATE_TYPES.find(c => c.enumValue === formData.certificateType)?.slug || ""))}`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary px-6 py-3 font-semibold text-primary hover:bg-primary/5 transition-colors"
+            >
+              Create Account
+            </Link>
+            <button
+              onClick={() => setShowLoginDialog(false)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Continue Browsing
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

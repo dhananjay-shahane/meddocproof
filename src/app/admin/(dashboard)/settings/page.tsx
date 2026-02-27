@@ -53,6 +53,7 @@ export default function SettingsPage() {
   });
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (settings) {
       setGeneral(settings.general);
@@ -61,6 +62,7 @@ export default function SettingsPage() {
       setNotifications(settings.notifications);
     }
   }, [settings]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSave = async (section: TabKey) => {
     const sectionData: Record<TabKey, Record<string, unknown>> = {

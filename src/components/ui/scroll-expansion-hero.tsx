@@ -42,11 +42,13 @@ const ScrollExpandMedia = ({
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setScrollProgress(0);
     setShowContent(false);
     setMediaFullyExpanded(false);
   }, [mediaType]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {

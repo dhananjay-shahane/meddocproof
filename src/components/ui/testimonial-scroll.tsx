@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
@@ -129,9 +129,6 @@ interface TestimonialScrollProps {
 
 export function TestimonialScroll({
   testimonials,
-  title = "What Our Users Say",
-  subtitle = "Trusted by thousands of users across India for their medical certification needs.",
-  badgeText = "Testimonials",
 }: TestimonialScrollProps) {
   const firstColumn = testimonials.slice(0, Math.ceil(testimonials.length / 3));
   const secondColumn = testimonials.slice(

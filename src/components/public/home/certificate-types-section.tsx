@@ -36,7 +36,7 @@ const certificates = [
     badgeTextColor: "#be185d",
     buttonBgColor: "#fce7f3",
     buttonTextColor: "#be185d",
-    href: "/certificates/sick-leave",
+    href: "/certificates/apply?type=sick-leave",
   },
   {
     key: "WORK_FROM_HOME",
@@ -53,7 +53,7 @@ const certificates = [
     badgeTextColor: "#047857",
     buttonBgColor: "#d1fae5",
     buttonTextColor: "#047857",
-    href: "/certificates/work-from-home",
+    href: "/certificates/apply?type=work-from-home",
   },
   {
     key: "CARETAKER",
@@ -70,7 +70,7 @@ const certificates = [
     badgeTextColor: "#c2410c",
     buttonBgColor: "#ffedd5",
     buttonTextColor: "#c2410c",
-    href: "/certificates/caretaker",
+    href: "/certificates/apply?type=caretaker",
   },
   {
     key: "RECOVERY",
@@ -87,7 +87,7 @@ const certificates = [
     badgeTextColor: "#0f766e",
     buttonBgColor: "#ccfbf1",
     buttonTextColor: "#0f766e",
-    href: "/certificates/recovery",
+    href: "/certificates/apply?type=recovery",
   },
   {
     key: "FITNESS",
@@ -104,7 +104,7 @@ const certificates = [
     badgeTextColor: "#7c3aed",
     buttonBgColor: "#f3e8ff",
     buttonTextColor: "#7c3aed",
-    href: "/certificates/fitness",
+    href: "/certificates/apply?type=fitness",
   },
   {
     key: "FIT_TO_FLY",
@@ -121,7 +121,7 @@ const certificates = [
     badgeTextColor: "#2563eb",
     buttonBgColor: "#dbeafe",
     buttonTextColor: "#2563eb",
-    href: "/certificates/fit-to-fly",
+    href: "/certificates/apply?type=fit-to-fly",
   },
   {
     key: "UNFIT_TO_WORK",
@@ -138,7 +138,7 @@ const certificates = [
     badgeTextColor: "#e11d48",
     buttonBgColor: "#ffe4e6",
     buttonTextColor: "#e11d48",
-    href: "/certificates/unfit-to-work",
+    href: "/certificates/apply?type=unfit-to-work",
   },
   {
     key: "UNFIT_TO_TRAVEL",
@@ -155,7 +155,7 @@ const certificates = [
     badgeTextColor: "#d97706",
     buttonBgColor: "#fef3c7",
     buttonTextColor: "#d97706",
-    href: "/certificates/unfit-to-travel",
+    href: "/certificates/apply?type=unfit-to-travel",
   },
   {
     key: "MEDICAL_DIAGNOSIS",
@@ -172,7 +172,7 @@ const certificates = [
     badgeTextColor: "#4f46e5",
     buttonBgColor: "#e0e7ff",
     buttonTextColor: "#4f46e5",
-    href: "/certificates/medical-diagnosis",
+    href: "/certificates/apply?type=medical-diagnosis",
   },
 ];
 

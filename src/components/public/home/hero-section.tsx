@@ -44,77 +44,9 @@ export function HeroSection() {
       />
 
       {/* Top Left Wave Shape */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <svg
-          className="absolute -top-20 -left-20 w-[600px] h-[600px] text-cyan-100/40"
-          viewBox="0 0 600 600"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M-100 100C50 150 150 50 200 200C250 350 400 300 500 400"
-            stroke="currentColor"
-            strokeWidth="80"
-            strokeLinecap="round"
-            className="animate-pulse"
-          />
-          <path
-            d="M-50 200C100 250 200 150 250 300C300 450 450 400 550 500"
-            stroke="currentColor"
-            strokeWidth="60"
-            strokeLinecap="round"
-            opacity="0.6"
-          />
-        </svg>
-      </div>
+   
 
-      {/* Main Content Waves - Left Side */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[500px] h-[800px] pointer-events-none">
-        <svg
-          className="w-full h-full"
-          viewBox="0 0 500 800"
-          fill="none"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <motion.path
-            initial={{ d: "M0,0 Q250,200 0,400 Q250,600 0,800" }}
-            animate={{ 
-              d: [
-                "M0,0 Q250,200 0,400 Q250,600 0,800",
-                "M0,0 Q300,250 50,400 Q300,550 0,800",
-                "M0,0 Q250,200 0,400 Q250,600 0,800"
-              ]
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            fill="url(#gradient1)"
-            opacity="0.3"
-          />
-          <motion.path
-            initial={{ d: "M0,100 Q200,300 0,500 Q200,700 0,900" }}
-            animate={{ 
-              d: [
-                "M0,100 Q200,300 0,500 Q200,700 0,900",
-                "M0,100 Q250,350 50,500 Q250,650 0,900",
-                "M0,100 Q200,300 0,500 Q200,700 0,900"
-              ]
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            fill="url(#gradient2)"
-            opacity="0.2"
-          />
-          <defs>
-            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#06b6d4" />
-              <stop offset="100%" stopColor="#3b82f6" />
-            </linearGradient>
-            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#14b8a6" />
-              <stop offset="100%" stopColor="#06b6d4" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
+   
 
       {/* Bottom Right Wave Shape */}
       <div className="absolute bottom-0 right-0 w-full h-[400px] pointer-events-none">
@@ -265,8 +197,18 @@ export function HeroSection() {
           </FadeIn>
 
           {/* Right Content - Doctor Image */}
-          <FadeIn direction="left" delay={0.2} className="hidden lg:block">
-            <div className="relative">
+          <FadeIn direction="left" delay={0.2} className="relative">
+            {/* Mobile: Simple image without decorations */}
+            <div className="lg:hidden flex justify-center">
+              <img
+                src="/images/hero/doctor-team-hero.png"
+                alt="Professional Doctor Team"
+                className="w-full max-w-sm h-auto object-contain drop-shadow-xl"
+              />
+            </div>
+
+            {/* Desktop: Full decorations */}
+            <div className="hidden lg:block relative">
               {/* Decorative Rings */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-[500px] h-[500px] border border-slate-200/50 rounded-full" />

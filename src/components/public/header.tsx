@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Logo } from "@/components/shared/logo";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
@@ -130,11 +129,13 @@ export default function PublicHeader() {
     return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
     setIsProfileOpen(false);
   }, [pathname]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -440,10 +441,7 @@ export default function PublicHeader() {
                 className="flex items-center gap-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-teal-500 p-1.5 shadow-md">
-                  <Logo />
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">MediProofDocs</span>
+                <Logo />
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}

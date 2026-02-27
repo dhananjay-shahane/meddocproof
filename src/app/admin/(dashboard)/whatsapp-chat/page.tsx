@@ -7,7 +7,6 @@ import {
   MessageSquare,
   Phone,
   User,
-  Clock,
   CheckCheck,
   Check,
   Loader2,

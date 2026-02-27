@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import {
-  Stethoscope,
   Shield,
   Clock,
   ArrowRight,
@@ -9,25 +8,13 @@ import {
   Video,
   FileCheck,
   Star,
-  Users,
   HeartPulse,
   Sparkles,
-  MessageCircle,
-  BadgeCheck,
-  Phone,
-  Lock,
   Play,
-  Activity,
-  Zap,
-  Globe,
-  Award,
   Calendar,
-  ChevronRight,
-  Microscope,
   Brain,
   Baby,
   Bone,
-  Eye,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -519,7 +506,7 @@ export default function DoctorConsultationPage() {
           <div className="text-center">
             <h2 className="text-4xl font-bold text-gray-900">Google Reviews</h2>
             <p className="mx-auto mt-4 max-w-2xl text-gray-600">
-              For our time in the limelight, we've helped out on over 1,550 projects to date – take a look at our testimonials below, and know you can{" "}
+              For our time in the limelight, we&apos;ve helped out on over 1,550 projects to date – take a look at our testimonials below, and know you can{" "}
               <a href="#" className="text-blue-600 hover:underline">reach out</a> with confidence!
             </p>
           </div>

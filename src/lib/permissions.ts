@@ -48,8 +48,8 @@ export function canAccessPage(
   );
 
   if (!matchingPath) return true; // Dashboard and unknown paths are accessible
-  const module = pathToModule[matchingPath];
-  return hasPermission(role, permissions, module, "read");
+  const permModule = pathToModule[matchingPath];
+  return hasPermission(role, permissions, permModule, "read");
 }
 
 /**

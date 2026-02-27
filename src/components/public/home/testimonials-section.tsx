@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { FadeIn, SectionReveal } from "@/components/ui/fade-in";
+import { SectionReveal } from "@/components/ui/fade-in";
 import { GridPattern } from "@/components/ui/grid-pattern";
 
 interface Testimonial {
@@ -125,7 +125,7 @@ export function TestimonialsSection() {
             data.reviews.map(
               (
                 r: { title: string; message: string; rating: number },
-                i: number
+                _i: number
               ) => ({
                 name: r.title,
                 role: "Verified User",

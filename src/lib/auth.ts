@@ -1,13 +1,13 @@
 import { SignJWT, jwtVerify } from "jose";
 import { hash, compare } from "bcryptjs";
 
-if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
-  throw new Error("FATAL: JWT_SECRET environment variable is not set in production!");
+function getJwtSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret && process.env.NODE_ENV === "production") {
+    throw new Error("FATAL: JWT_SECRET environment variable is not set in production!");
+  }
+  return new TextEncoder().encode(secret || "meddocproof-secret-key-dev-only");
 }
-
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "meddocproof-secret-key-dev-only"
-);
 
 const JWT_EXPIRY = "7d";
 
@@ -27,7 +27,7 @@ export async function createToken(payload: JWTPayload): Promise<string> {
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime(JWT_EXPIRY)
     .setIssuedAt()
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 /**
@@ -35,7 +35,7 @@ export async function createToken(payload: JWTPayload): Promise<string> {
  */
 export async function verifyToken(token: string): Promise<JWTPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token, getJwtSecret());
     return payload as unknown as JWTPayload;
   } catch {
     return null;

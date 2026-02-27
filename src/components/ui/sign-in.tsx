@@ -57,7 +57,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   testimonials = [],
   children,
   footer,
-  brandLabel = "MediProofDocs",
+  brandLabel: _brandLabel = "MediProofDocs",
 }) => {
   return (
     <div className="flex min-h-[100dvh] w-full flex-col md:flex-row bg-gradient-to-br from-blue-50 via-white to-teal-50">

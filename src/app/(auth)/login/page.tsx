@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
 import api from "@/lib/api";
@@ -15,7 +15,6 @@ import {
   ChevronLeft,
   Lock,
   Zap,
-  HeartPulse,
   Stethoscope,
   Activity,
   Sparkles,
@@ -48,6 +47,8 @@ type Step = "phone" | "otp";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/";
   const { login } = useAuth();
   const [step, setStep] = useState<Step>("phone");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -90,7 +91,7 @@ export default function LoginPage() {
       const res = await api.post("/auth/user/verify-otp", { phoneNumber, otp });
       login(undefined, { ...res.data.user, type: "user" });
       toast.success("Welcome back!");
-      router.push("/");
+      router.push(redirectUrl);
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } } };
       toast.error(err.response?.data?.message || "Invalid OTP");
@@ -228,7 +229,7 @@ export default function LoginPage() {
                           <h4 className="font-semibold text-sm">{item.name}</h4>
                           <span className="text-xs text-white/40">{item.role}</span>
                         </div>
-                        <p className="text-sm text-white/50 line-clamp-2">"{item.text}"</p>
+                        <p className="text-sm text-white/50 line-clamp-2">&quot;{item.text}&quot;</p>
                       </div>
                     </div>
                   </motion.div>
@@ -464,35 +465,6 @@ export default function LoginPage() {
                   Create account
                 </Link>
               </p>
-
-              {/* Alternative Logins */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10 lg:border-gray-200" />
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="px-2 bg-transparent lg:bg-white text-white/40 lg:text-gray-400 uppercase tracking-wider">
-                    Alternative Access
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <Link
-                  href="/admin/login"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-sm font-medium text-white/70 lg:text-gray-600 hover:bg-white/10 lg:hover:bg-gray-100 hover:text-white lg:hover:text-gray-900 transition-all"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  Admin
-                </Link>
-                <Link
-                  href="/doctor/login"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-sm font-medium text-white/70 lg:text-gray-600 hover:bg-white/10 lg:hover:bg-gray-100 hover:text-white lg:hover:text-gray-900 transition-all"
-                >
-                  <Stethoscope className="w-4 h-4" />
-                  Doctor
-                </Link>
-              </div>
 
               {/* Security Badge */}
               <div className="flex items-center justify-center gap-2 text-xs text-white/30 lg:text-gray-400">

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateAdminRequest, isAuthError } from "@/lib/api-auth";
 
@@ -102,8 +103,8 @@ export async function PUT(request: NextRequest) {
       const key = `${section}.${field}`;
       return prisma.setting.upsert({
         where: { key },
-        create: { key, value: value as any, description: `${section} - ${field}` },
-        update: { value: value as any },
+        create: { key, value: value as Prisma.InputJsonValue, description: `${section} - ${field}` },
+        update: { value: value as Prisma.InputJsonValue },
       });
     });
 

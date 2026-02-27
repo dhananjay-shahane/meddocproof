@@ -6,7 +6,6 @@ import * as Color from "color-bits";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
 import { Logo } from "@/components/shared/logo";
 import { Facebook, Twitter, Instagram, Linkedin, Mail } from "lucide-react";
 
@@ -336,8 +335,8 @@ const defaultSocialLinks: SocialLink[] = [
 ];
 
 export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
-  logoSrc = "/logo.png",
-  brandName = "MediProofDocs",
+  logoSrc: _logoSrc = "/logo.png",
+  brandName: _brandName = "MediProofDocs",
   description = "Get your medical certificate online from verified doctors. Streamlined process with secure verification and fast delivery.",
   footerLinks = [
     {

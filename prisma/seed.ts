@@ -141,9 +141,12 @@ async function main() {
   console.log(`✅ Test User created: ${testUser.phoneNumber}`);
 
   // Create sample applications
+  const now = new Date();
+  const datePart = `${String(now.getDate()).padStart(2, "0")}${String(now.getMonth() + 1).padStart(2, "0")}${now.getFullYear()}`;
   const applicationData = [
     {
       userId: testUser.id,
+      applicationId: `MDP-${datePart}-0000-0001`,
       certificateType: "sick_leave" as const,
       status: "submitted" as const,
       formData: {
@@ -156,6 +159,7 @@ async function main() {
     },
     {
       userId: testUser.id,
+      applicationId: `MDP-${datePart}-0000-0002`,
       certificateType: "fitness" as const,
       status: "assigned" as const,
       assignedDoctorId: doctor.id,
@@ -170,6 +174,7 @@ async function main() {
     },
     {
       userId: testUser.id,
+      applicationId: `MDP-${datePart}-0000-0003`,
       certificateType: "work_from_home" as const,
       status: "completed" as const,
       assignedDoctorId: doctor.id,
@@ -186,6 +191,7 @@ async function main() {
     },
     {
       userId: testUser.id,
+      applicationId: `MDP-${datePart}-0000-0004`,
       certificateType: "caretaker" as const,
       status: "rejected" as const,
       formData: {
@@ -198,6 +204,7 @@ async function main() {
     },
     {
       userId: testUser.id,
+      applicationId: `MDP-${datePart}-0000-0005`,
       certificateType: "recovery" as const,
       status: "pending_review" as const,
       assignedDoctorId: doctor.id,

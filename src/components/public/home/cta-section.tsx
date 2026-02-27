@@ -41,7 +41,7 @@ export const CTASection = ({
                 <div className="mt-8">
                   <AnimatedLinkButton
                     href={buttonPrimary.href}
-                    variant="white"
+                    variant="outline-white"
                     className="bg-white text-[#4A90E2] hover:bg-white/90"
                   >
                     {buttonPrimary.label}

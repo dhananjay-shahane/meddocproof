@@ -72,7 +72,7 @@ export const CTASection = ({
           </div>
 
           {/* Right Image - Hidden on mobile, positioned absolute on desktop */}
-          <div className="hidden lg:block absolute -right-20 -top-60 bottom-0 z-10 w-[500px]">
+          <div className="hidden lg:block absolute -right-10 -top-60 bottom-0 z-10 w-[500px]">
               <Image
                 src={doctorImage}
                 alt="Medical professional"

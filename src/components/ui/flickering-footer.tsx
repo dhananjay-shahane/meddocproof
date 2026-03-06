@@ -451,14 +451,14 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/60">
                 Secure Payment
               </p>
-              <div className="flex flex-wrap items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3 border border-blue-400/30 w-fit">
+              <div className="flex flex-wrap items-center gap-4 bg-white backdrop-blur-sm rounded-xl px-5 py-3 border border-blue-400/30 w-fit">
                 <img src="/images/payment-logo/mastercard-payment.png" alt="Mastercard" className="h-8 object-contain" />
-                <img src="/images/payment-logo/paypal-payment.png" alt="PayPal" className="h-10 object-contain" />
-                <img src="/images/payment-logo/rayzorpay-payment.png" alt="Razorpay" className="h-6 object-contain" />
-                <img src="/images/payment-logo/visa-payment.png" alt="Visa" className="h-10 object-contain" />
-                <span className="text-sm font-bold text-cyan-400 tracking-wide">stripe</span>
-                <span className="text-sm font-bold text-white/90 tracking-wide">UPI</span>
-                <span className="text-xs font-semibold text-yellow-400 tracking-wide">RuPay</span>
+                <img src="/images/payment-logo/visa-payment.png" alt="Visa" className="h-8 object-contain" />
+                <img src="/images/payment-logo/paypal-payment.png" alt="PayPal" className="h-8 object-contain" />
+                <img src="/images/payment-logo/rayzorpay-payment.png" alt="Razorpay" className="h-8 object-contain" />
+                <img src="/images/payment-logo/stripe-payment.png" alt="Stripe" className="h-8 object-contain" />
+                <img src="/images/payment-logo/upi-payment.png" alt="UPI" className="h-8 object-contain" />
+                <img src="/images/payment-logo/RuPay-payment.png" alt="RuPay" className="h-8 object-contain" />
               </div>
             </div>
           </div>

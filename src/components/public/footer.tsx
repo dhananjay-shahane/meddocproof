@@ -45,24 +45,28 @@ export default function PublicFooter() {
       href: "https://twitter.com/medproofdocs",
       label: "Twitter",
       hoverBg: "hover:bg-[#1DA1F2] hover:border-[#1DA1F2]",
+      brandColor: "#1DA1F2",
     },
     {
       icon: <Instagram className="h-4 w-4" />,
       href: "https://instagram.com/medproofdocs",
       label: "Instagram",
       hoverBg: "hover:bg-[#E4405F] hover:border-[#E4405F]",
+      brandColor: "#E4405F",
     },
     {
       icon: <Linkedin className="h-4 w-4" />,
       href: "https://linkedin.com/company/medproofdocs",
       label: "LinkedIn",
       hoverBg: "hover:bg-[#0A66C2] hover:border-[#0A66C2]",
+      brandColor: "#0A66C2",
     },
     {
       icon: <Mail className="h-4 w-4" />,
       href: "mailto:support@medproofdocs.com",
       label: "Email",
       hoverBg: "hover:bg-[#EA4335] hover:border-[#EA4335]",
+      brandColor: "#EA4335",
     },
   ];
 

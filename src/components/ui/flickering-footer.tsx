@@ -294,6 +294,7 @@ interface SocialLink {
   icon: React.ReactNode;
   href: string;
   label: string;
+  brandColor?: string;
 }
 
 interface FlickeringFooterProps {
@@ -389,9 +390,21 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               <Link
                 key={index}
                 href={link.href}
-                className={`flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:text-white hover:scale-110 active:scale-95 backdrop-blur-sm ${(link as any).hoverBg || 'hover:bg-white/10 hover:border-white'}`}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white transition-all duration-300 hover:scale-110 active:scale-95 backdrop-blur-sm"
                 target="_blank"
                 rel="noopener noreferrer"
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget;
+                  el.style.backgroundColor = (link as any).brandColor || "rgba(255,255,255,0.15)";
+                  el.style.borderColor = (link as any).brandColor || "white";
+                  el.style.color = "#22c55e";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.backgroundColor = "";
+                  el.style.borderColor = "";
+                  el.style.color = "";
+                }}
               >
                 {link.icon}
                 <span className="sr-only">{link.label}</span>

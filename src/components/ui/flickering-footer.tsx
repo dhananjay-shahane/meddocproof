@@ -482,7 +482,7 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent z-10 from-0% to-40%" />
         <div className="absolute inset-0 mx-4 md:mx-6">
           <FlickeringGrid
-            text={mobile ? "Medproof" : (tablet ? "Medproof" : gridText)}
+            text={mobile ? "MediProofDocs" : (tablet ? "MediProofDocs" : gridText)}
             fontSize={tablet ? 50 : 70}
             className="h-full w-full"
             squareSize={2}

@@ -88,7 +88,7 @@ export function CertificateSidebar() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="hidden sm:block absolute top-[12%] -right-2 sm:bottom-[15%] sm:-right-1 md:bottom-[18%] md:right-0 lg:bottom-[15%] lg:-right-4 z-20"
+            className="absolute bottom-[20%] -right-2 sm:bottom-[22%] sm:right-0 md:bottom-[24%] md:right-1 lg:bottom-28 lg:-right-2 z-20"
           >
             <div className="bg-white/95 backdrop-blur-md rounded-lg sm:rounded-xl lg:rounded-2xl px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 md:py-2.5 lg:px-4 lg:py-3 shadow-xl border border-white/50">
               <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
@@ -136,7 +136,7 @@ export function CertificateSidebar() {
           </motion.div>
 
           {/* Small Floating Shield Icon - Bottom Right */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1, duration: 0.4 }}
@@ -147,7 +147,7 @@ export function CertificateSidebar() {
                 <ShieldCheck className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6 text-teal-500" />
               </div>
             </Float>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </motion.div>

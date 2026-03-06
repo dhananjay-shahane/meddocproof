@@ -438,7 +438,7 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
                   <a
                     key={index}
                     href="/#certificates"
-                    className="text-xs font-medium text-blue-400 border-b border-blue-400 hover:text-blue-300 hover:border-blue-300 transition-all duration-200 leading-relaxed"
+                    className="text-xs font-medium text-blue-400  hover:text-blue-300 hover:border-blue-300 transition-all duration-200 leading-relaxed"
                   >
                     {city}
                   </a>
@@ -451,11 +451,11 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/60">
                 Secure Payment
               </p>
-              <div className="flex flex-wrap items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-blue-400/30 w-fit">
-                <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/payment-icons@master/icons/mastercard.svg" alt="Mastercard" className="h-8 object-contain" />
-                <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/payment-icons@master/icons/paypal.svg" alt="PayPal" className="h-7 object-contain" />
-                <img src="https://cdn.razorpay.com/static/assets/logo/payment.svg" alt="Razorpay" className="h-6 object-contain brightness-0 invert" />
-                <img src="https://cdn.jsdelivr.net/gh/nicepay-dev/payment-icons@master/icons/visa.svg" alt="Visa" className="h-7 object-contain" />
+              <div className="flex flex-wrap items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3 border border-blue-400/30 w-fit">
+                <img src="/images/payment-logo/mastercard-payment.png" alt="Mastercard" className="h-8 object-contain" />
+                <img src="/images/payment-logo/paypal-payment.png" alt="PayPal" className="h-10 object-contain" />
+                <img src="/images/payment-logo/rayzorpay-payment.png" alt="Razorpay" className="h-6 object-contain" />
+                <img src="/images/payment-logo/visa-payment.png" alt="Visa" className="h-10 object-contain" />
                 <span className="text-sm font-bold text-cyan-400 tracking-wide">stripe</span>
                 <span className="text-sm font-bold text-white/90 tracking-wide">UPI</span>
                 <span className="text-xs font-semibold text-yellow-400 tracking-wide">RuPay</span>
@@ -469,7 +469,7 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent z-10 from-0% to-40%" />
         <div className="absolute inset-0 mx-4 md:mx-6">
           <FlickeringGrid
-            text={mobile ? "" : (tablet ? "Medproof" : gridText)}
+            text={mobile ? "Medproof" : (tablet ? "Medproof" : gridText)}
             fontSize={tablet ? 50 : 70}
             className="h-full w-full"
             squareSize={2}

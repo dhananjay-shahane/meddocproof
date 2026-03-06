@@ -230,7 +230,7 @@ export function HeroSection() {
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7, duration: 0.4 }}
-                  className="absolute top-[25%] -left-3 sm:top-[28%] sm:-left-2 md:top-[30%] md:-left-1 lg:top-1/3 lg:-left-4 z-20"
+                  className="absolute top-[15%] -left-3 sm:top-[50%] sm:-left-2 md:top-[1%] md:-left-1 lg:top-1/3 lg:-left-4 z-20"
                 >
                   <Float duration={6} distance={10}>
                     <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full bg-slate-100 border-2 border-white shadow-lg flex items-center justify-center">
@@ -244,7 +244,7 @@ export function HeroSection() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7, duration: 0.5 }}
-                  className="absolute top-[12%] -right-2 sm:bottom-[15%] sm:-right-1 md:bottom-[18%] md:right-0 lg:bottom-[15%] lg:-right-4 z-20"
+                  className="absolute bottom-[20%] -right-2 sm:bottom-[22%] sm:right-0 md:bottom-[24%] md:right-1 lg:bottom-28 lg:-right-2 z-20"
                 >
                   <div className="bg-white/95 backdrop-blur-md rounded-lg sm:rounded-xl lg:rounded-2xl px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 md:py-2.5 lg:px-4 lg:py-3 shadow-xl border border-white/50">
                     <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
@@ -292,18 +292,18 @@ export function HeroSection() {
                 </motion.div>
 
                 {/* Small Floating Shield Icon - Bottom Right */}
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1, duration: 0.4 }}
-                  className="absolute bottom-[15%] right-2 sm:bottom-[18%] sm:right-3 md:bottom-[20%] md:right-4 lg:bottom-16 lg:right-8 z-20"
+                  className="absolute bottom-[10%] right-2 sm:bottom-[10%] sm:right-3 md:bottom-[20%] md:right-4 lg:bottom-16 lg:right-8 z-20"
                 >
                   <Float duration={5} distance={7}>
                     <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full bg-slate-100 border-2 border-white shadow-md flex items-center justify-center">
                       <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 lg:w-4 lg:h-4 text-cyan-500" />
                     </div>
                   </Float>
-                </motion.div>
+                </motion.div> */}
 
               </div>
             </div>

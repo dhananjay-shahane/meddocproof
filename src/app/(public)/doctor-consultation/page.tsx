@@ -115,105 +115,51 @@ const MILAN_HIGHLIGHTS = [
 const EXPERT_CARE_ITEMS = [
   {
     title: "Mental Health",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <circle cx="22" cy="24" r="4" fill="#00acc1" />
-        <circle cx="42" cy="24" r="4" fill="#00acc1" />
-        <path d="M20 36 Q32 48 44 36" stroke="#00acc1" strokeWidth="3" fill="none" />
-        <circle cx="16" cy="20" r="3" fill="#80deea" />
-        <circle cx="48" cy="20" r="3" fill="#80deea" />
-        <circle cx="32" cy="14" r="3" fill="#80deea" />
-      </svg>
-    ),
+    icon: Brain,
+    iconClassName: "text-violet-600",
+    ringClassName: "border-violet-200 bg-violet-50",
   },
   {
     title: "Allergy",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <circle cx="32" cy="28" r="12" fill="#ffccbc" />
-        <path d="M28 24 L32 28 L36 24" stroke="#ff7043" strokeWidth="2" fill="none" />
-        <circle cx="26" cy="30" r="2" fill="#5d4037" />
-        <circle cx="38" cy="30" r="2" fill="#5d4037" />
-        <ellipse cx="32" cy="36" rx="3" ry="2" fill="#ffab91" />
-      </svg>
-    ),
+    icon: Sparkles,
+    iconClassName: "text-cyan-600",
+    ringClassName: "border-cyan-200 bg-cyan-50",
   },
   {
     title: "Pregnancy Related Queries",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <ellipse cx="32" cy="38" rx="10" ry="12" fill="#ffccbc" />
-        <circle cx="32" cy="22" r="8" fill="#ffccbc" />
-        <path d="M24 18 Q32 14 40 18" stroke="#8d6e63" strokeWidth="2" fill="none" />
-        <circle cx="40" cy="16" r="4" fill="#ff8a80" />
-      </svg>
-    ),
+    icon: Heart,
+    iconClassName: "text-rose-600",
+    ringClassName: "border-rose-200 bg-rose-50",
   },
   {
     title: "Menstrual Health",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <ellipse cx="32" cy="34" rx="8" ry="12" fill="none" stroke="#00acc1" strokeWidth="3" />
-        <ellipse cx="32" cy="34" rx="4" ry="8" fill="#ff8a80" />
-        <circle cx="32" cy="20" r="3" fill="#00acc1" />
-        <circle cx="20" cy="34" r="3" fill="#00acc1" />
-        <circle cx="44" cy="34" r="3" fill="#00acc1" />
-      </svg>
-    ),
+    icon: Activity,
+    iconClassName: "text-pink-600",
+    ringClassName: "border-pink-200 bg-pink-50",
   },
   {
     title: "General Medicine",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <rect x="28" y="16" width="8" height="32" rx="2" fill="#00acc1" />
-        <rect x="16" y="28" width="32" height="8" rx="2" fill="#00acc1" />
-        <circle cx="32" cy="32" r="4" fill="#fff" />
-      </svg>
-    ),
+    icon: Stethoscope,
+    iconClassName: "text-blue-600",
+    ringClassName: "border-blue-200 bg-blue-50",
   },
   {
     title: "Pediatrics",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <circle cx="32" cy="24" r="8" fill="#ffccbc" />
-        <ellipse cx="32" cy="44" rx="10" ry="8" fill="#ffccbc" />
-        <circle cx="28" cy="22" r="2" fill="#5d4037" />
-        <circle cx="36" cy="22" r="2" fill="#5d4037" />
-        <path d="M28 28 Q32 32 36 28" stroke="#ff7043" strokeWidth="2" fill="none" />
-        <circle cx="48" cy="20" r="4" fill="#ff8a80" />
-      </svg>
-    ),
+    icon: Baby,
+    iconClassName: "text-amber-600",
+    ringClassName: "border-amber-200 bg-amber-50",
   },
   {
     title: "Dermatology",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <circle cx="32" cy="32" r="12" fill="#ffccbc" />
-        <circle cx="26" cy="30" r="2" fill="#5d4037" />
-        <circle cx="38" cy="30" r="2" fill="#5d4037" />
-        <ellipse cx="32" cy="36" rx="3" ry="2" fill="#ffab91" />
-        <circle cx="48" cy="20" r="3" fill="#80deea" />
-        <circle cx="16" cy="20" r="3" fill="#80deea" />
-      </svg>
-    ),
+    icon: Sparkles,
+    iconClassName: "text-emerald-600",
+    ringClassName: "border-emerald-200 bg-emerald-50",
   },
   {
     title: "Orthopedics",
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-16 h-16">
-        <circle cx="32" cy="32" r="28" fill="#e0f7fa" />
-        <path d="M20 20 L28 28 L20 36" stroke="#00acc1" strokeWidth="4" fill="none" strokeLinecap="round" />
-        <path d="M44 20 L36 28 L44 36" stroke="#00acc1" strokeWidth="4" fill="none" strokeLinecap="round" />
-        <circle cx="32" cy="28" r="6" fill="#00acc1" />
-      </svg>
-    ),
+    icon: Bone,
+    iconClassName: "text-teal-600",
+    ringClassName: "border-teal-200 bg-teal-50",
   },
 ];
 
@@ -745,16 +691,21 @@ export default function DoctorConsultationPage() {
                       viewport={{ once: true }}
                       className="flex items-center justify-center"
                     >
+                      {(() => {
+                        const Icon = item.icon;
+                        return (
                       <div className="w-[180px] sm:w-[190px] md:w-[200px] min-h-[205px] rounded-[18px] border border-border bg-card shadow-md px-4 py-5 flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
-                        <div className="w-[122px] h-[122px] rounded-full border-[10px] border-primary/20 bg-primary/5 flex items-center justify-center mb-4">
-                          <div className="w-[74px] h-[74px] flex items-center justify-center">
-                            {item.icon}
+                        <div className={`w-[122px] h-[122px] rounded-full border-[10px] flex items-center justify-center mb-4 ${item.ringClassName}`}>
+                          <div className="w-[74px] h-[74px] rounded-full bg-card/70 border border-border/50 flex items-center justify-center">
+                            <Icon className={`w-9 h-9 ${item.iconClassName}`} strokeWidth={2.2} />
                           </div>
                         </div>
                         <h3 className="text-lg font-semibold text-foreground text-center leading-snug">
                           {item.title}
                         </h3>
                       </div>
+                        );
+                      })()}
                     </motion.div>
                   </CarouselItem>
                 ))}

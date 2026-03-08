@@ -25,7 +25,7 @@ export const CTASection = ({
   },
 }: CTASectionProps) => {
   return (
-    <section className="relative overflow-visiable bg-linear-to-b from-primary/30 via-primary/30 to-secondary/30 ">
+    <section className="relative overflow-visiable bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative flex min-h-[280px] items-center lg:min-h-[350px]">
           <div className="grid w-full items-center gap-6 lg:grid-cols-2">

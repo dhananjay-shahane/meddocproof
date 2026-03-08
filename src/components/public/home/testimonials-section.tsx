@@ -204,15 +204,15 @@ export function TestimonialsSection() {
   const handleNext = () => setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
 
   return (
-    <section className="py-14 lg:py-20 xl:py-24 bg-gray-50 relative overflow-hidden">
+    <section className="py-14 lg:py-20 xl:py-24 bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <SectionReveal blur={true} scale={true}>
           <div className="text-center mb-8 lg:mb-10">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
-              The Trust We&apos;ve Earned
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-3">
+              The Trust We&apos;ve <span className="text-primary">Earned</span>
             </h2>
-            <p className="text-base lg:text-lg font-semibold text-gray-700">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
               MediProofDocs Google Reviews
             </p>
           </div>

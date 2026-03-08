@@ -121,6 +121,14 @@
   --color-brand-primary-hover: hsl(212 94% 38%);
   --color-brand-primary-dark: hsl(212 94% 32%);
 
+  /* Theme Primary & Accent */
+  --color-theme-primary: #0d2f85;
+  --color-theme-primary-dark: #0a2468;
+  --color-theme-cyan: #1fb8c9;
+  --color-theme-cyan-hover: #19a0af;
+  --color-theme-cyan-light: #eaf8fb;
+  --color-theme-cyan-border: #bfe6ea;
+
   /* Section backgrounds */
   --color-section-light-blue: #f0f7fa;
 

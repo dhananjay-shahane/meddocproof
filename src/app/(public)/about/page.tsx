@@ -103,7 +103,7 @@ export default function AboutPage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="px-4 py-16">
+      <section className="px-4 py-16 bg-linear-to-b from-[#7ea4cc] via-[#9fbfe0] to-[#c1d6ea]">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-center text-2xl font-bold">
             Why Choose MediProofDocs?

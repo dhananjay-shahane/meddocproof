@@ -188,13 +188,10 @@ export function CertificateTypesSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionReveal blur={true} scale={true}>
           <div className="text-center mb-10 lg:mb-14">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4 tracking-wide backdrop-blur-sm border border-primary/20">
-              Wide Range of Options
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 tracking-tight">
-              Types of Certificates We Offer
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-3">
+              Types of <span className="text-primary">Certificates</span> We Offer
             </h2>
-            <p className="text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               We provide a variety of medical certificates, including Sick Leave, Fitness, Work From Home (WFH), Fit-to-Fly, and custom certificates. All certificates are issued by certified doctors through a quick and convenient online consultation.
             </p>
           </div>

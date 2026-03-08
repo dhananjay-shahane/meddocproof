@@ -77,7 +77,7 @@ const GOOGLE_REVIEWS = [
 
 export function GoogleReviewsSection() {
   return (
-    <section className="bg-gray-50 px-4 py-24">
+    <section className="bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40 px-4 py-24">
       <div className="mx-auto max-w-7xl">
         <div className="text-center">
           <h2 className="text-4xl font-bold text-gray-900">Google Reviews</h2>

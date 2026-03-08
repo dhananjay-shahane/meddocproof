@@ -1,12 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, CheckCircle, Phone, MessageCircle, Heart, Star, Stethoscope, ShieldCheck } from "lucide-react";
 import { FadeIn, Float } from "@/components/ui/fade-in";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { TypewriterEffect } from "@/components/ui/typewriter";
+import { HeroSectionLayout } from "@/components/public/shared/hero-section-layout";
 
-const certificateTypes = [
+const defaultCertificateTypes = [
   "Sick Leave",
   "Fitness",
   "Work From Home",
@@ -18,7 +20,7 @@ const certificateTypes = [
   "Unfit to Travel",
 ];
 
-const trustBadges = [
+const defaultTrustBadges = [
   "Handwritten certificate with courier option available",
   "Issued by registered Indian MBBS / MD / MS doctors",
   "Digital copy delivered within 30–60 minutes*",
@@ -28,15 +30,49 @@ const trustBadges = [
   "Fully online process — no clinic visit required",
 ];
 
-export function HeroSection() {
+interface HeroSectionProps {
+  headingPrefix?: string;
+  headingHighlight?: string;
+  typewriterPrefix?: string;
+  rotatingWords?: string[];
+  trustBadges?: string[];
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
+  secondaryCta?: {
+    label: string;
+    href: string;
+  };
+  heroImageSrc?: string;
+  heroImageAlt?: string;
+}
+
+export function HeroSection({
+  headingPrefix = "Get Your Medical",
+  headingHighlight = "Certificate",
+  typewriterPrefix = "For",
+  rotatingWords = defaultCertificateTypes,
+  trustBadges = defaultTrustBadges,
+  primaryCta = {
+    label: "Get Certificate Now",
+    href: "/certificates/apply",
+  },
+  secondaryCta = {
+    label: "How It Works",
+    href: "#how-it-works",
+  },
+  heroImageSrc = "/images/hero/doctor-team-hero.png",
+  heroImageAlt = "Professional Doctor Team",
+}: HeroSectionProps) {
   return (
-    <section className="relative min-h-[85vh] lg:min-h-[90vh] xl:min-h-screen flex items-center overflow-hidden bg-secondary/30">
+    <section className="relative min-h-[85vh] lg:min-h-[90vh] xl:min-h-screen flex items-center overflow-hidden bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
       {/* Modern Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-teal-50/20" />
+      {/* <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-blue-100/50 to-teal-100/40" /> */}
       
       {/* Animated Mesh Gradient Orbs */}
-      <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-teal-200/20 to-emerald-200/20 rounded-full blur-3xl animate-pulse delay-1000" />
+      {/* <div className="absolute top-0 left-1/5 w-[800px] h-[800px] bg-gradient-to-r from-blue-400 to-cyan-400 blur-3xl animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-r from-teal-400/30 to-emerald-400/30 rounded-full blur-3xl animate-pulse delay-1000" /> */}
       
       {/* Subtle Grid Pattern */}
       <GridPattern
@@ -108,16 +144,18 @@ export function HeroSection() {
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 sm:pt-28 lg:pt-24 py-16 lg:py-0">
-        <div className="grid lg:grid-cols-[5fr_7fr] gap-8 lg:gap-8 xl:gap-12 items-center">
+      <HeroSectionLayout
+        containerClassName="pt-24 sm:pt-28 lg:pt-24 py-16 lg:py-0"
+        gridClassName="lg:grid-cols-[5fr_7fr] gap-8 lg:gap-8 xl:gap-12"
+      >
           {/* Left Content */}
           <FadeIn direction="up" className="max-w-2xl">
             {/* Main Heading */}
             <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 leading-[1.15] tracking-tight mb-3 lg:mb-4">
-              Get Your Medical{" "}
+              {headingPrefix}{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500">
-                  Certificate
+                  {headingHighlight}
                 </span>
                 <svg
                   className="absolute -bottom-1.5 left-0 w-full h-2.5 text-cyan-200/50 -z-0"
@@ -136,9 +174,9 @@ export function HeroSection() {
               </span>
               <br />
               <span className="text-slate-600 font-medium text-xl sm:text-2xl lg:text-3xl xl:text-4xl">
-                For{" "}
+                {typewriterPrefix}{" "}
                 <TypewriterEffect
-                  words={certificateTypes}
+                  words={rotatingWords}
                   className="text-blue-600 font-semibold"
                   typingSpeed={120}
                   deletingSpeed={60}
@@ -166,22 +204,22 @@ export function HeroSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-2.5 mb-6 lg:mb-8">
               <motion.a
-                href="/certificates/apply"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 hover:bg-blue-700 transition-all duration-300"
+                href={primaryCta.href}
               >
-                Get Certificate Now
+                {primaryCta.label}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </motion.a>
               
               <motion.a
-                href="#how-it-works"
+                href={secondaryCta.href}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-slate-700 border border-slate-200 rounded-lg font-semibold text-sm sm:text-base hover:border-slate-300 hover:bg-slate-50 transition-all duration-300"
               >
-                How It Works
+                {secondaryCta.label}
               </motion.a>
             </div>
           </FadeIn>
@@ -261,9 +299,14 @@ export function HeroSection() {
 
                 {/* Doctor Image */}
                 <Float duration={6} distance={12}>
-                  <img
-                    src="/images/hero/doctor-team-hero.png"
-                    alt="Professional Doctor Team"
+                  <Image
+                    src={heroImageSrc}
+                    alt={heroImageAlt}
+                    width={1200}
+                    height={1200}
+                    priority
+                    quality={95}
+                    sizes="(max-width: 640px) 280px, (max-width: 768px) 340px, (max-width: 1024px) 400px, 680px"
                     className="relative z-10 w-full h-auto max-h-[280px] sm:max-h-[340px] md:max-h-[400px] lg:max-h-[680px] object-contain drop-shadow-2xl"
                   />
                 </Float>
@@ -308,8 +351,7 @@ export function HeroSection() {
               </div>
             </div>
           </FadeIn>
-        </div>
-      </div>
+      </HeroSectionLayout>
 
       {/* Bottom Wave Divider */}
       <div className="absolute bottom-0 left-0 right-0 pointer-events-none">

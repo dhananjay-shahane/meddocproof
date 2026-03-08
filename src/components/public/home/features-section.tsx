@@ -27,7 +27,7 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-14 lg:py-20 xl:py-24 bg-linear-to-b from-primary/30 via-primary/30 to-secondary/30 relative overflow-hidden">
+    <section className="py-14 lg:py-20 xl:py-24 bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40 relative overflow-hidden">
       <GridPattern
         width={32}
         height={32}
@@ -38,9 +38,12 @@ export function FeaturesSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionReveal blur={true} scale={true}>
           <div className="text-center mb-10 lg:mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3">
-              Why Trust Us?
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-3">
+              Why <span className="text-primary">Trust Us?</span>
             </h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+              Trusted by patients across India for secure, doctor-verified, and hassle-free certificate support.
+            </p>
           </div>
         </SectionReveal>
 

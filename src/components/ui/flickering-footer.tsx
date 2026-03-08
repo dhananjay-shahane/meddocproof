@@ -3,6 +3,7 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { ClassValue, clsx } from "clsx";
 import * as Color from "color-bits";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -390,21 +391,9 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               <Link
                 key={index}
                 href={link.href}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white transition-all duration-300 hover:scale-110 active:scale-95 backdrop-blur-sm"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-green-500 bg-white text-green-600 transition-all duration-300 hover:scale-110 hover:bg-green-50 active:scale-95"
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget;
-                  el.style.backgroundColor = (link as any).brandColor || "rgba(255,255,255,0.15)";
-                  el.style.borderColor = (link as any).brandColor || "white";
-                  el.style.color = "#22c55e";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget;
-                  el.style.backgroundColor = "";
-                  el.style.borderColor = "";
-                  el.style.color = "";
-                }}
               >
                 {link.icon}
                 <span className="sr-only">{link.label}</span>
@@ -448,14 +437,18 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               </p>
               <div className="flex flex-wrap gap-x-1 gap-y-0.5">
                 {serviceAreas.map((city, index) => (
-                  <a
-                    key={index}
-                    href="/#certificates"
-                    className="text-xs font-medium text-blue-400  hover:text-blue-300 hover:border-blue-300 transition-all duration-200 leading-relaxed"
-                  >
-                    {city}
-                  </a>
-                  ))}
+                  <span key={index} className="flex items-center">
+                    <a
+                      href="/#certificates"
+                      className="text-xs font-medium text-white hover:text-green-400 active:text-blue-400 transition-all duration-200 leading-relaxed"
+                    >
+                      {city}
+                    </a>
+                    {index < serviceAreas.length - 1 && (
+                      <span className="text-xs font-medium text-white/40 mx-1">|</span>
+                    )}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -465,13 +458,13 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
                 Secure Payment
               </p>
               <div className="flex flex-wrap items-center gap-4 bg-white backdrop-blur-sm rounded-xl px-5 py-3 border border-blue-400/30 w-fit">
-                <img src="/images/payment-logo/mastercard-payment.png" alt="Mastercard" className="h-8 object-contain" />
-                <img src="/images/payment-logo/visa-payment.png" alt="Visa" className="h-8 object-contain" />
-                <img src="/images/payment-logo/paypal-payment.png" alt="PayPal" className="h-8 object-contain" />
-                <img src="/images/payment-logo/rayzorpay-payment.png" alt="Razorpay" className="h-8 object-contain" />
-                <img src="/images/payment-logo/stripe-payment.png" alt="Stripe" className="h-8 object-contain" />
-                <img src="/images/payment-logo/upi-payment.png" alt="UPI" className="h-8 object-contain" />
-                <img src="/images/payment-logo/RuPay-payment.png" alt="RuPay" className="h-8 object-contain" />
+                <Image src="/images/payment-logo/mastercard-payment.png" alt="Mastercard" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
+                <Image src="/images/payment-logo/visa-payment.png" alt="Visa" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
+                <Image src="/images/payment-logo/paypal-payment.png" alt="PayPal" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
+                <Image src="/images/payment-logo/rayzorpay-payment.png" alt="Razorpay" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
+                <Image src="/images/payment-logo/stripe-payment.png" alt="Stripe" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
+                <Image src="/images/payment-logo/upi-payment.png" alt="UPI" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
+                <Image src="/images/payment-logo/RuPay-payment.png" alt="RuPay" width={96} height={32} quality={95} className="h-8 w-auto object-contain" />
               </div>
             </div>
           </div>

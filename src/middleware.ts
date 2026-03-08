@@ -19,6 +19,7 @@ const publicPaths = [
   "/doctor/login",
   "/doctor/register",
   "/doctor/pending-approval",
+  "/doctor-consultation",
   "/verify-certificate",
   "/certificates/apply",
   "/profile",

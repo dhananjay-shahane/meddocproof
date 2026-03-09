@@ -51,7 +51,7 @@ export const CTASection = ({
             </FadeIn>
           </div>
 
-          <div className="absolute -right-10 -top-60 bottom-0 z-10 hidden w-[730px] lg:block">
+          <div className="absolute -right-10 -top-60 bottom-0 z-10 hidden w-[600px] lg:block">
             <Image
               src={doctorImage}
               alt="Medical professional"

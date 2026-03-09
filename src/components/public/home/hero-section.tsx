@@ -156,23 +156,9 @@ export function HeroSection({
             <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 leading-[1.15] tracking-tight mb-3 lg:mb-4">
               {headingPrefix}{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500">
+                <span className="relative z-10 inline-block text-primary">
                   {headingHighlight}
                 </span>
-                <svg
-                  className="absolute -bottom-1.5 left-0 w-full h-2.5 text-cyan-200/50 -z-0"
-                  viewBox="0 0 200 9"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    d="M2.00025 6.99997C25.7509 3.49998 55.375 -0.500029 100 2.49998C144.625 5.49998 174.251 6.99997 198 6.99997"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
               </span>
               <br />
               <span className="text-slate-600 font-medium text-xl sm:text-2xl lg:text-3xl xl:text-4xl">

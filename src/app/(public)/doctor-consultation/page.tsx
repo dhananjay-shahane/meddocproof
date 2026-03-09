@@ -121,6 +121,23 @@ const CONSULTATION_HIGHLIGHTS = [
   "Our consultation process follows Indian telemedicine and healthcare standards."
 ];
 
+const DOCTOR_CONSULTATION_TOPICS = [
+  "General health concerns",
+  "Fever, cold, and cough",
+  "Women's health issues",
+  "Headache or body pain",
+  "Stomach and digestion problems",
+  "Skin and allergy issues",
+  "Medical certificate consultation",
+  "Follow-up medical advice",
+  "Minor infections",
+  "Stress, sleep, or fatigue issues",
+  "Diet and nutrition advice",
+  "Medication guidance or prescription clarification",
+  "Cold, flu, or seasonal illness symptoms",
+  "Basic health check advice",
+];
+
 const MILAN_HIGHLIGHTS = [
   "Every completed consultation contributes to community healthcare access.",
   "Your purchase helps fund care support for families with limited reach.",
@@ -261,43 +278,36 @@ const CONSULTATION_SPECIALTIES: Array<{
   title: string;
   price: string;
   svg: string;
-  accent: string;
 }> = [
   {
-    title: "Skin and Hair Advice",
-    price: "Starts at Rs 449",
+    title: "Sexology",
+    price: "Rs 499",
     svg: "/svg/medical-svgs/1-skin-hair.svg",
-    accent: "from-violet-100 via-fuchsia-50 to-white",
   },
   {
-    title: "Emotional Health Support",
-    price: "Starts at Rs 499",
+    title: "General physician",
+    price: "Rs 399",
     svg: "/svg/medical-svgs/2-brain-mental.svg",
-    accent: "from-orange-100 via-amber-50 to-white",
   },
   {
-    title: "Digestive Health",
-    price: "Starts at Rs 399",
+    title: "Dermatology",
+    price: "Rs 449",
     svg: "/svg/medical-svgs/3-stomach-digestive.svg",
-    accent: "from-yellow-100 via-amber-50 to-white",
   },
   {
-    title: "Child Health Guidance",
-    price: "Starts at Rs 499",
+    title: "Psychiatry",
+    price: "Rs 499",
     svg: "/svg/medical-svgs/4-pediatrics-child.svg",
-    accent: "from-indigo-100 via-blue-50 to-white",
   },
   {
-    title: "Bone and Joint Care",
-    price: "Starts at Rs 549",
+    title: "Stomach and digestion",
+    price: "Rs 399",
     svg: "/svg/medical-svgs/5-bone-orthopedic.svg",
-    accent: "from-emerald-100 via-teal-50 to-white",
   },
   {
-    title: "Eye and Vision Concerns",
-    price: "Starts at Rs 449",
+    title: "Pediatrics",
+    price: "Rs 499",
     svg: "/svg/medical-svgs/6-eye-vision.svg",
-    accent: "from-cyan-100 via-sky-50 to-white",
   },
 ];
 
@@ -331,10 +341,11 @@ export default function DoctorConsultationPage() {
         headingPrefix="Online Doctor"
         headingHighlight="Consultation"
         typewriterPrefix="For"
-        rotatingWords={[
+        rotatingWords={DOCTOR_CONSULTATION_TOPICS}
+        trustBadges={[
           "General health concerns",
           "Fever, cold, and cough",
-          "Women’s health issues",
+          "Women's health issues",
           "Headache or body pain",
           "Stomach and digestion problems",
           "Skin and allergy issues",
@@ -346,13 +357,6 @@ export default function DoctorConsultationPage() {
           "Medication guidance or prescription clarification",
           "Cold, flu, or seasonal illness symptoms",
           "Basic health check advice",
-        ]}
-        trustBadges={[
-          "Verified MBBS/MD doctors available online",
-          "Doctor-reviewed consultation from your home",
-          "Secure digital documentation with verification fields",
-          "Fast delivery updates via WhatsApp and email",
-          "Aligned with Indian telemedicine and care standards",
         ]}
         primaryCta={{
           label: "Book consultation",
@@ -463,73 +467,113 @@ export default function DoctorConsultationPage() {
         </div>
       </section>
 
-      {/* Milan Campaign Section */}
-      {/* <section className="relative py-16 sm:py-20 bg-primary overflow-hidden">
-        <div
-          className="absolute left-0 right-0 -top-6 h-6 bg-muted/30"
-          style={{
-            clipPath:
-              "polygon(0 0, 4% 100%, 8% 0, 12% 100%, 16% 0, 20% 100%, 24% 0, 28% 100%, 32% 0, 36% 100%, 40% 0, 44% 100%, 48% 0, 52% 100%, 56% 0, 60% 100%, 64% 0, 68% 100%, 72% 0, 76% 100%, 80% 0, 84% 100%, 88% 0, 92% 100%, 96% 0, 100% 100%, 100% 0)",
-          }}
-        />
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45 }}
-              className="order-2 lg:order-1"
-            >
-              <div className="relative rounded-4xl overflow-hidden border border-primary-foreground/20 bg-card shadow-2xl">
-                <img
-                  src="/images/auth/user-hero.jpg"
-                  alt="Community healthcare support"
-                  className="w-full h-72 sm:h-96 object-cover"
-                />
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.08 }}
-              className="order-1 lg:order-2"
-            >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-primary-foreground leading-tight mb-3">
-                Milan Program by <span className="text-accent">MediProofDocs</span>
+      
+      <section className="relative overflow-hidden bg-primary/40 py-16 sm:py-20">
+        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col gap-4 lg:mb-12 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+                25+ Specialities
               </h2>
-
-              <p className="text-primary-foreground/80 text-base sm:text-lg leading-relaxed mb-6 max-w-xl">
-                MediProofDocs consultations do more than documentation delivery. Each successful request
-                helps support practical healthcare access through our Milan community initiative.
+              <p className="mt-2 text-base text-muted-foreground sm:text-lg">
+                Consult with top doctors across specialities
               </p>
+            </div>
 
-              <div className="space-y-3 mb-7">
-                {MILAN_HIGHLIGHTS.map((item) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <span className="mt-0.5 shrink-0 rounded-full bg-primary-foreground/20 p-1">
-                      <Check className="w-4 h-4 text-accent" />
-                    </span>
-                    <p className="text-sm sm:text-base font-semibold text-primary-foreground leading-snug">{item}</p>
-                  </div>
-                ))}
-              </div>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-xl border border-zinc-300 bg-white px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-zinc-50 sm:self-start"
+            >
+              See all Specialities
+            </Link>
+          </div>
 
-              <Link
-                href="/certificates/apply"
-                className="inline-flex items-center justify-center rounded-full bg-accent hover:bg-accent/90 text-accent-foreground px-7 sm:px-9 py-3.5 text-lg sm:text-xl font-extrabold shadow-lg transition-all hover:-translate-y-0.5"
+          <div className="relative">
+            <button
+              type="button"
+              aria-label="Previous specialties"
+              onClick={() => shiftSpecialties("prev")}
+              className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-md transition hover:text-foreground lg:flex"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+
+            <button
+              type="button"
+              aria-label="Next specialties"
+              onClick={() => shiftSpecialties("next")}
+              className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-md transition hover:text-foreground lg:flex"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+              {visibleSpecialties.map((specialty, index) => {
+                return (
+                  <motion.div
+                    key={`${specialty.title}-${specialtyStart}`}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.05 }}
+                    className="group rounded-md border border-zinc-200 bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                  >
+                    <div
+                      className="mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full bg-[#d8dfef]"
+                    >
+                      <Image
+                        src={specialty.svg}
+                        alt={specialty.title}
+                        width={76}
+                        height={76}
+                        className="h-[4.5rem] w-[4.5rem] object-contain"
+                      />
+                    </div>
+
+                    <h3 className="min-h-[56px] text-[1.05rem] font-bold leading-tight text-foreground">
+                      {specialty.title}
+                    </h3>
+
+                    <p className="mt-3 text-base font-medium text-muted-foreground">
+                      {specialty.price}
+                    </p>
+
+                    <Link
+                      href="/certificates/apply"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-500 transition-colors hover:text-sky-600"
+                    >
+                      Consult now
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 flex items-center justify-center gap-3 lg:hidden">
+              <button
+                type="button"
+                onClick={() => shiftSpecialties("prev")}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm transition hover:text-foreground"
+                aria-label="Previous specialties"
               >
-                Discover Milan With MediProofDocs
-              </Link>
-            </motion.div>
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => shiftSpecialties("next")}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm transition hover:text-foreground"
+                aria-label="Next specialties"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       {/* Three-step process section */}
-      <section className="relative overflow-hidden bg-primary/40 py-20">
+      {/* <section className="relative overflow-hidden bg-primary/40 py-20">
         <div
           className="absolute left-0 right-0 -bottom-6 h-6 bg-muted/20"
           style={{
@@ -578,7 +622,7 @@ export default function DoctorConsultationPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Common Conditions for a Medical Certificate Section */}
       <section className="relative py-20 bg-linear-to-b from-background via-primary/5 to-background overflow-hidden">
@@ -651,130 +695,6 @@ export default function DoctorConsultationPage() {
 
       <TestimonialsSection />
 
-      <section className="relative overflow-hidden bg-linear-to-b from-background via-primary/5 to-background py-16 sm:py-20">
-        <div
-          className="absolute left-0 right-0 -top-1 h-8 bg-background"
-          style={{
-            clipPath:
-              "polygon(0 0, 4% 100%, 8% 0, 12% 100%, 16% 0, 20% 100%, 24% 0, 28% 100%, 32% 0, 36% 100%, 40% 0, 44% 100%, 48% 0, 52% 100%, 56% 0, 60% 100%, 64% 0, 68% 100%, 72% 0, 76% 100%, 80% 0, 84% 100%, 88% 0, 92% 100%, 96% 0, 100% 100%, 100% 0)",
-          }}
-        />
-        <div
-          className="absolute left-0 right-0 -bottom-1 h-8 bg-background"
-          style={{
-            clipPath:
-              "polygon(0 100%, 4% 0, 8% 100%, 12% 0, 16% 100%, 20% 0, 24% 100%, 28% 0, 32% 100%, 36% 0, 40% 100%, 44% 0, 48% 100%, 52% 0, 56% 100%, 60% 0, 64% 100%, 68% 0, 72% 100%, 76% 0, 80% 100%, 84% 0, 88% 100%, 92% 0, 96% 100%, 100% 0, 100% 100%)",
-          }}
-        />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-primary/8 to-transparent" />
-        <div className="pointer-events-none absolute -left-10 top-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
-        <div className="pointer-events-none absolute -right-12 bottom-8 h-64 w-64 rounded-full bg-secondary/25 blur-3xl" />
-
-        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 flex flex-col gap-5 lg:mb-12 lg:flex-row lg:items-start lg:justify-between">
-            <div>
-              <div className="mb-3 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-                Doctor categories
-              </div>
-              <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-                Care Paths for <span className="text-primary">Every Need</span>
-              </h2>
-              <p className="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg lg:text-xl">
-                Choose a doctor category based on the concern you want to discuss online.
-              </p>
-            </div>
-
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-2xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted sm:self-start"
-            >
-              Explore all departments
-            </Link>
-          </div>
-
-          <div className="relative">
-            <button
-              type="button"
-              aria-label="Previous specialties"
-              onClick={() => shiftSpecialties("prev")}
-              className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-lg transition hover:text-foreground lg:flex"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-
-            <button
-              type="button"
-              aria-label="Next specialties"
-              onClick={() => shiftSpecialties("next")}
-              className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-lg transition hover:text-foreground lg:flex"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
-              {visibleSpecialties.map((specialty, index) => {
-                return (
-                  <motion.div
-                    key={`${specialty.title}-${specialtyStart}`}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: index * 0.05 }}
-                    className="group rounded-[24px] border border-border bg-card p-6 text-center shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(15,23,42,0.12)]"
-                  >
-                    <div
-                      className={`mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br ${specialty.accent} shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]`}
-                    >
-                      <Image
-                        src={specialty.svg}
-                        alt={specialty.title}
-                        width={68}
-                        height={68}
-                        className="h-16 w-16 object-contain"
-                      />
-                    </div>
-
-                    <h3 className="min-h-[56px] text-xl font-bold leading-tight text-foreground">
-                      {specialty.title}
-                    </h3>
-
-                    <p className="mt-3 text-base font-medium text-muted-foreground">
-                      {specialty.price}
-                    </p>
-
-                    <Link
-                      href="/certificates/apply"
-                      className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-primary/80"
-                    >
-                      Consult this specialist
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            <div className="mt-6 flex items-center justify-center gap-3 lg:hidden">
-              <button
-                type="button"
-                onClick={() => shiftSpecialties("prev")}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition hover:text-foreground"
-                aria-label="Previous specialties"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => shiftSpecialties("next")}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition hover:text-foreground"
-                aria-label="Next specialties"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <CTASection
         title="Connect With a Licensed Doctor Online"

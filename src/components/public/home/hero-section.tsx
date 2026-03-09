@@ -46,6 +46,7 @@ interface HeroSectionProps {
   };
   heroImageSrc?: string;
   heroImageAlt?: string;
+  usePrimaryIconTheme?: boolean;
 }
 
 export function HeroSection({
@@ -64,6 +65,7 @@ export function HeroSection({
   },
   heroImageSrc = "/images/hero/doctor-team-hero.png",
   heroImageAlt = "Professional Doctor Team",
+  usePrimaryIconTheme = false,
 }: HeroSectionProps) {
   return (
     <section className="relative min-h-[85vh] lg:min-h-[90vh] xl:min-h-screen flex items-center overflow-hidden bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
@@ -195,7 +197,7 @@ export function HeroSection({
                   transition={{ delay: 0.4 + index * 0.08 }}
                   className="flex items-start gap-2 text-slate-600 text-sm sm:text-base"
                 >
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 mt-0.5 shrink-0 fill-emerald-500/20" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 shrink-0 fill-primary/20" />
                   <span>{point}</span>
                 </motion.li>
               ))}
@@ -243,7 +245,13 @@ export function HeroSection({
                   className="absolute -top-2 -left-2 sm:top-0 sm:left-0 md:top-2 md:left-2 lg:top-8 lg:left-2 z-20"
                 >
                   <Float duration={5} distance={8}>
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                    <div
+                      className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 rounded-full flex items-center justify-center shadow-lg ${
+                        usePrimaryIconTheme
+                          ? "bg-primary text-primary-foreground shadow-primary/30"
+                          : "bg-blue-500 text-white shadow-blue-500/30"
+                      }`}
+                    >
                       <Phone className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
                     </div>
                   </Float>
@@ -257,7 +265,13 @@ export function HeroSection({
                   className="absolute -top-1 right-0 sm:top-1 sm:right-1 md:top-2 md:right-2 lg:top-4 lg:right-4 z-20"
                 >
                   <Float duration={4} distance={6}>
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-11 lg:h-11 rounded-lg bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                    <div
+                      className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-11 lg:h-11 rounded-lg flex items-center justify-center shadow-lg ${
+                        usePrimaryIconTheme
+                          ? "bg-primary text-primary-foreground shadow-primary/30"
+                          : "bg-emerald-500 text-white shadow-emerald-500/30"
+                      }`}
+                    >
                       <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
                     </div>
                   </Float>
@@ -271,8 +285,18 @@ export function HeroSection({
                   className="absolute top-[15%] -left-3 sm:top-[50%] sm:-left-2 md:top-[1%] md:-left-1 lg:top-1/3 lg:-left-4 z-20"
                 >
                   <Float duration={6} distance={10}>
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full bg-slate-100 border-2 border-white shadow-lg flex items-center justify-center">
-                      <Stethoscope className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 text-orange-500" />
+                    <div
+                      className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border-2 shadow-lg flex items-center justify-center ${
+                        usePrimaryIconTheme
+                          ? "bg-primary/10 border-primary/20"
+                          : "bg-slate-100 border-white"
+                      }`}
+                    >
+                      <Stethoscope
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 ${
+                          usePrimaryIconTheme ? "text-primary" : "text-orange-500"
+                        }`}
+                      />
                     </div>
                   </Float>
                 </motion.div>

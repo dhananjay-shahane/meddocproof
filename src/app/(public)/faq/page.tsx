@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, HelpCircle } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -9,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { InView } from "@/components/ui/in-view";
+import { CTASection } from "@/components/public/home/cta-section";
 import { FAQ_ITEMS } from "@/lib/certificate-types";
 
 // Parse **bold** markers into <strong> elements
@@ -60,31 +60,14 @@ export default function FAQPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="px-4 py-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold">Still Have Questions?</h2>
-          <p className="mt-3 text-muted-foreground">
-            Can&apos;t find what you&apos;re looking for? Our support team is
-            here to help.
-          </p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
-            >
-              Contact Us
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/certificates/apply"
-              className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold hover:bg-muted"
-            >
-              Apply for Certificate
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CTASection
+        title="Still Have Questions?"
+        description="If you need a certificate, start your online consultation and get a professionally formatted document issued by a registered doctor."
+        buttonPrimary={{
+          label: "Apply For Certificate",
+          href: "/certificates/apply",
+        }}
+      />
     </>
   );
 }

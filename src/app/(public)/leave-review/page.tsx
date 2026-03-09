@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Star, Send, Loader2, CheckCircle } from "lucide-react";
+import { CTASection } from "@/components/public/home/cta-section";
 
 export default function LeaveReviewPage() {
   const [form, setForm] = useState({
@@ -196,6 +197,15 @@ export default function LeaveReviewPage() {
           )}
         </div>
       </section>
+
+      <CTASection
+        title="Need A Verified Medical Certificate?"
+        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        buttonPrimary={{
+          label: "Apply For Certificate",
+          href: "/certificates/apply",
+        }}
+      />
     </>
   );
 }

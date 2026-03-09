@@ -3,6 +3,7 @@ import { ReceiptText, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { PAYMENT_OPTIONS } from "@/lib/certificate-types";
 import { GridPattern } from "@/components/ui/grid-pattern";
+import { CTASection } from "@/components/public/home/cta-section";
 
 export const metadata: Metadata = {
   title: "Refund & Cancellation Policy | MediProofDocs",
@@ -313,6 +314,15 @@ export default function RefundPolicyPage() {
           </article>
         </div>
       </div>
+
+      <CTASection
+        title="Need A Verified Medical Certificate?"
+        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        buttonPrimary={{
+          label: "Apply For Certificate",
+          href: "/certificates/apply",
+        }}
+      />
     </>
   );
 }

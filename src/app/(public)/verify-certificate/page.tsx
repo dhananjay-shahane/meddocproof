@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
+import { CTASection } from "@/components/public/home/cta-section";
 
 export default function VerifyCertificatePage() {
   const [certificateNumber, setCertificateNumber] = useState("");
@@ -32,7 +33,8 @@ export default function VerifyCertificatePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <div className="min-h-screen bg-background">
       {/* Hero header */}
       <div className="relative overflow-hidden bg-primary/5 border-b">
         <GridPattern
@@ -224,6 +226,16 @@ export default function VerifyCertificatePage() {
           MediProofDocs — Trusted Medical Certificate Verification
         </p>
       </div>
-    </div>
+      </div>
+
+      <CTASection
+        title="Need A Verified Medical Certificate?"
+        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        buttonPrimary={{
+          label: "Apply For Certificate",
+          href: "/certificates/apply",
+        }}
+      />
+    </>
   );
 }

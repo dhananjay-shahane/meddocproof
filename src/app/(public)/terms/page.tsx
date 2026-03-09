@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Scale, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { GridPattern } from "@/components/ui/grid-pattern";
+import { CTASection } from "@/components/public/home/cta-section";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | MediProofDocs",
@@ -225,6 +226,15 @@ export default function TermsPage() {
           </article>
         </div>
       </div>
+
+      <CTASection
+        title="Need A Verified Medical Certificate?"
+        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        buttonPrimary={{
+          label: "Apply For Certificate",
+          href: "/certificates/apply",
+        }}
+      />
     </>
   );
 }

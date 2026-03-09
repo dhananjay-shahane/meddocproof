@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Shield, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { GridPattern } from "@/components/ui/grid-pattern";
+import { CTASection } from "@/components/public/home/cta-section";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | MediProofDocs",
@@ -217,6 +218,15 @@ export default function PrivacyPage() {
           </article>
         </div>
       </div>
+
+      <CTASection
+        title="Need A Verified Medical Certificate?"
+        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        buttonPrimary={{
+          label: "Apply For Certificate",
+          href: "/certificates/apply",
+        }}
+      />
     </>
   );
 }

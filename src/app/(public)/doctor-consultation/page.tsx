@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import * as React from "react";
+import Script from "next/script";
 import { motion } from "framer-motion";
 import {
   Shield,
@@ -20,6 +21,8 @@ import {
   Brain,
   Baby,
   Bone,
+  Bandage,
+  CalendarDays,
   Sparkles,
   Activity,
   Thermometer,
@@ -27,15 +30,23 @@ import {
   Syringe,
   Eye,
   Check,
+  ChevronLeft,
+  ChevronRight,
+  LucideIcon,
 } from "lucide-react";
-import {
-  type CarouselApi,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
 import { TestimonialsSection } from "@/components/public/home/testimonials-section";
 import { HeroSection } from "@/components/public/home/hero-section";
+import { CTASection } from "@/components/public/home/cta-section";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "dotlottie-wc": any;
+    }
+  }
+}
+
+const DotLottieWC = "dotlottie-wc" as any;
 
 // Trust Items from Home Page
 const TRUST_ITEMS = [
@@ -96,12 +107,18 @@ const TRUST_ITEMS = [
 ];
 
 const CONSULTATION_HIGHLIGHTS = [
-  "Book online consultation with verified MBBS/MD doctors from anywhere.",
-  "Request sick leave, fitness, recovery, and fit-to-travel certificates.",
-  "Receive doctor-signed digital documentation with verification fields.",
-  "Transparent fees, secure payment flow, and fast status updates.",
-  "Dedicated support on call and WhatsApp during the full process.",
-  "Workflow aligned with NMC Act, Telemedicine, and WHO care standards.",
+  "Consult Experienced Doctors",
+  "Get online consultation from qualified MBBS / MD / MS doctors.",
+  "Affordable Consultation",
+  "Online doctor consultation available starting from ₹599.",
+  "Video, Audio, or Chat Consultation",
+  "Choose your preferred way to talk with a doctor online.",
+  "Digital Prescription Provided",
+  "Receive a doctor-issued digital prescription after consultation.",
+  "Government-Registered Doctors",
+  "Consult doctors registered with the National Medical Commission (NMC).",
+  "Telemedicine Guideline Compliant",
+  "Our consultation process follows Indian telemedicine and healthcare standards."
 ];
 
 const MILAN_HIGHLIGHTS = [
@@ -111,333 +128,224 @@ const MILAN_HIGHLIGHTS = [
   "Clear and transparent contribution model linked to each successful request.",
 ];
 
-// Expert Care Categories with SVG Icons
-const EXPERT_CARE_ITEMS = [
+const CONSULTATION_STEPS = [
   {
-    title: "Mental Health",
-    icon: Brain,
-    iconClassName: "text-violet-600",
-    ringClassName: "border-violet-200 bg-violet-50",
+    id: "01",
+    title: "Fill the form",
+    icon: () => (
+      <div style={{ transform: "translateY(-18px)" }}>
+        <DotLottieWC
+          src="https://lottie.host/c7d0d300-084f-4c4a-a11e-c558a4905f71/r8QNFYcARL.lottie"
+          style={{ width: "130px", height: "130px" }}
+          autoplay
+          loop
+        />
+      </div>
+    ),
   },
   {
-    title: "Allergy",
-    icon: Sparkles,
-    iconClassName: "text-cyan-600",
-    ringClassName: "border-cyan-200 bg-cyan-50",
+    id: "02",
+    title: "Consult with doctor",
+    icon: () => (
+      <DotLottieWC
+        src="https://lottie.host/2c669a53-7e4f-4b24-8fcb-ed3830471bf3/0m0Al1PXP4.lottie"
+        style={{ width: "220px", height: "220px" }}
+        autoplay
+        loop
+      />
+    ),
   },
   {
-    title: "Pregnancy Related Queries",
-    icon: Heart,
-    iconClassName: "text-rose-600",
-    ringClassName: "border-rose-200 bg-rose-50",
-  },
-  {
-    title: "Menstrual Health",
-    icon: Activity,
-    iconClassName: "text-pink-600",
-    ringClassName: "border-pink-200 bg-pink-50",
-  },
-  {
-    title: "General Medicine",
-    icon: Stethoscope,
-    iconClassName: "text-blue-600",
-    ringClassName: "border-blue-200 bg-blue-50",
-  },
-  {
-    title: "Pediatrics",
-    icon: Baby,
-    iconClassName: "text-amber-600",
-    ringClassName: "border-amber-200 bg-amber-50",
-  },
-  {
-    title: "Dermatology",
-    icon: Sparkles,
-    iconClassName: "text-emerald-600",
-    ringClassName: "border-emerald-200 bg-emerald-50",
-  },
-  {
-    title: "Orthopedics",
-    icon: Bone,
-    iconClassName: "text-teal-600",
-    ringClassName: "border-teal-200 bg-teal-50",
+    id: "03",
+    title: "Recieve your priscption",
+    icon: () => (
+      <DotLottieWC
+        src="https://lottie.host/c0935007-58e3-45e2-af17-c898ef07b002/m7BvS6VlNw.lottie"
+        style={{ width: "220px", height: "220px" }}
+        autoplay
+        loop
+      />
+    ),
   },
 ];
 
-// Common Conditions for Doctor Consultation with SVG Icons
+// Common Conditions for Doctor Consultation with Icon Cards
 const COMMON_CONDITIONS = [
   {
     number: "01",
     title: "Fever",
     description: "A high body temperature is a sign of infection, and a certificate confirms you need to rest and recover.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person with thermometer */}
-        <circle cx="40" cy="25" r="12" fill="#f5d0c5" />
-        <path d="M28 35 Q40 32 52 35 L52 55 Q40 58 28 55 Z" fill="#8b5cf6" />
-        <rect x="35" y="38" width="10" height="15" fill="#f5d0c5" />
-        {/* Thermometer */}
-        <rect x="52" y="20" width="4" height="20" rx="2" fill="#ef4444" />
-        <circle cx="54" cy="42" r="5" fill="#ef4444" />
-        <line x1="54" y1="22" x2="54" y2="35" stroke="white" strokeWidth="1.5" />
-        {/* Sweat drops */}
-        <circle cx="25" cy="30" r="2" fill="#60a5fa" opacity="0.6" />
-        <circle cx="22" cy="38" r="1.5" fill="#60a5fa" opacity="0.6" />
-      </svg>
-    ),
+    svg: "/svg/fever-male-svgrepo-com.svg",
+    tint: "from-rose-100 via-orange-50 to-white",
   },
   {
     number: "02",
     title: "Cold",
     description: "Symptoms like a cough and sore throat can make it hard to work, and a certificate also helps prevent spreading the illness.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person */}
-        <circle cx="35" cy="28" r="12" fill="#f5d0c5" />
-        <path d="M23 38 Q35 35 47 38 L47 58 Q35 61 23 58 Z" fill="#3b82f6" />
-        {/* Tissue */}
-        <rect x="45" y="35" width="15" height="20" rx="2" fill="#f3f4f6" stroke="#d1d5db" strokeWidth="1" />
-        <path d="M48 40 L52 48" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" />
-        {/* Virus symbol */}
-        <circle cx="60" cy="25" r="6" fill="#10b981" />
-        <circle cx="60" cy="25" r="3" fill="#065f46" />
-        <line x1="60" y1="17" x2="60" y2="13" stroke="#10b981" strokeWidth="2" />
-        <line x1="60" y1="33" x2="60" y2="37" stroke="#10b981" strokeWidth="2" />
-        <line x1="52" y1="25" x2="48" y2="25" stroke="#10b981" strokeWidth="2" />
-        <line x1="68" y1="25" x2="72" y2="25" stroke="#10b981" strokeWidth="2" />
-      </svg>
-    ),
+    svg: "/svg/cold-coughing-svgrepo-com.svg",
+    tint: "from-sky-100 via-cyan-50 to-white",
   },
   {
     number: "03",
     title: "Stomach Ache",
     description: "This can be due to a stomach virus or food poisoning, and a certificate confirms the need for rest.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person holding stomach */}
-        <circle cx="40" cy="25" r="12" fill="#f5d0c5" />
-        <path d="M28 35 Q40 32 52 35 L52 55 Q40 58 28 55 Z" fill="#f59e0b" />
-        {/* Arms holding stomach */}
-        <ellipse cx="32" cy="48" rx="8" ry="4" fill="#f5d0c5" />
-        <ellipse cx="48" cy="48" rx="8" ry="4" fill="#f5d0c5" />
-        {/* Pain symbol */}
-        <circle cx="55" cy="22" r="5" fill="#fee2e2" stroke="#ef4444" strokeWidth="1.5" />
-        <text x="55" y="25" textAnchor="middle" fontSize="8" fill="#ef4444" fontWeight="bold">!</text>
-      </svg>
-    ),
+    svg: "/svg/stomach-ache-svgrepo-com.svg",
+    tint: "from-amber-100 via-yellow-50 to-white",
   },
   {
     number: "04",
     title: "Periods",
     description: "Severe cramps and other symptoms can be debilitating, and a certificate validates the need for time off to manage the pain.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Sanitary pad */}
-        <ellipse cx="40" cy="40" rx="20" ry="28" fill="#f3f4f6" stroke="#d1d5db" strokeWidth="2" />
-        <ellipse cx="40" cy="40" rx="12" ry="20" fill="#fecaca" />
-        {/* Drops */}
-        <ellipse cx="40" cy="35" rx="4" ry="6" fill="#ef4444" />
-        <ellipse cx="35" cy="45" rx="3" ry="5" fill="#ef4444" opacity="0.7" />
-        <ellipse cx="45" cy="45" rx="3" ry="5" fill="#ef4444" opacity="0.7" />
-      </svg>
-    ),
+    svg: "/svg/femaleHealth(periods)-svgrepo-com.svg",
+    tint: "from-pink-100 via-rose-50 to-white",
   },
   {
     number: "05",
     title: "Back Pain",
     description: "This can limit your ability to sit or move, and a certificate explains the physical restrictions you have.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person with back pain */}
-        <circle cx="40" cy="25" r="10" fill="#f5d0c5" />
-        <path d="M30 35 L35 55 L45 55 L50 35" fill="#10b981" />
-        {/* Bent posture */}
-        <path d="M30 35 Q25 45 30 55" fill="none" stroke="#f5d0c5" strokeWidth="6" strokeLinecap="round" />
-        <path d="M50 35 Q55 45 50 55" fill="none" stroke="#f5d0c5" strokeWidth="6" strokeLinecap="round" />
-        {/* Pain indicators */}
-        <path d="M55 40 L62 35" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" />
-        <path d="M57 45 L65 42" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" />
-        <path d="M55 50 L62 50" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    svg: "/svg/back-pain-svgrepo-com.svg",
+    tint: "from-emerald-100 via-teal-50 to-white",
   },
   {
     number: "06",
     title: "Injury",
     description: "For a sprain or wound, a certificate documents the injury and the necessary time for healing.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person with bandage */}
-        <circle cx="40" cy="25" r="12" fill="#f5d0c5" />
-        <path d="M28 35 Q40 32 52 35 L52 55 Q40 58 28 55 Z" fill="#6366f1" />
-        {/* Bandage on head */}
-        <rect x="32" y="18" width="16" height="8" rx="2" fill="#f3f4f6" stroke="#d1d5db" strokeWidth="1" />
-        <line x1="36" y1="22" x2="44" y2="22" stroke="#ef4444" strokeWidth="1.5" />
-        {/* Arm sling */}
-        <path d="M28 45 Q35 50 42 45" fill="none" stroke="#f3f4f6" strokeWidth="8" strokeLinecap="round" />
-        <path d="M28 45 Q35 50 42 45" fill="none" stroke="#d1d5db" strokeWidth="1" strokeLinecap="round" />
-      </svg>
-    ),
+    svg: "/svg/Injury-svgrepo-com.svg",
+    tint: "from-indigo-100 via-blue-50 to-white",
   },
   {
     number: "07",
     title: "Stress",
     description: "High stress can cause physical and mental symptoms, and a certificate can justify a leave to prevent burnout.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Stressed person */}
-        <circle cx="40" cy="28" r="12" fill="#f5d0c5" />
-        <path d="M28 38 Q40 35 52 38 L52 58 Q40 61 28 58 Z" fill="#f59e0b" />
-        {/* Hands on head */}
-        <ellipse cx="26" cy="32" rx="6" ry="4" fill="#f5d0c5" />
-        <ellipse cx="54" cy="32" rx="6" ry="4" fill="#f5d0c5" />
-        {/* Stress symbols */}
-        <text x="60" y="25" fontSize="10" fill="#ef4444">!</text>
-        <text x="65" y="30" fontSize="8" fill="#ef4444">!</text>
-        <circle cx="18" cy="35" r="3" fill="#fbbf24" />
-        <circle cx="62" cy="45" r="2" fill="#fbbf24" />
-      </svg>
-    ),
+    svg: "/svg/stress-svgrepo-com.svg",
+    tint: "from-violet-100 via-purple-50 to-white",
   },
   {
     number: "08",
     title: "Migraine",
     description: "A migraine is more than a headache; a certificate confirms a severe attack that makes it impossible to work or study.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person with migraine */}
-        <circle cx="40" cy="28" r="12" fill="#f5d0c5" />
-        <path d="M28 38 Q40 35 52 38 L52 58 Q40 61 28 58 Z" fill="#8b5cf6" />
-        {/* Pain waves */}
-        <path d="M20 25 Q15 28 20 31" fill="none" stroke="#ef4444" strokeWidth="2" />
-        <path d="M16 22 Q10 28 16 34" fill="none" stroke="#ef4444" strokeWidth="2" />
-        <path d="M60 25 Q65 28 60 31" fill="none" stroke="#ef4444" strokeWidth="2" />
-        <path d="M64 22 Q70 28 64 34" fill="none" stroke="#ef4444" strokeWidth="2" />
-        {/* Hand on head */}
-        <ellipse cx="55" cy="28" rx="5" ry="3" fill="#f5d0c5" />
-      </svg>
-    ),
+    svg: "/svg/Migraine -svgrepo-com.svg",
+    tint: "from-fuchsia-100 via-pink-50 to-white",
   },
   {
     number: "09",
     title: "Dengue, Malaria, etc",
     description: "A blood test report is required to confirm the diagnosis, as symptoms alone aren't enough.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Mosquito */}
-        <ellipse cx="40" cy="35" rx="8" ry="12" fill="#6b7280" />
-        <circle cx="40" cy="25" r="5" fill="#6b7280" />
-        {/* Wings */}
-        <ellipse cx="28" cy="30" rx="8" ry="4" fill="#9ca3af" opacity="0.5" />
-        <ellipse cx="52" cy="30" rx="8" ry="4" fill="#9ca3af" opacity="0.5" />
-        {/* Legs */}
-        <line x1="35" y1="45" x2="30" y2="55" stroke="#6b7280" strokeWidth="1.5" />
-        <line x1="40" y1="47" x2="40" y2="58" stroke="#6b7280" strokeWidth="1.5" />
-        <line x1="45" y1="45" x2="50" y2="55" stroke="#6b7280" strokeWidth="1.5" />
-        {/* No symbol */}
-        <circle cx="55" cy="50" r="10" fill="none" stroke="#ef4444" strokeWidth="2" />
-        <line x1="48" y1="43" x2="62" y2="57" stroke="#ef4444" strokeWidth="2" />
-      </svg>
-    ),
+    svg: "/svg/Dengue-Malaria-svgrepo-com.svg",
+    tint: "from-lime-100 via-green-50 to-white",
   },
   {
     number: "10",
     title: "Fracture",
     description: "An X-ray report is required to prove the injury and determine the recovery time.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person with cast */}
-        <circle cx="40" cy="25" r="12" fill="#f5d0c5" />
-        <path d="M28 35 Q40 32 52 35 L52 55 Q40 58 28 55 Z" fill="#14b8a6" />
-        {/* Leg cast */}
-        <rect x="32" y="55" width="8" height="18" rx="2" fill="#f3f4f6" stroke="#d1d5db" strokeWidth="1" />
-        <line x1="34" y1="60" x2="38" y2="60" stroke="#ef4444" strokeWidth="1.5" />
-        <line x1="34" y1="65" x2="38" y2="65" stroke="#ef4444" strokeWidth="1.5" />
-        {/* Crutch */}
-        <line x1="50" y1="45" x2="55" y2="70" stroke="#9ca3af" strokeWidth="3" strokeLinecap="round" />
-        <line x1="48" y1="50" x2="52" y2="50" stroke="#9ca3af" strokeWidth="3" strokeLinecap="round" />
-      </svg>
-    ),
+    svg: "/svg/Fracture-svgrepo-com.svg",
+    tint: "from-teal-100 via-cyan-50 to-white",
   },
   {
     number: "11",
     title: "Chicken Pox",
     description: "While a visual diagnosis is made, the certificate often confirms that the patient is no longer contagious, based on the doctor's observation of the blisters.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Person with spots */}
-        <circle cx="40" cy="25" r="12" fill="#f5d0c5" />
-        <path d="M28 35 Q40 32 52 35 L52 55 Q40 58 28 55 Z" fill="#3b82f6" />
-        {/* Chicken pox spots */}
-        <circle cx="35" cy="22" r="2" fill="#ef4444" />
-        <circle cx="45" cy="28" r="1.5" fill="#ef4444" />
-        <circle cx="38" cy="32" r="1.8" fill="#ef4444" />
-        <circle cx="42" cy="20" r="1.5" fill="#ef4444" />
-        <circle cx="32" cy="40" r="2" fill="#ef4444" />
-        <circle cx="48" cy="45" r="1.8" fill="#ef4444" />
-        <circle cx="40" cy="50" r="2" fill="#ef4444" />
-      </svg>
-    ),
+    svg: "/svg/ChickenPox-svgrepo-com.svg",
+    tint: "from-red-100 via-orange-50 to-white",
   },
   {
     number: "12",
     title: "Any Surgery",
     description: "When it comes to any surgery, a medical certificate is crucial for justifying a prolonged absence from work or school. The key document is the hospital discharge summary.",
-    icon: () => (
-      <svg viewBox="0 0 80 80" className="w-16 h-16">
-        {/* Hospital scene */}
-        <rect x="25" y="30" width="30" height="25" rx="3" fill="#f3f4f6" stroke="#d1d5db" strokeWidth="1.5" />
-        <rect x="35" y="35" width="10" height="15" fill="#3b82f6" />
-        <rect x="38" y="38" width="4" height="9" fill="white" />
-        <rect x="36" y="40" width="8" height="3" fill="white" />
-        {/* Person */}
-        <circle cx="55" cy="35" r="8" fill="#f5d0c5" />
-        <path d="M50 42 L55 52 L60 42" fill="#10b981" />
-        {/* Medical cross */}
-        <rect x="28" y="48" width="6" height="2" fill="#ef4444" />
-        <rect x="30" y="46" width="2" height="6" fill="#ef4444" />
-      </svg>
-    ),
+    svg: "/svg/surgery-svgrepo-com.svg",
+    tint: "from-blue-100 via-indigo-50 to-white",
+  },
+];
+
+const CONSULTATION_SPECIALTIES: Array<{
+  title: string;
+  price: string;
+  svg: string;
+  accent: string;
+}> = [
+  {
+    title: "Skin and Hair Advice",
+    price: "Starts at Rs 449",
+    svg: "/svg/medical-svgs/1-skin-hair.svg",
+    accent: "from-violet-100 via-fuchsia-50 to-white",
+  },
+  {
+    title: "Emotional Health Support",
+    price: "Starts at Rs 499",
+    svg: "/svg/medical-svgs/2-brain-mental.svg",
+    accent: "from-orange-100 via-amber-50 to-white",
+  },
+  {
+    title: "Digestive Health",
+    price: "Starts at Rs 399",
+    svg: "/svg/medical-svgs/3-stomach-digestive.svg",
+    accent: "from-yellow-100 via-amber-50 to-white",
+  },
+  {
+    title: "Child Health Guidance",
+    price: "Starts at Rs 499",
+    svg: "/svg/medical-svgs/4-pediatrics-child.svg",
+    accent: "from-indigo-100 via-blue-50 to-white",
+  },
+  {
+    title: "Bone and Joint Care",
+    price: "Starts at Rs 549",
+    svg: "/svg/medical-svgs/5-bone-orthopedic.svg",
+    accent: "from-emerald-100 via-teal-50 to-white",
+  },
+  {
+    title: "Eye and Vision Concerns",
+    price: "Starts at Rs 449",
+    svg: "/svg/medical-svgs/6-eye-vision.svg",
+    accent: "from-cyan-100 via-sky-50 to-white",
   },
 ];
 
 export default function DoctorConsultationPage() {
-  const [expertCarouselApi, setExpertCarouselApi] = React.useState<CarouselApi>();
-  const [expertCurrentSnap, setExpertCurrentSnap] = React.useState(0);
-  const [expertSnapCount, setExpertSnapCount] = React.useState(0);
+  const [specialtyStart, setSpecialtyStart] = useState(0);
+  const visibleSpecialties = CONSULTATION_SPECIALTIES.slice(
+    specialtyStart,
+    specialtyStart + 6
+  );
 
-  React.useEffect(() => {
-    if (!expertCarouselApi) {
-      return;
-    }
+  const shiftSpecialties = (direction: "prev" | "next") => {
+    const maxStart = Math.max(CONSULTATION_SPECIALTIES.length - 6, 0);
+    setSpecialtyStart((current) => {
+      if (direction === "next") {
+        return current >= maxStart ? 0 : current + 1;
+      }
 
-    const onSelect = () => {
-      setExpertCurrentSnap(expertCarouselApi.selectedScrollSnap());
-      setExpertSnapCount(expertCarouselApi.scrollSnapList().length);
-    };
-
-    onSelect();
-    expertCarouselApi.on("select", onSelect);
-    expertCarouselApi.on("reInit", onSelect);
-
-    return () => {
-      expertCarouselApi.off("select", onSelect);
-      expertCarouselApi.off("reInit", onSelect);
-    };
-  }, [expertCarouselApi]);
+      return current <= 0 ? maxStart : current - 1;
+    });
+  };
 
   return (
     <>
+      <Script
+        src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js"
+        type="module"
+        strategy="afterInteractive"
+      />
+
       <HeroSection
-        headingPrefix="Expert Medical Consultation"
-        headingHighlight="From Home"
+        headingPrefix="Online Doctor"
+        headingHighlight="Consultation"
         typewriterPrefix="For"
         rotatingWords={[
-          "Sick Leave",
-          "Fitness",
-          "Recovery",
-          "Fit-to-Travel",
-          "General Consultation",
-          "Women Health Queries",
+          "General health concerns",
+          "Fever, cold, and cough",
+          "Women’s health issues",
+          "Headache or body pain",
+          "Stomach and digestion problems",
+          "Skin and allergy issues",
+          "Medical certificate consultation",
+          "Follow-up medical advice",
+          "Minor infections",
+          "Stress, sleep, or fatigue issues",
+          "Diet and nutrition advice",
+          "Medication guidance or prescription clarification",
+          "Cold, flu, or seasonal illness symptoms",
+          "Basic health check advice",
         ]}
         trustBadges={[
           "Verified MBBS/MD doctors available online",
@@ -447,13 +355,14 @@ export default function DoctorConsultationPage() {
           "Aligned with Indian telemedicine and care standards",
         ]}
         primaryCta={{
-          label: "Start Consultation",
+          label: "Book consultation",
           href: "/certificates/apply",
         }}
         secondaryCta={{
           label: "Talk to Support",
           href: "/contact",
         }}
+        usePrimaryIconTheme
         heroImageSrc="/images/hero/docter.png"
         heroImageAlt="Online doctor consultation team"
       />
@@ -471,19 +380,14 @@ export default function DoctorConsultationPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.45 }}
             >
-              <p className="inline-flex items-center gap-2 rounded-full bg-card border border-border text-primary px-4 py-2 text-sm font-semibold mb-5 shadow-sm">
-                <Sparkles className="w-4 h-4" />
-                Medical Certificate Support
-              </p>
-
+            
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-4">
-                Certification That Fits
-                <span className="text-primary"> Real Life Timelines</span>
+                Online Doctor Consultation
+                <span className="text-primary"> Simple. Fast. Reliable.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-7 max-w-2xl">
-                Built for employees, students, and frequent travelers who need a legitimate medical
-                certificate process without delay, confusion, or repeated follow-ups.
+                Consult a Doctor Online from Anywhere, Anytime
               </p>
 
               <div className="grid gap-3 mb-8">
@@ -505,7 +409,7 @@ export default function DoctorConsultationPage() {
                   href="/certificates/apply"
                   className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground px-7 sm:px-8 py-3.5 sm:py-4 text-lg sm:text-xl font-bold shadow-lg hover:-translate-y-0.5 transition-all"
                 >
-                  Apply For Certificate
+                  Consult Now
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Link>
 
@@ -540,19 +444,19 @@ export default function DoctorConsultationPage() {
 
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/80 via-foreground/45 to-transparent px-6 py-6">
                   <p className="text-background font-semibold text-sm sm:text-base leading-relaxed">
-                    End-to-end digital flow: case review, doctor approval, and certificate sharing in one place.
+                    Complete online process - From consultation to Certificate Delivery 
                   </p>
                 </div>
               </div>
 
               <div className="hidden sm:flex items-center gap-2 absolute -top-5 -right-4 bg-card rounded-full px-4 py-2.5 shadow-lg border border-border">
                 <Clock className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">Average delivery window: 30 min to 24 hrs</span>
+                <span className="text-sm font-semibold text-foreground">Quick Delivery: 30 to 60 mins</span>
               </div>
 
               <div className="hidden sm:flex items-center gap-2 absolute -bottom-4 -left-3 bg-primary text-primary-foreground rounded-full px-4 py-2.5 shadow-lg">
                 <Shield className="w-4 h-4" />
-                <span className="text-sm font-semibold">Doctor-verified documentation</span>
+                <span className="text-sm font-semibold">Doctor verified: reviewed and approved by NMC registered doctors</span>
               </div>
             </motion.div>
           </div>
@@ -624,111 +528,60 @@ export default function DoctorConsultationPage() {
         </div>
       </section> */}
 
-      {/* Expert Care For Your Health Section - Dark Theme with ZigZak */}
-      <section className="relative py-20 bg-primary/40  overflow-hidden">
-       
-        {/* Bottom ZigZak Border */}
+      {/* Three-step process section */}
+      <section className="relative overflow-hidden bg-primary/40 py-20">
         <div
-          className="absolute left-0 right-0 -bottom-6 h-6 bg-muted/30"
+          className="absolute left-0 right-0 -bottom-6 h-6 bg-muted/20"
           style={{
             clipPath:
               "polygon(0 100%, 4% 0, 8% 100%, 12% 0, 16% 100%, 20% 0, 24% 100%, 28% 0, 32% 100%, 36% 0, 40% 100%, 44% 0, 48% 100%, 52% 0, 56% 100%, 60% 0, 64% 100%, 68% 0, 72% 100%, 76% 0, 80% 100%, 84% 0, 88% 100%, 92% 0, 96% 100%, 100% 0, 100% 100%)",
           }}
         />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground mb-2 sm:mb-3 leading-tight">
-              Expert Care For{" "}
-              <span className="text-primary">Your Health</span>
+          <div className="mb-14 text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
+              Three Easy Steps To Get Your <span className="text-primary">Medical Priscption</span>
             </h2>
-            <p className="text-lg sm:text-2xl text-muted-foreground max-w-4xl mx-auto">
-              Consult our verified doctors for medical certificates across all health conditions
-            </p>
           </div>
 
-          <div className="relative max-w-[1500px] mx-auto">
-            <Carousel
-              setApi={setExpertCarouselApi}
-              opts={{
-                align: "start",
-                loop: true,
-                slidesToScroll: 2,
-              }}
-              className="px-4 sm:px-10 lg:px-16"
-            >
-              <button
-                type="button"
-                onClick={() => expertCarouselApi?.scrollPrev()}
-                className="flex absolute left-0 sm:left-1 lg:left-0 top-[43%] -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-card text-primary items-center justify-center shadow-lg border border-border hover:bg-muted transition-colors"
-                aria-label="Previous slide"
-              >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+          <div className="relative mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-8">
+              {CONSULTATION_STEPS.map((step, index) => {
+                const StepIcon = step.icon;
 
-              <button
-                type="button"
-                onClick={() => expertCarouselApi?.scrollNext()}
-                className="flex absolute right-0 sm:right-1 lg:right-0 top-[43%] -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-card text-primary items-center justify-center shadow-lg border border-border hover:bg-muted transition-colors"
-                aria-label="Next slide"
-              >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-
-              <CarouselContent className="py-2">
-                {EXPERT_CARE_ITEMS.map((item, index) => (
-                  <CarouselItem
-                    key={item.title}
-                    className="basis-1/2 md:basis-1/3 lg:basis-1/4"
+                return (
+                  <motion.div
+                    key={step.id}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                    viewport={{ once: true }}
+                    className="relative"
                   >
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.08 }}
-                      viewport={{ once: true }}
-                      className="flex items-center justify-center"
-                    >
-                      {(() => {
-                        const Icon = item.icon;
-                        return (
-                      <div className="w-[180px] sm:w-[190px] md:w-[200px] min-h-[205px] rounded-[18px] border border-border bg-card shadow-md px-4 py-5 flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
-                        <div className={`w-[122px] h-[122px] rounded-full border-[10px] flex items-center justify-center mb-4 ${item.ringClassName}`}>
-                          <div className="w-[74px] h-[74px] rounded-full bg-card/70 border border-border/50 flex items-center justify-center">
-                            <Icon className={`w-9 h-9 ${item.iconClassName}`} strokeWidth={2.2} />
-                          </div>
-                        </div>
-                        <h3 className="text-lg font-semibold text-foreground text-center leading-snug">
-                          {item.title}
-                        </h3>
-                      </div>
-                        );
-                      })()}
-                    </motion.div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
+                    {index < CONSULTATION_STEPS.length - 1 && (
+                      <div className="pointer-events-none absolute -right-10 top-12 z-0 hidden h-0.5 w-20 border-t-2 border-dashed border-primary/35 md:block" />
+                    )}
 
-            <div className="flex justify-center gap-5 mt-7">
-              {Array.from({ length: Math.max(expertSnapCount, 4) }).map((_, dotIndex) => (
-                <button
-                  key={dotIndex}
-                  type="button"
-                  onClick={() => expertCarouselApi?.scrollTo(dotIndex)}
-                  className={`w-2.5 h-2.5 rounded-full transition-colors ${dotIndex === expertCurrentSnap ? "bg-primary" : "bg-muted-foreground/30"}`}
-                  aria-label={`Go to slide ${dotIndex + 1}`}
-                />
-              ))}
+                    <div className="relative z-10 min-h-[320px] overflow-hidden rounded-[22px] border border-green-400/20 bg-green-400/40 px-6 pb-8 pt-48 text-center shadow-[0_10px_24px_rgba(0,0,0,0.09)]">
+                      <div className="pointer-events-none absolute left-1/2 top-0 flex h-48 w-[90%] -translate-x-1/2 items-end justify-center overflow-hidden rounded-b-[130px] bg-card pb-2" />
+
+                      <div className="absolute left-1/2 top-10 z-10 flex h-40 w-40 -translate-x-1/2 items-center justify-center overflow-hidden text-primary">
+                        <StepIcon />
+                      </div>
+
+                      <p className="mb-2 text-4xl font-extrabold text-primary">{step.id}</p>
+                      <h3 className="text-xl font-semibold text-white">{step.title}</h3>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Common Conditions for a Medical Certificate Section - Dark Theme with ZigZak */}
-      <section className="relative py-20 bg-background overflow-hidden">
+      {/* Common Conditions for a Medical Certificate Section */}
+      <section className="relative py-20 bg-linear-to-b from-background via-primary/5 to-background overflow-hidden">
           {/* Top ZigZak Border */}
         <div
           className="absolute left-0 right-0 -top-1 h-8 bg-primary/40"
@@ -737,271 +590,200 @@ export default function DoctorConsultationPage() {
               "polygon(0 0, 4% 100%, 8% 0, 12% 100%, 16% 0, 20% 100%, 24% 0, 28% 100%, 32% 0, 36% 100%, 40% 0, 44% 100%, 48% 0, 52% 100%, 56% 0, 60% 100%, 64% 0, 68% 100%, 72% 0, 76% 100%, 80% 0, 84% 100%, 88% 0, 92% 100%, 96% 0, 100% 100%, 100% 0)",
           }}
         />
+        <div className="pointer-events-none absolute -top-24 -left-12 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground mb-3 leading-tight">
               Common Conditions for a <span className="text-primary">Medical Certificate</span>
             </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
               Our doctors provide expert consultation for a wide range of health conditions
             </p>
           </div>
 
-          {/* Common Conditions Grid with Connecting Arrows */}
+          {/* Common Conditions Grid */}
           <div className="relative max-w-6xl mx-auto">
-            {/* Row 1: 01-04 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {COMMON_CONDITIONS.slice(0, 4).map((condition, index) => (
-                <div key={index} className="relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
+              {COMMON_CONDITIONS.map((condition, index) => {
+                return (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    key={condition.number}
+                    initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.35 }}
                     viewport={{ once: true }}
-                    className="flex flex-col items-center text-center"
+                    className="group relative overflow-hidden rounded-[26px] border border-primary/15 bg-white/90 p-5 sm:p-6 text-center shadow-[0_8px_26px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(15,23,42,0.16)] hover:border-primary/35"
                   >
-                    {/* Hexagon Container */}
-                    <div className="relative mb-4">
-                      {/* Hexagon Shape with Dashed Border */}
-                      <div className="w-24 h-28 relative">
-                        <svg viewBox="0 0 100 110" className="w-full h-full">
-                          <polygon
-                            points="50,5 95,27.5 95,82.5 50,105 5,82.5 5,27.5"
-                            fill="hsl(var(--card))"
-                            stroke="hsl(var(--primary))"
-                            strokeWidth="1.5"
-                            strokeDasharray="6,4"
-                          />
-                        </svg>
-                        {/* SVG Icon inside hexagon */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <condition.icon />
-                        </div>
-                      </div>
-                      {/* Teal Number Badge */}
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-extrabold shadow-md animate-bounce border border-background">
-                        {condition.number}
-                      </div>
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-primary/8 to-transparent" />
+
+                    <div className="absolute top-3 right-3 flex h-8 min-w-8 items-center justify-center rounded-full bg-primary text-primary-foreground px-2 text-[11px] font-extrabold tracking-wide shadow-md">
+                      {condition.number}
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-base font-bold text-foreground mb-2">
+                    <div className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-2xl border border-primary/15 bg-gradient-to-br ${condition.tint} shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] transition-transform duration-300 group-hover:scale-105`}>
+                      <Image
+                        src={condition.svg}
+                        alt={condition.title}
+                        width={56}
+                        height={56}
+                        className="h-14 w-14 object-contain"
+                      />
+                    </div>
+
+                    <h3 className="text-lg sm:text-[1.15rem] font-extrabold text-foreground mb-2 leading-tight">
                       {condition.title}
                     </h3>
 
-                    {/* Description */}
-                    <p className="text-muted-foreground text-xs leading-relaxed max-w-[180px]">
+                    <p className="text-muted-foreground text-sm leading-relaxed min-h-[88px]">
                       {condition.description}
                     </p>
+
+                    <div className="mt-4 h-1.5 w-14 mx-auto rounded-full bg-linear-to-r from-primary/70 via-primary/30 to-transparent opacity-80 group-hover:w-20 transition-all duration-300" />
                   </motion.div>
-                  
-                  {/* Curved Arrow - Downward curve for odd positions (01→02, 03→04) */}
-                  {index < 3 && index % 2 === 0 && (
-                    <div className="hidden lg:block absolute top-16 -right-8 w-16 h-12 z-10">
-                      <svg viewBox="0 0 60 40" className="w-full h-full">
-                        <path
-                          d="M5,5 Q30,35 55,20"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="2"
-                          strokeDasharray="4,3"
-                          className="animate-pulse"
-                        />
-                        <polygon points="52,17 58,22 52,25" fill="hsl(var(--border))" />
-                      </svg>
-                    </div>
-                  )}
-                  
-                  {/* Curved Arrow - Upward curve for even positions (02→03) */}
-                  {index < 3 && index % 2 === 1 && (
-                    <div className="hidden lg:block absolute top-16 -right-8 w-16 h-12 z-10">
-                      <svg viewBox="0 0 60 40" className="w-full h-full">
-                        <path
-                          d="M5,25 Q30,-5 55,10"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="2"
-                          strokeDasharray="4,3"
-                          className="animate-pulse"
-                        />
-                        <polygon points="52,7 58,12 52,15" fill="hsl(var(--border))" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Row 2: 05-08 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {COMMON_CONDITIONS.slice(4, 8).map((condition, index) => (
-                <div key={index} className="relative">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: (index + 4) * 0.05 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col items-center text-center"
-                  >
-                    {/* Hexagon Container */}
-                    <div className="relative mb-4">
-                      {/* Hexagon Shape with Dashed Border */}
-                      <div className="w-24 h-28 relative">
-                        <svg viewBox="0 0 100 110" className="w-full h-full">
-                          <polygon
-                            points="50,5 95,27.5 95,82.5 50,105 5,82.5 5,27.5"
-                            fill="hsl(var(--card))"
-                            stroke="hsl(var(--primary))"
-                            strokeWidth="1.5"
-                            strokeDasharray="6,4"
-                          />
-                        </svg>
-                        {/* SVG Icon inside hexagon */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <condition.icon />
-                        </div>
-                      </div>
-                      {/* Teal Number Badge */}
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-extrabold shadow-md animate-bounce border border-background">
-                        {condition.number}
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-base font-bold text-foreground mb-2">
-                      {condition.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-muted-foreground text-xs leading-relaxed max-w-[180px]">
-                      {condition.description}
-                    </p>
-                  </motion.div>
-                  
-                  {/* Curved Arrow - Downward curve for odd positions */}
-                  {index < 3 && index % 2 === 0 && (
-                    <div className="hidden lg:block absolute top-16 -right-8 w-16 h-12 z-10">
-                      <svg viewBox="0 0 60 40" className="w-full h-full">
-                        <path
-                          d="M5,5 Q30,35 55,20"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="2"
-                          strokeDasharray="4,3"
-                          className="animate-pulse"
-                        />
-                        <polygon points="52,17 58,22 52,25" fill="hsl(var(--border))" />
-                      </svg>
-                    </div>
-                  )}
-                  
-                  {/* Curved Arrow - Upward curve for even positions */}
-                  {index < 3 && index % 2 === 1 && (
-                    <div className="hidden lg:block absolute top-16 -right-8 w-16 h-12 z-10">
-                      <svg viewBox="0 0 60 40" className="w-full h-full">
-                        <path
-                          d="M5,25 Q30,-5 55,10"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="2"
-                          strokeDasharray="4,3"
-                          className="animate-pulse"
-                        />
-                        <polygon points="52,7 58,12 52,15" fill="hsl(var(--border))" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Row 3: 09-12 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {COMMON_CONDITIONS.slice(8, 12).map((condition, index) => (
-                <div key={index} className="relative">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: (index + 8) * 0.05 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col items-center text-center"
-                  >
-                    {/* Hexagon Container */}
-                    <div className="relative mb-4">
-                      {/* Hexagon Shape with Dashed Border */}
-                      <div className="w-24 h-28 relative">
-                        <svg viewBox="0 0 100 110" className="w-full h-full">
-                          <polygon
-                            points="50,5 95,27.5 95,82.5 50,105 5,82.5 5,27.5"
-                            fill="hsl(var(--card))"
-                            stroke="hsl(var(--primary))"
-                            strokeWidth="1.5"
-                            strokeDasharray="6,4"
-                          />
-                        </svg>
-                        {/* SVG Icon inside hexagon */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <condition.icon />
-                        </div>
-                      </div>
-                      {/* Teal Number Badge */}
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-extrabold shadow-md animate-bounce border border-background">
-                        {condition.number}
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-base font-bold text-foreground mb-2">
-                      {condition.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-muted-foreground text-xs leading-relaxed max-w-[180px]">
-                      {condition.description}
-                    </p>
-                  </motion.div>
-                  
-                  {/* Curved Arrow - Downward curve for odd positions */}
-                  {index < 3 && index % 2 === 0 && (
-                    <div className="hidden lg:block absolute top-16 -right-8 w-16 h-12 z-10">
-                      <svg viewBox="0 0 60 40" className="w-full h-full">
-                        <path
-                          d="M5,5 Q30,35 55,20"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="2"
-                          strokeDasharray="4,3"
-                          className="animate-pulse"
-                        />
-                        <polygon points="52,17 58,22 52,25" fill="hsl(var(--border))" />
-                      </svg>
-                    </div>
-                  )}
-                  
-                  {/* Curved Arrow - Upward curve for even positions */}
-                  {index < 3 && index % 2 === 1 && (
-                    <div className="hidden lg:block absolute top-16 -right-8 w-16 h-12 z-10">
-                      <svg viewBox="0 0 60 40" className="w-full h-full">
-                        <path
-                          d="M5,25 Q30,-5 55,10"
-                          fill="none"
-                          stroke="hsl(var(--border))"
-                          strokeWidth="2"
-                          strokeDasharray="4,3"
-                          className="animate-pulse"
-                        />
-                        <polygon points="52,7 58,12 52,15" fill="hsl(var(--border))" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
       <TestimonialsSection />
+
+      <section className="relative overflow-hidden bg-linear-to-b from-background via-primary/5 to-background py-16 sm:py-20">
+        <div
+          className="absolute left-0 right-0 -top-1 h-8 bg-background"
+          style={{
+            clipPath:
+              "polygon(0 0, 4% 100%, 8% 0, 12% 100%, 16% 0, 20% 100%, 24% 0, 28% 100%, 32% 0, 36% 100%, 40% 0, 44% 100%, 48% 0, 52% 100%, 56% 0, 60% 100%, 64% 0, 68% 100%, 72% 0, 76% 100%, 80% 0, 84% 100%, 88% 0, 92% 100%, 96% 0, 100% 100%, 100% 0)",
+          }}
+        />
+        <div
+          className="absolute left-0 right-0 -bottom-1 h-8 bg-background"
+          style={{
+            clipPath:
+              "polygon(0 100%, 4% 0, 8% 100%, 12% 0, 16% 100%, 20% 0, 24% 100%, 28% 0, 32% 100%, 36% 0, 40% 100%, 44% 0, 48% 100%, 52% 0, 56% 100%, 60% 0, 64% 100%, 68% 0, 72% 100%, 76% 0, 80% 100%, 84% 0, 88% 100%, 92% 0, 96% 100%, 100% 0, 100% 100%)",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-primary/8 to-transparent" />
+        <div className="pointer-events-none absolute -left-10 top-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-12 bottom-8 h-64 w-64 rounded-full bg-secondary/25 blur-3xl" />
+
+        <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col gap-5 lg:mb-12 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <div className="mb-3 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+                Doctor categories
+              </div>
+              <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+                Care Paths for <span className="text-primary">Every Need</span>
+              </h2>
+              <p className="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg lg:text-xl">
+                Choose a doctor category based on the concern you want to discuss online.
+              </p>
+            </div>
+
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-2xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted sm:self-start"
+            >
+              Explore all departments
+            </Link>
+          </div>
+
+          <div className="relative">
+            <button
+              type="button"
+              aria-label="Previous specialties"
+              onClick={() => shiftSpecialties("prev")}
+              className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-lg transition hover:text-foreground lg:flex"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+
+            <button
+              type="button"
+              aria-label="Next specialties"
+              onClick={() => shiftSpecialties("next")}
+              className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-lg transition hover:text-foreground lg:flex"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+              {visibleSpecialties.map((specialty, index) => {
+                return (
+                  <motion.div
+                    key={`${specialty.title}-${specialtyStart}`}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: index * 0.05 }}
+                    className="group rounded-[24px] border border-border bg-card p-6 text-center shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(15,23,42,0.12)]"
+                  >
+                    <div
+                      className={`mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br ${specialty.accent} shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]`}
+                    >
+                      <Image
+                        src={specialty.svg}
+                        alt={specialty.title}
+                        width={68}
+                        height={68}
+                        className="h-16 w-16 object-contain"
+                      />
+                    </div>
+
+                    <h3 className="min-h-[56px] text-xl font-bold leading-tight text-foreground">
+                      {specialty.title}
+                    </h3>
+
+                    <p className="mt-3 text-base font-medium text-muted-foreground">
+                      {specialty.price}
+                    </p>
+
+                    <Link
+                      href="/certificates/apply"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-primary/80"
+                    >
+                      Consult this specialist
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 flex items-center justify-center gap-3 lg:hidden">
+              <button
+                type="button"
+                onClick={() => shiftSpecialties("prev")}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition hover:text-foreground"
+                aria-label="Previous specialties"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => shiftSpecialties("next")}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition hover:text-foreground"
+                aria-label="Next specialties"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <CTASection
+        title="Connect With a Licensed Doctor Online"
+        description="Book a guided online consultation, speak to a registered doctor, and move ahead with the right next step from home."
+        buttonPrimary={{
+          label: "Start consultation",
+          href: "/certificates/apply",
+        }}
+      />
     </>
   );
 }

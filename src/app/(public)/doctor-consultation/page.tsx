@@ -282,32 +282,32 @@ const CONSULTATION_SPECIALTIES: Array<{
   {
     title: "Sexology",
     price: "Rs 499",
-    svg: "/svg/medical-svgs/1-skin-hair.svg",
+    svg: "/svg/medical-svgs/5-sexology.svg",
   },
   {
     title: "General physician",
     price: "Rs 399",
-    svg: "/svg/medical-svgs/2-brain-mental.svg",
+    svg: "/svg/medical-svgs/2-general-physician.svg",
   },
   {
     title: "Dermatology",
     price: "Rs 449",
-    svg: "/svg/medical-svgs/3-stomach-digestive.svg",
+    svg: "/svg/medical-svgs/1-dermatology.svg",
   },
   {
     title: "Psychiatry",
     price: "Rs 499",
-    svg: "/svg/medical-svgs/4-pediatrics-child.svg",
+    svg: "/svg/medical-svgs/6-psychiatry.svg",
   },
   {
     title: "Stomach and digestion",
     price: "Rs 399",
-    svg: "/svg/medical-svgs/5-bone-orthopedic.svg",
+    svg: "/svg/medical-svgs/3-stomach-digestion.svg",
   },
   {
     title: "Pediatrics",
     price: "Rs 499",
-    svg: "/svg/medical-svgs/6-eye-vision.svg",
+    svg: "/svg/medical-svgs/4-pediatrics.svg",
   },
 ];
 
@@ -624,6 +624,9 @@ export default function DoctorConsultationPage() {
         </div>
       </section> */}
 
+
+      {/* <TestimonialsSection /> */}
+
       {/* Common Conditions for a Medical Certificate Section */}
       <section className="relative py-20 bg-linear-to-b from-background via-primary/5 to-background overflow-hidden">
           {/* Top ZigZak Border */}
@@ -692,9 +695,6 @@ export default function DoctorConsultationPage() {
           </div>
         </div>
       </section>
-
-      <TestimonialsSection />
-
 
       <CTASection
         title="Connect With a Licensed Doctor Online"

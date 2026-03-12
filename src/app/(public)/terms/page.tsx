@@ -1,235 +1,203 @@
-import { Metadata } from "next";
-import { Scale, ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { GridPattern } from "@/components/ui/grid-pattern";
 import { CTASection } from "@/components/public/home/cta-section";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | MediProofDocs",
   description:
-    "Read the terms and conditions for using MediProofDocs medical certificate services.",
+    "Review the terms that govern the use of MediProofDocs, including eligibility, consultations, payments, and acceptable use.",
 };
 
-const SECTIONS = [
-  { id: "introduction", label: "Introduction" },
-  { id: "our-service", label: "Our Service" },
-  { id: "doctor-responsibility", label: "Doctor Responsibility" },
-  { id: "user-responsibility", label: "User Responsibility" },
-  { id: "certificate-acceptance", label: "Certificate Acceptance" },
-  { id: "refund-policy", label: "Refund Policy" },
-  { id: "misuse", label: "Misuse & Restricted Activities" },
-  { id: "intellectual-property", label: "Intellectual Property" },
-  { id: "website-availability", label: "Website Availability" },
-  { id: "changes", label: "Changes to Services" },
-  { id: "disclaimer", label: "Disclaimer" },
-  { id: "liability", label: "Limitation of Liability" },
-  { id: "governing-law", label: "Governing Law" },
-  { id: "contact", label: "Contact Us" },
-];
+const sectionTitleClass = "text-3xl font-semibold text-slate-900 mt-8 mb-3";
+const paragraphClass = "text-slate-600 leading-relaxed mb-4";
+const listClass = "list-disc pl-6 space-y-2 text-slate-600 leading-relaxed mb-6";
 
 export default function TermsPage() {
   return (
     <>
       {/* Hero Header */}
-      <div className="relative overflow-hidden border-b bg-primary/5">
-        <GridPattern
-          width={30}
-          height={30}
-          x={-1}
-          y={-1}
-          strokeDasharray="4 2"
-          className="mask-[radial-gradient(ellipse_at_center,white,transparent_70%)]"
+      <div className="relative border-b border-primary/10 overflow-hidden">
+        {/* Background Image - Unsplash CDN */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1920&q=80')" }}
         />
-        <div className="relative mx-auto max-w-4xl px-4 py-16 sm:py-20 text-center">
-          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 ring-1 ring-primary/20">
-            <Scale className="h-7 w-7 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Terms &amp; Conditions
+        {/* Light Secondary Color Overlay */}
+        <div className="absolute inset-0 bg-primary/85" />
+        {/* Content */}
+        <div className="relative mx-auto max-w-4xl px-4 pt-28 pb-20 sm:pt-36 sm:pb-28 text-center">
+          <span className="inline-block rounded-full bg-white/20 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-white mb-4">
+            Terms & Conditions
+          </span>
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Terms and Conditions
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
-            Please read these terms carefully before using MediProofDocs services.
-          </p>
-          <p className="mt-3 text-sm text-muted-foreground/70">Last updated: February 2026</p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="mx-auto max-w-5xl px-4 py-12">
-        <div className="grid gap-10 lg:grid-cols-[220px_1fr]">
-          {/* Table of Contents - Desktop sidebar */}
-          <aside className="hidden lg:block">
-            <nav className="sticky top-24 space-y-1">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">On this page</p>
-              {SECTIONS.map((s) => (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  className="block rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                >
-                  {s.label}
-                </a>
-              ))}
-            </nav>
-          </aside>
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
+        <article className="prose prose-slate max-w-none">
+          <h2 className={sectionTitleClass}>1. About Us</h2>
+          <p className={paragraphClass}>
+            &quot;MediProofDocs&quot; is operated by <strong>Stargate Technologies PVT LTD</strong>, operating in the
+            field of IT Services. The IT Services is a company organized and existing under the laws of India, 
+            w/e/f October 1, 2024. It is available on{" "}
+            <Link href="https://MediProofDocs.in" className="text-primary font-semibold">
+              https://MediProofDocs.in
+            </Link>{" "}
+            as a domain service and on Android application in the Google Play Store.
+          </p>
 
-          {/* Main Content */}
-          <article className="prose prose-neutral max-w-none dark:prose-invert prose-headings:scroll-mt-24">
-            <h2 id="introduction">1. Introduction</h2>
-            <p>
-              Welcome to MediProofDocs. By using our website and services, you agree
-              to these Terms &amp; Conditions. If you do not agree, please do not
-              use our website.
-            </p>
+          <h2 className={sectionTitleClass}>2. Services</h2>
+          <p className={paragraphClass}>
+            These terms define that this website carries details about regulated medical products/services or 
+            incorporates a buying/selling platform/options for such products and is not for general public 
+            advertisement/information. These certificates or prescriptions we provide by conducting one on one 
+            live consultation with the assigned consulting doctor. The consulting doctor decides after one-on-one 
+            video consultation along with the prescriber whether a certificate is suitable for the consumer, and 
+            what certificate to provide to the consumer.
+          </p>
 
-            <h2 id="our-service">2. Our Service</h2>
-            <p>
-              MediProofDocs provides an online consultation platform where users can
-              connect with registered medical doctors.
-            </p>
-            <ul>
-              <li>We help users request medical certificates after doctor consultation.</li>
-              <li>Final approval and issuance depend only on the doctor&apos;s decision.</li>
-              <li>We do not guarantee that a certificate will be issued.</li>
-              <li>Certificates are provided for genuine medical reasons only.</li>
-            </ul>
+          <h2 className={sectionTitleClass}>3. Working Hours and Timeline</h2>
+          <ul className={listClass}>
+            <li><strong>Consultations/Working Hours</strong> are <strong>10:30 am–6:30 pm</strong> excluding public holidays (Monday to Saturday).</li>
+            <li><strong>Timeline for review:</strong> 24 hours (2 to 10 hours are taken as norm).</li>
+            <li>Timelines depend on doctors/assignees availability during working hours.</li>
+            <li><strong>Soft copy release:</strong> Within 6 hours post-approval/signature.</li>
+            <li><strong>Hard copy delivery:</strong> Within 7 days (via current mode of dispatching).</li>
+            <li><strong>Doctor Telephonic contact:</strong> Within 4 to 6 hours (during working hours).</li>
+            <li><strong>Non-refundable</strong> means: Where there is no scope of refund.</li>
+          </ul>
 
-            <h2 id="doctor-responsibility">3. Doctor Responsibility</h2>
-            <ul>
-              <li>All medical consultations are handled by registered doctors.</li>
-              <li>Doctors may approve or reject requests based on medical evaluation.</li>
-              <li>The website is not responsible for doctor decisions.</li>
-              <li>
-                Certificates may include digital or handwritten signatures/seals as
-                decided by the doctor.
-              </li>
-            </ul>
+          <h2 className={sectionTitleClass}>4. Certificate Format & Usage</h2>
+          <p className={paragraphClass}>
+            All Medical Certificates must be submitted for their respective purposes, as the objective of this product 
+            MediProofDocs serves with their legitimate use. Configuration/modification requests for any add-ons are 
+            non-refundable/non-applicable post the consultation/review. Consultation fee is the fee for availing 
+            consultation/review services of the Certificate.
+          </p>
 
-            <h2 id="user-responsibility">4. User Responsibility</h2>
-            <p>By using our service, you agree that:</p>
-            <ul>
-              <li>You will provide true and correct information.</li>
-              <li>You will not submit fake, misleading, or false details.</li>
-              <li>
-                You understand that wrong information may lead to rejection without
-                refund.
-              </li>
-              <li>You will attend the consultation properly if required.</li>
-            </ul>
+          <h2 className={sectionTitleClass}>5. Identification Policy</h2>
+          <p className={paragraphClass}>
+            The Identification/ID Document attached will be used as a verification to validate any consultation for 
+            the records. Consultation is provided regardless of the identification validation.
+          </p>
 
-            <h2 id="certificate-acceptance">5. Medical Certificate Acceptance</h2>
-            <ul>
-              <li>
-                We do not guarantee acceptance of certificates by employers,
-                colleges, companies, or authorities.
-              </li>
-              <li>
-                Acceptance depends on the organization requesting the certificate.
-              </li>
-              <li>We are not liable for rejection by any third party.</li>
-            </ul>
+          <h2 className={sectionTitleClass}>6. Affiliation Policy</h2>
+          <p className={paragraphClass}>
+            The doctors associated with this organization are either appointed or contracted/affiliated to 
+            provide services via any number of methods supported.
+          </p>
 
-            <h2 id="refund-policy">6. Refund Policy</h2>
-            <p>Refunds are not applicable if:</p>
-            <ul>
-              <li>Consultation is completed.</li>
-              <li>Doctor has reviewed your case.</li>
-              <li>Certificate is issued or rejected after consultation.</li>
-              <li>Incorrect or incomplete information is provided.</li>
-              <li>Refund is requested after service processing.</li>
-            </ul>
-            <p>
-              If any refund is approved, service or convenience charges may be
-              deducted. See our{" "}
-              <Link href="/refund-policy" className="text-primary hover:text-primary/80">
-                full Refund Policy
-              </Link>{" "}
-              for details.
-            </p>
+          <h2 className={sectionTitleClass}>7. User Responsibilities</h2>
+          <p className={paragraphClass}>
+            Applicants/users are the end consumers who submit applications for a certificate. They are responsible 
+            for providing valid and accurate information at the form-filling as well as during discussion with 
+            the doctor.
+          </p>
 
-            <h2 id="misuse">7. Misuse &amp; Restricted Activities</h2>
-            <p>Users must not:</p>
-            <ul>
-              <li>Use the website for illegal purposes.</li>
-              <li>Upload fake reports or documents.</li>
-              <li>Misuse doctor identity or certificates.</li>
-              <li>Attempt hacking, spamming, or system abuse.</li>
-              <li>Copy or misuse website content.</li>
-            </ul>
-            <p>Violation may result in permanent access ban.</p>
+          <h2 className={sectionTitleClass}>8. Consent for Consultation</h2>
+          <p className={paragraphClass}>
+            Booking for consultation means consent has been submitted for medical/wellness or employee purposes only, 
+            using legitimate reason/purpose/intent, no malice in use, no misuse, to deceive. Users consent to 
+            MediProofDocs use of Call Recorder/Screen recorder during any scheduled consultation.
+          </p>
 
-            <h2 id="intellectual-property">8. Intellectual Property</h2>
-            <p>
-              All website content including text, design, logos, and structure
-              belongs to MediProofDocs. You may not copy, reuse, or distribute
-              content without permission.
-            </p>
+          <h2 className={sectionTitleClass}>9. Restrictions and Prohibited Conduct</h2>
+          <ul className={listClass}>
+            <li><strong>Any document for medico-legal cases</strong></li>
+            <li><strong>Professional service as consultation</strong></li>
+            <li><strong>Misrepresentation/Fake certificates</strong></li>
+            <li><strong>Attempting to disturb</strong> the doctor or any member of this organization</li>
+            <li><strong>Using services without any consent</strong></li>
+          </ul>
+          <p className={paragraphClass}>
+            Providing misleading/fake/unlawful/false details we don&apos;t accept and holds full responsibility 
+            for any charge/consequence.
+          </p>
 
-            <h2 id="website-availability">9. Website Availability</h2>
-            <ul>
-              <li>We try to keep services running smoothly.</li>
-              <li>
-                We are not responsible for delays due to technical issues, internet
-                problems, or doctor availability.
-              </li>
-            </ul>
+          <h2 className={sectionTitleClass}>10. Intellectual Property</h2>
+          <p className={paragraphClass}>
+            All content on this Website Technologies PVT. Ltd is owned by Registrar.
+          </p>
 
-            <h2 id="changes">10. Changes to Services</h2>
-            <p>
-              MediProofDocs may update, modify, or stop services anytime without
-              prior notice.
-            </p>
+          <h2 className={sectionTitleClass}>11. Disclaimer</h2>
+          <p className={paragraphClass}>
+            The counseling, texts in this document and the website do not constitute health claims or diagnose conditions. 
+            We are not liable for any legal use of the Service or Product at any given point of time. This is only 
+            applicable for non-critical conditions and where the doctor is not legally bound by any applicable law.
+          </p>
 
-            <h2 id="disclaimer">11. Disclaimer</h2>
-            <ul>
-              <li>We do not provide emergency medical services.</li>
-              <li>
-                Our platform is for online consultation and documentation only.
-              </li>
-              <li>
-                Medical certificates are valid only for the mentioned duration.
-              </li>
-              <li>Once issued, certificates cannot be changed.</li>
-            </ul>
+          <h2 className={sectionTitleClass}>12. Limitation of Liability</h2>
+          <p className={paragraphClass}>
+            We are not liable for Fraud/Fake/Misleading and misuse of our product by 3rd party/individual/self.
+          </p>
 
-            <h2 id="liability">12. Limitation of Liability</h2>
-            <p>MediProofDocs is not responsible for:</p>
-            <ul>
-              <li>Loss due to certificate rejection.</li>
-              <li>Misuse of certificate by user.</li>
-              <li>Any indirect or third-party damages.</li>
-            </ul>
+          <h2 className={sectionTitleClass}>13. Third Party Data</h2>
+          <p className={paragraphClass}>
+            Any form of sending/sharing your data outfieldside with outside to any outside 3rd party/individual/self is 
+            for service purpose only. We do not sell your data to third-party applications.
+          </p>
 
-            <h2 id="governing-law">13. Governing Law</h2>
-            <p>
-              These Terms are governed by Indian law. Any disputes will be handled
-              under Indian jurisdiction.
-            </p>
+          <h2 className={sectionTitleClass}>14. Indemnification</h2>
+          <p className={paragraphClass}>
+            You agree to defend and hold harmless MediProofDocs and its officers, agents, employees, and suppliers from 
+            any and all claims or demand, made by any third party due to or arising out of (a) any content you submit 
+            or use to which MediProofDocs gains access as a result of your use of the Services and (b) a breach of this 
+            Agreement.
+          </p>
 
-            <h2 id="contact">14. Contact Us</h2>
-            <p>
-              For support or questions:{" "}
-              <a href="mailto:support@medproofdocs.com">
-                support@medproofdocs.com
-              </a>
-            </p>
+          <h2 className={sectionTitleClass}>15. Termination</h2>
+          <p className={paragraphClass}>
+            We may suspend or terminate the Service at any time without prior notice and with no liability for any damages 
+            arising out.
+          </p>
 
-            {/* Cross-link */}
-            <div className="not-prose mt-10 flex flex-wrap gap-3">
-              <Link href="/privacy" className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                Privacy Policy <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link href="/refund-policy" className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                Refund Policy <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </article>
-        </div>
+          <h2 className={sectionTitleClass}>16. Dispute Resolution</h2>
+          <p className={paragraphClass}>
+            This Agreement will be governed by and constituted in accordance with the Laws of India without reference 
+            to conflict of laws principles.
+          </p>
+
+          <h2 className={sectionTitleClass}>17. Governing Law</h2>
+          <p className={paragraphClass}>
+            This agreement and its performance shall be governed by laws of India. Stargate Technologies may assign 
+            this Agreement without your consent to: (1) a subsidiary or affiliate; (2) an acquirer of Stargate Technologies 
+            equity, business, or assets; or (3) a successor by merger.
+          </p>
+
+          <h2 className={sectionTitleClass}>18. Miscellaneous</h2>
+          <p className={paragraphClass}>
+            User agrees to follow instructions as provided by the MediProofDocs team and to strictly maintain confidentiality. 
+            MediProofDocs reserves the right to update this Terms of Use at any time.
+          </p>
+
+          <p className={paragraphClass}>
+            For any concerns, contact us <a href="mailto:help@MediProofDocs.in" className="text-primary font-semibold">help@MediProofDocs.in</a>
+          </p>
+
+          {/* Cross-links */}
+          <div className="flex flex-wrap gap-3 mt-10 pt-6 border-t border-slate-200">
+            <Link
+              href="/privacy"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/refund-policy"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              Refund Policy
+            </Link>
+          </div>
+        </article>
       </div>
 
       <CTASection
-        title="Need A Verified Medical Certificate?"
-        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        title="Ready To Start A Certificate Request?"
+        description="Share your details through the guided application flow and we will route the request through the appropriate review process."
         buttonPrimary={{
           label: "Apply For Certificate",
           href: "/certificates/apply",

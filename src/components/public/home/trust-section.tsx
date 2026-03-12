@@ -1,203 +1,378 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Shield, Clock, IndianRupee, BadgeCheck, Lock, Headphones } from "lucide-react";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import { GridPattern } from "@/components/ui/grid-pattern";
-import { InView } from "@/components/ui/in-view";
-
-const TRUST_ITEMS = [
+const TRUST_STEPS = [
   {
-    id: "verified",
-    icon: Shield,
-    title: "Verified & Authentic",
-    description:
-      "Every certificate is reviewed and signed by a registered MBBS practitioner with valid credentials. Our doctors are verified and comply with all medical council regulations.",
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&auto=format&fit=crop&q=80",
+    id: "01",
+    title: "Data Privacy and Protection",
+    text: "We respect your privacy and treat your personal and medical details with care. All information is securely handled and used only for doctor consultation and issuing your medical certificate. Our system is built to protect your details at every step.",
+    position: "below",
   },
   {
-    id: "quick",
-    icon: Clock,
-    title: "Quick Turnaround",
-    description:
-      "Receive your certificate within 30 minutes to 24 hours through a fully digital, hassle-free workflow. No hospital visits or long waiting queues.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&auto=format&fit=crop&q=80",
+    id: "02",
+    title: "Genuine And Verified Certificates",
+    text: "Medical certificates are provided only after consultation with a registered Indian medical practitioner. Each certificate carries the doctor's name and registration number, ensuring it is genuine and acceptable for official and professional use across India.",
+    position: "above",
   },
   {
-    id: "pricing",
-    icon: IndianRupee,
-    title: "Transparent Pricing",
-    description:
-      "Clear pricing with no hidden fees. Starting from just ₹599 for digital certificates. Multiple payment options available including UPI, cards, and net banking.",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "compliant",
-    icon: BadgeCheck,
-    title: "NMC & WHO Compliant",
-    description:
-      "All certificates adhere to National Medical Commission and WHO guidelines for validity. Accepted by employers, institutions, and travel authorities across India.",
-    image:
-      "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "privacy",
-    icon: Lock,
-    title: "Privacy & Security",
-    description:
-      "Your personal and medical information is handled with strict confidentiality and encryption. We follow HIPAA-compliant data protection practices.",
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=80",
-  },
-  {
-    id: "support",
-    icon: Headphones,
-    title: "Dedicated Support",
-    description:
-      "Our support team is available to assist you through the entire process, from application to delivery. Get help via WhatsApp, email, or phone.",
-    image:
-      "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&auto=format&fit=crop&q=80",
+    id: "03",
+    title: "Easy And Convenient Process",
+    text: "Our online service is designed to be simple and easy to use. You can submit your request, speak with a doctor, and receive your medical certificate smoothly, without delays or complicated steps.",
+    position: "below",
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const headerVariants = {
+  hidden: { opacity: 0, y: -30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
+const lineVariants = {
+  hidden: { scaleX: 0 },
+  visible: {
+    scaleX: 1,
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
+    },
+  },
+};
+
+const stepVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+const textVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+const mobileItemVariants = {
+  hidden: { opacity: 0, x: -30 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
 export function TrustSection() {
-  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  useEffect(() => {
-    if (!carouselApi) {
-      return;
-    }
-    const updateSelection = () => {
-      setCanScrollPrev(carouselApi.canScrollPrev());
-      setCanScrollNext(carouselApi.canScrollNext());
-      setCurrentSlide(carouselApi.selectedScrollSnap());
-    };
-    updateSelection();
-    carouselApi.on("select", updateSelection);
-    return () => {
-      carouselApi.off("select", updateSelection);
-    };
-  }, [carouselApi]);
-
   return (
-    <section className="relative border-t bg-background px-4 py-20 overflow-hidden">
-      <GridPattern
-        width={30}
-        height={30}
-        x={-1}
-        y={-1}
-        strokeDasharray="4 2"
-        className="mask-[radial-gradient(ellipse_at_center,white,transparent_70%)]"
+    <section className="relative px-4 py-20 lg:py-28 mb-2.5 overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop')" }}
       />
-      <div className="mx-auto max-w-6xl">
-        <InView>
-          <div className="mb-8 flex flex-col items-center justify-between gap-4 md:mb-14 lg:mb-16 lg:flex-row">
-            <div className="text-center lg:text-left">
-              <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-                Our Promise
-              </span>
-              <h2 className="mt-4 text-3xl font-bold sm:text-4xl">
-                Why Choose MediProofDocs?
-              </h2>
-              <p className="mt-3 max-w-lg text-muted-foreground">
-                We&apos;re committed to providing authentic, timely, and
-                confidential medical certification services.
-              </p>
-            </div>
-            <div className="hidden shrink-0 gap-2 md:flex">
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={() => {
-                  carouselApi?.scrollPrev();
-                }}
-                disabled={!canScrollPrev}
-                className="disabled:pointer-events-auto"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={() => {
-                  carouselApi?.scrollNext();
-                }}
-                disabled={!canScrollNext}
-                className="disabled:pointer-events-auto"
-              >
-                <ArrowRight className="h-5 w-5" />
-              </Button>
+      {/* Light Primary Overlay */}
+      <div className="absolute inset-0 bg-primary/85" />
+      
+      <div className="mx-auto max-w-6xl relative z-10">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={containerVariants}
+        >
+          {/* Header */}
+          <motion.div variants={headerVariants} className="text-center">
+            <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl text-white">
+              Why Trust Us?
+            </h2>
+            <p className="mt-4 mx-auto max-w-2xl text-white/80 text-lg">
+              Trusted by patients across India for secure, doctor-verified, and hassle-free certificate support.
+            </p>
+          </motion.div>
+
+          {/* Desktop Timeline */}
+          <div className="hidden lg:block relative mt-64 mb-52">
+            {/* Main horizontal line */}
+            <motion.div
+              variants={lineVariants}
+              className="absolute top-1/2 left-0 right-0 h-0.5 bg-white -translate-y-1/2 origin-left"
+            />
+            
+            {/* Start dot */}
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+              viewport={{ once: true }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white"
+            />
+            
+            {/* End dot */}
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ delay: 1.2, duration: 0.3 }}
+              viewport={{ once: true }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white"
+            />
+
+            <div className="flex justify-between items-center relative px-8">
+              {TRUST_STEPS.map((step, index) => (
+                <motion.div
+                  key={step.id}
+                  variants={stepVariants}
+                  custom={index}
+                  className="flex flex-col items-center relative"
+                >
+                  {/* Text above */}
+                  {step.position === "above" && (
+                    <>
+                      <motion.div
+                        variants={textVariants}
+                        className="absolute bottom-full mb-16 text-center w-56"
+                      >
+                        <h3 className="text-sm font-bold text-white mb-2">{step.title}</h3>
+                        <p className="text-xs text-white/70 leading-relaxed line-clamp-6">
+                          {step.text}
+                        </p>
+                      </motion.div>
+                      {/* Vertical connector line going up */}
+                      <motion.div
+                        initial={{ scaleY: 0 }}
+                        whileInView={{ scaleY: 1 }}
+                        transition={{ delay: 0.8 + index * 0.2, duration: 0.3 }}
+                        viewport={{ once: true }}
+                        className="absolute bottom-full mb-1 w-0.5 h-14 bg-white origin-bottom"
+                      />
+                      {/* Small connector dot at top */}
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ delay: 1 + index * 0.2, duration: 0.2 }}
+                        viewport={{ once: true }}
+                        className="absolute bottom-full mb-14 w-2 h-2 rounded-full bg-white"
+                      />
+                    </>
+                  )}
+
+                  {/* Number circle */}
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full border-3 border-white bg-primary shadow-lg"
+                  >
+                    <span className="text-2xl font-bold text-white">{step.id}</span>
+                  </motion.div>
+
+                  {/* Text below */}
+                  {step.position === "below" && (
+                    <>
+                      {/* Vertical connector line going down */}
+                      <motion.div
+                        initial={{ scaleY: 0 }}
+                        whileInView={{ scaleY: 1 }}
+                        transition={{ delay: 0.8 + index * 0.2, duration: 0.3 }}
+                        viewport={{ once: true }}
+                        className="absolute top-full mt-1 w-0.5 h-14 bg-white origin-top"
+                      />
+                      {/* Small connector dot at bottom */}
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ delay: 1 + index * 0.2, duration: 0.2 }}
+                        viewport={{ once: true }}
+                        className="absolute top-full mt-14 w-2 h-2 rounded-full bg-white"
+                      />
+                      <motion.div
+                        variants={textVariants}
+                        className="absolute top-full mt-16 text-center w-56"
+                      >
+                        <h3 className="text-sm font-bold text-white mb-2">{step.title}</h3>
+                        <p className="text-xs text-white/70 leading-relaxed line-clamp-6">
+                          {step.text}
+                        </p>
+                      </motion.div>
+                    </>
+                  )}
+                </motion.div>
+              ))}
             </div>
           </div>
-        </InView>
-      </div>
 
-      <div className="w-full">
-        <Carousel
-          setApi={setCarouselApi}
-          opts={{
-            breakpoints: {
-              "(max-width: 768px)": {
-                dragFree: true,
-              },
-            },
-          }}
-        >
-          <CarouselContent className="ml-0 2xl:ml-[max(8rem,calc(50vw-700px))] 2xl:mr-[max(0rem,calc(50vw-700px))]">
-            {TRUST_ITEMS.map((item) => (
-              <CarouselItem
-                key={item.id}
-                className="max-w-80 pl-5 lg:max-w-100"
-              >
-                <div className="group h-full rounded-2xl">
-                    <div className="relative h-full min-h-88 overflow-hidden rounded-2xl border">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="absolute h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 h-full bg-linear-to-t from-primary/90 via-primary/40 to-transparent mix-blend-multiply" />
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-                        <item.icon className="h-6 w-6 text-white" />
-                      </div>
-                      <h3 className="text-xl font-semibold">{item.title}</h3>
-                      <p className="mt-2 line-clamp-3 text-sm text-white/90">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-
-        <div className="mt-8 flex justify-center gap-2">
-          {TRUST_ITEMS.map((_, index) => (
-            <button
-              key={index}
-              className={`h-2 w-2 rounded-full transition-colors ${
-                currentSlide === index ? "bg-primary" : "bg-primary/20"
-              }`}
-              onClick={() => carouselApi?.scrollTo(index)}
-              aria-label={`Go to slide ${index + 1}`}
+          {/* Tablet Timeline */}
+          <div className="hidden md:block lg:hidden relative mt-52 mb-44">
+            {/* Main horizontal line */}
+            <motion.div
+              variants={lineVariants}
+              className="absolute top-1/2 left-4 right-4 h-0.5 bg-white -translate-y-1/2 origin-left"
             />
-          ))}
-        </div>
+            
+            {/* Start dot */}
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+              viewport={{ once: true }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white"
+            />
+            
+            {/* End dot */}
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ delay: 1.2, duration: 0.3 }}
+              viewport={{ once: true }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white"
+            />
+
+            <div className="flex justify-between items-center relative px-8">
+              {TRUST_STEPS.map((step, index) => (
+                <motion.div
+                  key={step.id}
+                  variants={stepVariants}
+                  custom={index}
+                  className="flex flex-col items-center relative"
+                >
+                  {/* Text above */}
+                  {step.position === "above" && (
+                    <>
+                      <motion.div variants={textVariants} className="absolute bottom-full mb-14 text-center w-40">
+                        <h3 className="text-xs font-bold text-white mb-1">{step.title}</h3>
+                        <p className="text-[10px] text-white/70 leading-relaxed line-clamp-6">
+                          {step.text}
+                        </p>
+                      </motion.div>
+                      <motion.div
+                        initial={{ scaleY: 0 }}
+                        whileInView={{ scaleY: 1 }}
+                        transition={{ delay: 0.8 + index * 0.2, duration: 0.3 }}
+                        viewport={{ once: true }}
+                        className="absolute bottom-full mb-1 w-0.5 h-12 bg-white origin-bottom"
+                      />
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ delay: 1 + index * 0.2, duration: 0.2 }}
+                        viewport={{ once: true }}
+                        className="absolute bottom-full mb-12 w-1.5 h-1.5 rounded-full bg-white"
+                      />
+                    </>
+                  )}
+
+                  {/* Number circle */}
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    className="relative z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-primary"
+                  >
+                    <span className="text-lg font-bold text-white">{step.id}</span>
+                  </motion.div>
+
+                  {/* Text below */}
+                  {step.position === "below" && (
+                    <>
+                      <motion.div
+                        initial={{ scaleY: 0 }}
+                        whileInView={{ scaleY: 1 }}
+                        transition={{ delay: 0.8 + index * 0.2, duration: 0.3 }}
+                        viewport={{ once: true }}
+                        className="absolute top-full mt-1 w-0.5 h-12 bg-white origin-top"
+                      />
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ delay: 1 + index * 0.2, duration: 0.2 }}
+                        viewport={{ once: true }}
+                        className="absolute top-full mt-12 w-1.5 h-1.5 rounded-full bg-white"
+                      />
+                      <motion.div variants={textVariants} className="absolute top-full mt-14 text-center w-40">
+                        <h3 className="text-xs font-bold text-white mb-1">{step.title}</h3>
+                        <p className="text-[10px] text-white/70 leading-relaxed line-clamp-6">
+                          {step.text}
+                        </p>
+                      </motion.div>
+                    </>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Timeline - Vertical */}
+          <motion.div
+            variants={containerVariants}
+            className="md:hidden relative mt-12"
+          >
+            {/* Vertical line */}
+            <motion.div
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+              viewport={{ once: true }}
+              className="absolute left-7 top-0 bottom-0 w-0.5 bg-white origin-top"
+            />
+
+            <div className="space-y-10">
+              {TRUST_STEPS.map((step, index) => (
+                <motion.div
+                  key={step.id}
+                  variants={mobileItemVariants}
+                  custom={index}
+                  className="flex items-start gap-6"
+                >
+                  {/* Number circle */}
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    className="relative z-10 shrink-0 flex items-center justify-center w-14 h-14 rounded-full border-2 border-white bg-primary"
+                  >
+                    <span className="text-xl font-bold text-white">{step.id}</span>
+                  </motion.div>
+
+                  {/* Text */}
+                  <div className="pt-1">
+                    <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
+                    <p className="text-sm text-white/70 leading-relaxed">
+                      {step.text}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

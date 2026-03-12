@@ -4,11 +4,14 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
 import { AnimatedLinkButton } from "@/components/ui/ripple-button";
+import { cn } from "@/lib/utils";
 
 interface CTASectionProps {
   title?: string;
   description?: string;
   doctorImage?: string;
+  imageWrapperClassName?: string;
+  imageClassName?: string;
   buttonPrimary?: {
     label: string;
     href: string;
@@ -19,15 +22,17 @@ export const CTASection = ({
   title = "Get Verified Medical Certificates Online - Fast & Secure",
   description = "All certificates are issued after a licensed doctor's online consultation, in compliance with Indian telemedicine guidelines.",
   doctorImage = "/cta.png",
+  imageWrapperClassName,
+  imageClassName,
   buttonPrimary = {
     label: "Apply for Certificate",
     href: "/certificates/apply",
   },
 }: CTASectionProps) => {
   return (
-    <section className="relative overflow-visiable bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
+    <section className="relative overflow-hidden bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex min-h-[280px] items-center lg:min-h-[350px]">
+        <div className="relative flex min-h-70 items-center lg:min-h-87.5">
           <div className="grid w-full items-center gap-6 lg:grid-cols-2">
             <FadeIn direction="left">
               <div className="max-w-xl py-10 text-center sm:py-12 sm:text-left lg:py-16">
@@ -51,12 +56,17 @@ export const CTASection = ({
             </FadeIn>
           </div>
 
-          <div className="absolute -right-10 -top-60 bottom-0 z-10 hidden w-[600px] lg:block">
+          <div
+            className={cn(
+              "absolute right-0 top-1/2 z-10 hidden h-[82%] w-110 -translate-y-1/2 lg:block xl:w-130",
+              imageWrapperClassName
+            )}
+          >
             <Image
               src={doctorImage}
               alt="Medical professional"
               fill
-              className="object-contain object-bottom"
+              className={cn("object-contain object-bottom", imageClassName)}
               priority
             />
           </div>

@@ -1,227 +1,201 @@
-import { Metadata } from "next";
-import { Shield, ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { GridPattern } from "@/components/ui/grid-pattern";
 import { CTASection } from "@/components/public/home/cta-section";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | MediProofDocs",
   description:
-    "Read how MediProofDocs collects, uses, stores, and protects your personal information.",
+    "Learn how MediProofDocs collects, uses, stores, and protects personal information shared through the platform.",
 };
 
-const SECTIONS = [
-  { id: "information-we-collect", label: "Information We Collect" },
-  { id: "how-we-use", label: "How We Use Your Info" },
-  { id: "sharing", label: "Sharing of Information" },
-  { id: "data-security", label: "Data Security" },
-  { id: "cookies", label: "Cookies" },
-  { id: "your-rights", label: "Your Rights" },
-  { id: "third-party", label: "Third-Party Links" },
-  { id: "changes", label: "Changes to This Policy" },
-  { id: "contact", label: "Contact Us" },
-];
+const sectionTitleClass = "text-3xl font-semibold text-slate-900 mt-10 mb-4";
+const paragraphClass = "text-slate-600 leading-relaxed mb-4";
+const listClass = "list-disc pl-6 space-y-2 text-slate-600 leading-relaxed mb-6";
 
 export default function PrivacyPage() {
   return (
     <>
       {/* Hero Header */}
-      <div className="relative overflow-hidden border-b bg-primary/5">
-        <GridPattern
-          width={30}
-          height={30}
-          x={-1}
-          y={-1}
-          strokeDasharray="4 2"
-          className="mask-[radial-gradient(ellipse_at_center,white,transparent_70%)]"
+      <div className="relative border-b border-primary/10 overflow-hidden">
+        {/* Background Image - Unsplash CDN */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1920&q=80')" }}
         />
-        <div className="relative mx-auto max-w-4xl px-4 py-16 sm:py-20 text-center">
-          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 ring-1 ring-primary/20">
-            <Shield className="h-7 w-7 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        {/* Light Secondary Color Overlay */}
+        <div className="absolute inset-0 bg-primary/85" />
+        {/* Content */}
+        <div className="relative mx-auto max-w-4xl px-4 pt-28 pb-20 sm:pt-36 sm:pb-28 text-center">
+          <span className="inline-block rounded-full bg-white/20 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-white mb-4">
+            Privacy Policy
+          </span>
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Privacy Policy
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
-            How MediProofDocs collects, uses, and protects your personal information.
-          </p>
-          <p className="mt-3 text-sm text-muted-foreground/70">Last updated: February 2026</p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="mx-auto max-w-5xl px-4 py-12">
-        <div className="grid gap-10 lg:grid-cols-[220px_1fr]">
-          {/* Table of Contents */}
-          <aside className="hidden lg:block">
-            <nav className="sticky top-24 space-y-1">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">On this page</p>
-              {SECTIONS.map((s) => (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  className="block rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                >
-                  {s.label}
-                </a>
-              ))}
-            </nav>
-          </aside>
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
+        <article className="prose prose-slate max-w-none">
+          <h2 className={sectionTitleClass}>1. Privacy Policy</h2>
+          <p className={paragraphClass}>
+            This Privacy Policy describes how MediProofDocs (the &quot;Site&quot; or &quot;we&quot;) collects, uses, and 
+            discloses your Personal Information when you visit or make a purchase from the Site.
+          </p>
+          <p className={paragraphClass}>
+            The security of your personal information is important to us. When you enter sensitive information 
+            (such as your phone number or other details through our service), we encrypt that information. 
+            Stargate Technologies Pvt Ltd helps us with data management and is a sub-contractor to our service. 
+            They will host, store, and process data under our instruction, and on our behalf. They may have access 
+            to your data for operational purposes only.
+          </p>
 
-          {/* Main Content */}
-          <article className="prose prose-neutral max-w-none dark:prose-invert prose-headings:scroll-mt-24">
-            <p>
-              Welcome to MediProofDocs. Protecting your privacy is important to us.
-              This Privacy Policy explains how we collect, use, store, and protect
-              your personal information when you use our website and services.
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 my-6">
+            <p className={`${paragraphClass} mb-0`}>
+              If you are using the Services on behalf of a business entity, you confirm that:
             </p>
-            <p>
-              By accessing or using MediProofDocs, you agree to this Privacy Policy.
-              If you do not agree, please do not use our services.
-            </p>
-
-            <h2 id="information-we-collect">1. Information We Collect</h2>
-            <p>
-              We collect only the information that is necessary to provide our
-              services effectively and securely.
-            </p>
-
-            <h3>1.1 Personal Information</h3>
-            <ul>
-              <li>Full Name</li>
-              <li>Email Address</li>
-              <li>Phone Number</li>
-              <li>Date of Birth (if required)</li>
-              <li>
-                Medical details required for consultation and issuing medical
-                certificates
-              </li>
+            <ul className={`${listClass} mt-3 mb-0`}>
+              <li>You have the authority to agree to this Privacy Policy on behalf of that entity</li>
+              <li>The entity agrees to be legally bound by this Privacy Policy</li>
             </ul>
+          </div>
 
-            <h3>1.2 Payment Information</h3>
-            <p>
-              To complete transactions, certain payment-related information is
-              required. All payment transactions are carried out using secure,
-              encrypted systems and industry-standard security protocols. Payment
-              information is used only for transaction processing and refunds.
+          <h2 className={sectionTitleClass}>2. Personal Information We Collect</h2>
+          <p className={paragraphClass}>
+            We may collect the following information that you choose to provide:
+          </p>
+          <ul className={listClass}>
+            <li><strong>Full name</strong></li>
+            <li><strong>Email address</strong></li>
+            <li><strong>Phone number</strong></li>
+            <li><strong>Address and location</strong></li>
+            <li><strong>Date of birth</strong> and Age</li>
+            <li><strong>Government issued identification</strong></li>
+            <li>Order history and preferences</li>
+            <li>Any content you submit via forms or communication channels</li>
+            <li><strong>Financial or payment details</strong> necessary to process transactions</li>
+            <li>Any other personal information you provide while using our services</li>
+          </ul>
+
+          <h2 className={sectionTitleClass}>3. How We Use Your Personal Information</h2>
+          <p className={paragraphClass}>
+            We may collect, store, use, and disclose your information for the following purposes:
+          </p>
+          <ul className={listClass}>
+            <li>To fulfill orders, process payments, and manage refunds or exchanges</li>
+            <li>To provide customer support and respond to inquiries</li>
+            <li>To send promotional materials, updates, and marketing communications (if you opt in)</li>
+            <li>To analyze and improve our products, services, and website functionality</li>
+            <li>To prevent fraud and ensure secure transactions</li>
+            <li>To share insights with trusted third-party partners for analytics or marketing</li>
+            <li>To comply with legal requirements and enforce our terms</li>
+          </ul>
+
+          <h2 className={sectionTitleClass}>4. Disclosure to Third Parties</h2>
+          <p className={paragraphClass}>
+            We may disclose your personal information to:
+          </p>
+          <ul className={listClass}>
+            <li>Third-party service providers who assist us in operating the website or conducting business</li>
+            <li>Professional service companies for data processing or analytics</li>
+            <li>Marketing and advertising platforms (with your consent)</li>
+            <li>Government, regulatory, or legal bodies when required by law</li>
+          </ul>
+
+          <h2 className={sectionTitleClass}>5. Data Protection and Security</h2>
+          <p className={paragraphClass}>
+            Your personal information is stored securely. It is uploaded, maintained using industry-standard 
+            security measures to protect it from theft, loss, misuse, unauthorized access, disclosure, 
+            alteration, or destruction.
+          </p>
+          <p className={paragraphClass}>
+            We take reasonable measures to protect your personal information from unauthorized access, 
+            including encryption protocols, secure servers, and restricted access policies.
+          </p>
+
+          <h2 className={sectionTitleClass}>6. Sensitive Information</h2>
+          <p className={paragraphClass}>
+            We may occasionally process sensitive information, such as:
+          </p>
+          <ul className={listClass}>
+            <li>Health status</li>
+            <li>Biometric data</li>
+            <li>Personal beliefs</li>
+          </ul>
+          <p className={paragraphClass}>
+            Such data is collected only when necessary and protected with enhanced security measures.
+          </p>
+
+          <h2 className={sectionTitleClass}>7. Your Rights</h2>
+          <p className={paragraphClass}>
+            Depending on your location, you may have the following rights:
+          </p>
+          <ul className={listClass}>
+            <li><strong>Access</strong> the personal information we hold about you</li>
+            <li><strong>Request correction</strong> of inaccurate information</li>
+            <li><strong>Request deletion</strong> of your personal information</li>
+            <li><strong>Opt out</strong> of marketing communications</li>
+            <li><strong>Withdraw consent</strong> for data processing (where applicable)</li>
+          </ul>
+
+          <h2 className={sectionTitleClass}>8. Cookies & Web Beacons</h2>
+          <p className={paragraphClass}>
+            Our Site may use cookies, pixel tags, and similar technologies to track your preferences, 
+            analyze Site usage, and improve user experience. You can manage cookie preferences in 
+            your browser settings.
+          </p>
+
+          <h2 className={sectionTitleClass}>9. Links to External Sites</h2>
+          <p className={paragraphClass}>
+            Our Site may contain links to third-party websites. We are not responsible for their 
+            privacy practices. Please review their policies before providing personal information.
+          </p>
+
+          <h2 className={sectionTitleClass}>10. Policy Updates</h2>
+          <p className={paragraphClass}>
+            We may update this Privacy Policy periodically. Updates will be posted on this page. 
+            Please check back regularly to stay informed.
+          </p>
+
+          <h2 className={sectionTitleClass}>11. Contact Us</h2>
+          <p className={paragraphClass}>
+            For questions about this Privacy Policy or your personal information, contact us at:
+          </p>
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-5 my-4">
+            <p className="font-semibold text-slate-900 mb-2">Stargate Technologies Pvt Ltd</p>
+            <p className="text-slate-600 mb-1">
+              <a href="mailto:admin@medproofdocs.com" className="text-primary hover:underline">admin@medproofdocs.com</a>
             </p>
-
-            <h3>1.3 Automatically Collected Information</h3>
-            <ul>
-              <li>IP address</li>
-              <li>Browser type</li>
-              <li>Device and operating system information</li>
-              <li>Pages visited and basic usage data</li>
-            </ul>
-
-            <h2 id="how-we-use">2. How We Use Your Information</h2>
-            <p>Your information is used to:</p>
-            <ul>
-              <li>
-                Provide online medical consultations and issue medical certificates
-              </li>
-              <li>Process payments and refunds</li>
-              <li>Communicate regarding your requests or service updates</li>
-              <li>Improve website functionality and user experience</li>
-              <li>Comply with applicable legal and regulatory requirements</li>
-            </ul>
-
-            <h2 id="sharing">3. Sharing of Information</h2>
-            <p>We do not sell, rent, or trade your personal information.</p>
-            <p>We may share information only in the following cases:</p>
-            <ul>
-              <li>
-                With licensed medical practitioners for consultation and certificate
-                issuance
-              </li>
-              <li>
-                With trusted service providers necessary for website operations and
-                payment processing
-              </li>
-              <li>When required by law, court orders, or government authorities</li>
-            </ul>
-
-            <h2 id="data-security">4. Data Security</h2>
-            <p>
-              We take reasonable administrative and technical measures to protect
-              your personal information, including:
+            <p className="text-slate-600 mb-1">
+              <a href="mailto:support@medproofdocs.com" className="text-primary hover:underline">support@medproofdocs.com</a>
             </p>
-            <ul>
-              <li>Secure Socket Layer (SSL) encryption</li>
-              <li>Secure hosting environments</li>
-              <li>Restricted access to personal data</li>
-            </ul>
-            <p>
-              While we follow reasonable security practices, no method of data
-              transmission over the internet is completely secure. Therefore,
-              absolute security cannot be guaranteed.
+            <p className="text-slate-600">
+              <a href="mailto:help@medproofdocs.in" className="text-primary hover:underline">help@medproofdocs.in</a>
             </p>
+          </div>
 
-            <h2 id="cookies">5. Cookies</h2>
-            <p>MediProofDocs may use cookies to:</p>
-            <ul>
-              <li>Improve website functionality</li>
-              <li>Analyze traffic and usage patterns</li>
-            </ul>
-            <p>
-              You can choose to disable cookies through your browser settings.
-            </p>
-
-            <h2 id="your-rights">6. Your Rights</h2>
-            <p>You have the right to:</p>
-            <ul>
-              <li>Access or update your personal information</li>
-              <li>
-                Request deletion of your data (subject to legal and regulatory
-                requirements)
-              </li>
-              <li>Withdraw consent for non-essential communications</li>
-            </ul>
-            <p>
-              To exercise these rights, contact us at:{" "}
-              <a href="mailto:support@medproofdocs.com">
-                support@medproofdocs.com
-              </a>
-            </p>
-
-            <h2 id="third-party">7. Third-Party Links</h2>
-            <p>
-              Our website may contain links to third-party websites. We are not
-              responsible for the content, security, or privacy practices of those
-              websites.
-            </p>
-
-            <h2 id="changes">8. Changes to This Policy</h2>
-            <p>
-              We may update this Privacy Policy from time to time. Any changes will
-              be posted on this page.
-            </p>
-
-            <h2 id="contact">9. Contact Us</h2>
-            <p>
-              If you have any questions about this Privacy Policy or how your data
-              is handled, please contact us at:{" "}
-              <a href="mailto:support@medproofdocs.com">
-                support@medproofdocs.com
-              </a>
-            </p>
-
-            {/* Cross-links */}
-            <div className="not-prose mt-10 flex flex-wrap gap-3">
-              <Link href="/terms" className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                Terms &amp; Conditions <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link href="/refund-policy" className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted">
-                Refund Policy <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </article>
-        </div>
+          {/* Cross-links */}
+          <div className="flex flex-wrap gap-3 mt-10 pt-6 border-t border-slate-200">
+            <Link
+              href="/terms"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              Terms & Conditions
+            </Link>
+            <Link
+              href="/refund-policy"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              Refund Policy
+            </Link>
+          </div>
+        </article>
       </div>
 
       <CTASection
-        title="Need A Verified Medical Certificate?"
-        description="Complete a short online consultation and receive a professionally formatted medical certificate issued by a registered doctor."
+        title="Need A Secure, Guided Certificate Workflow?"
+        description="Start with the application flow and we will guide your request through the right support and review steps."
         buttonPrimary={{
           label: "Apply For Certificate",
           href: "/certificates/apply",

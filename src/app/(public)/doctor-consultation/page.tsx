@@ -1,110 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
 import { motion } from "framer-motion";
 import {
+  type LucideIcon,
+  Activity,
+  Apple,
   Shield,
   ArrowRight,
-  Stethoscope,
-  Phone,
-  MessageCircle,
-  Star,
-  Heart,
-  Clock,
-  IndianRupee,
-  BadgeCheck,
-  Lock,
-  Headphones,
-  Brain,
   Baby,
-  Bone,
   Bandage,
-  CalendarDays,
-  Sparkles,
-  Activity,
-  Thermometer,
-  Pill,
-  Syringe,
-  Eye,
+  BicepsFlexed,
+  Bone,
+  Brain,
+  BrainCircuit,
+  Clock,
   Check,
   ChevronLeft,
   ChevronRight,
-  LucideIcon,
+  Dna,
+  Droplets,
+  Ear,
+  Eye,
+  Flower2,
+  HeartHandshake,
+  HeartPulse,
+  Microscope,
+  MoonStar,
+  Pill,
+  Sparkles,
+  Stethoscope,
+  Syringe,
+  UtensilsCrossed,
 } from "lucide-react";
-import { TestimonialsSection } from "@/components/public/home/testimonials-section";
 import { HeroSection } from "@/components/public/home/hero-section";
 import { CTASection } from "@/components/public/home/cta-section";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "dotlottie-wc": any;
-    }
-  }
-}
-
-const DotLottieWC = "dotlottie-wc" as any;
-
-// Trust Items from Home Page
-const TRUST_ITEMS = [
-  {
-    id: "verified",
-    icon: Shield,
-    title: "Verified & Authentic",
-    description:
-      "Every certificate is reviewed and signed by a registered MBBS practitioner with valid credentials. Our doctors are verified and comply with all medical council regulations.",
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&auto=format&fit=crop&q=80 ",
-  },
-  {
-    id: "quick",
-    icon: Clock,
-    title: "Quick Turnaround",
-    description:
-      "Receive your certificate within 30 minutes to 24 hours through a fully digital, hassle-free workflow. No hospital visits or long waiting queues.",
-    image:
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&auto=format&fit=crop&q=80 ",
-  },
-  {
-    id: "pricing",
-    icon: IndianRupee,
-    title: "Transparent Pricing",
-    description:
-      "Clear pricing with no hidden fees. Starting from just ₹599 for digital certificates. Multiple payment options available including UPI, cards, and net banking.",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format&fit=crop&q=80 ",
-  },
-  {
-    id: "compliant",
-    icon: BadgeCheck,
-    title: "NMC & WHO Compliant",
-    description:
-      "All certificates adhere to National Medical Commission and WHO guidelines for validity. Accepted by employers, institutions, and travel authorities across India.",
-    image:
-      "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&auto=format&fit=crop&q=80 ",
-  },
-  {
-    id: "privacy",
-    icon: Lock,
-    title: "Privacy & Security",
-    description:
-      "Your personal and medical information is handled with strict confidentiality and encryption. We follow HIPAA-compliant data protection practices.",
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=80 ",
-  },
-  {
-    id: "support",
-    icon: Headphones,
-    title: "Dedicated Support",
-    description:
-      "Our support team is available to assist you through the entire process, from application to delivery. Get help via WhatsApp, email, or phone.",
-    image:
-      "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&auto=format&fit=crop&q=80 ",
-  },
-];
+import { FAQSection } from "@/components/public/home/faq-section";
+import { TrustSection } from "@/components/public/home/trust-section";
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { GridPattern } from "@/components/ui/grid-pattern";
 
 const CONSULTATION_HIGHLIGHTS = [
   "Consult Experienced Doctors",
@@ -136,54 +77,6 @@ const DOCTOR_CONSULTATION_TOPICS = [
   "Medication guidance or prescription clarification",
   "Cold, flu, or seasonal illness symptoms",
   "Basic health check advice",
-];
-
-const MILAN_HIGHLIGHTS = [
-  "Every completed consultation contributes to community healthcare access.",
-  "Your purchase helps fund care support for families with limited reach.",
-  "Join Milan and become part of a practical health impact network.",
-  "Clear and transparent contribution model linked to each successful request.",
-];
-
-const CONSULTATION_STEPS = [
-  {
-    id: "01",
-    title: "Fill the form",
-    icon: () => (
-      <div style={{ transform: "translateY(-18px)" }}>
-        <DotLottieWC
-          src="https://lottie.host/c7d0d300-084f-4c4a-a11e-c558a4905f71/r8QNFYcARL.lottie"
-          style={{ width: "130px", height: "130px" }}
-          autoplay
-          loop
-        />
-      </div>
-    ),
-  },
-  {
-    id: "02",
-    title: "Consult with doctor",
-    icon: () => (
-      <DotLottieWC
-        src="https://lottie.host/2c669a53-7e4f-4b24-8fcb-ed3830471bf3/0m0Al1PXP4.lottie"
-        style={{ width: "220px", height: "220px" }}
-        autoplay
-        loop
-      />
-    ),
-  },
-  {
-    id: "03",
-    title: "Recieve your priscption",
-    icon: () => (
-      <DotLottieWC
-        src="https://lottie.host/c0935007-58e3-45e2-af17-c898ef07b002/m7BvS6VlNw.lottie"
-        style={{ width: "220px", height: "220px" }}
-        autoplay
-        loop
-      />
-    ),
-  },
 ];
 
 // Common Conditions for Doctor Consultation with Icon Cards
@@ -277,86 +170,243 @@ const COMMON_CONDITIONS = [
 const CONSULTATION_SPECIALTIES: Array<{
   title: string;
   price: string;
-  svg: string;
+  icon: LucideIcon;
+  tint: string;
+  iconColor: string;
 }> = [
   {
     title: "Sexology",
     price: "Rs 499",
-    svg: "/svg/medical-svgs/5-sexology.svg",
+    icon: HeartHandshake,
+    tint: "from-cyan-100 via-sky-50 to-white",
+    iconColor: "text-cyan-600",
   },
   {
     title: "General physician",
     price: "Rs 399",
-    svg: "/svg/medical-svgs/2-general-physician.svg",
+    icon: Stethoscope,
+    tint: "from-emerald-100 via-teal-50 to-white",
+    iconColor: "text-emerald-700",
   },
   {
     title: "Dermatology",
     price: "Rs 449",
-    svg: "/svg/medical-svgs/1-dermatology.svg",
+    icon: Sparkles,
+    tint: "from-sky-100 via-cyan-50 to-white",
+    iconColor: "text-sky-600",
   },
   {
     title: "Psychiatry",
     price: "Rs 499",
-    svg: "/svg/medical-svgs/6-psychiatry.svg",
+    icon: Brain,
+    tint: "from-indigo-100 via-blue-50 to-white",
+    iconColor: "text-indigo-600",
   },
   {
     title: "Stomach and digestion",
     price: "Rs 399",
-    svg: "/svg/medical-svgs/3-stomach-digestion.svg",
+    icon: UtensilsCrossed,
+    tint: "from-amber-100 via-yellow-50 to-white",
+    iconColor: "text-amber-600",
   },
   {
     title: "Pediatrics",
     price: "Rs 499",
-    svg: "/svg/medical-svgs/4-pediatrics.svg",
+    icon: Baby,
+    tint: "from-pink-100 via-rose-50 to-white",
+    iconColor: "text-pink-600",
+  },
+  {
+    title: "Orthopedics",
+    price: "Rs 549",
+    icon: Bone,
+    tint: "from-slate-100 via-blue-50 to-white",
+    iconColor: "text-slate-600",
+  },
+  {
+    title: "ENT",
+    price: "Rs 449",
+    icon: Ear,
+    tint: "from-teal-100 via-cyan-50 to-white",
+    iconColor: "text-teal-600",
+  },
+  {
+    title: "Neurology",
+    price: "Rs 649",
+    icon: BrainCircuit,
+    tint: "from-violet-100 via-indigo-50 to-white",
+    iconColor: "text-violet-600",
+  },
+  {
+    title: "Cardiology",
+    price: "Rs 699",
+    icon: HeartPulse,
+    tint: "from-rose-100 via-red-50 to-white",
+    iconColor: "text-rose-600",
+  },
+  {
+    title: "Pulmonology",
+    price: "Rs 599",
+    icon: Activity,
+    tint: "from-cyan-100 via-blue-50 to-white",
+    iconColor: "text-cyan-600",
+  },
+  {
+    title: "Diabetology",
+    price: "Rs 499",
+    icon: Droplets,
+    tint: "from-lime-100 via-green-50 to-white",
+    iconColor: "text-lime-600",
+  },
+  {
+    title: "Gynecology",
+    price: "Rs 599",
+    icon: Flower2,
+    tint: "from-pink-100 via-fuchsia-50 to-white",
+    iconColor: "text-fuchsia-600",
+  },
+  {
+    title: "Urology",
+    price: "Rs 549",
+    icon: Droplets,
+    tint: "from-cyan-100 via-teal-50 to-white",
+    iconColor: "text-teal-600",
+  },
+  {
+    title: "Ophthalmology",
+    price: "Rs 499",
+    icon: Eye,
+    tint: "from-sky-100 via-indigo-50 to-white",
+    iconColor: "text-sky-600",
+  },
+  {
+    title: "Dentistry",
+    price: "Rs 449",
+    icon: Sparkles,
+    tint: "from-emerald-100 via-lime-50 to-white",
+    iconColor: "text-emerald-600",
+  },
+  {
+    title: "Rheumatology",
+    price: "Rs 599",
+    icon: Bandage,
+    tint: "from-amber-100 via-orange-50 to-white",
+    iconColor: "text-orange-600",
+  },
+  {
+    title: "Nutrition",
+    price: "Rs 399",
+    icon: Apple,
+    tint: "from-green-100 via-emerald-50 to-white",
+    iconColor: "text-green-600",
+  },
+  {
+    title: "Physiotherapy",
+    price: "Rs 499",
+    icon: BicepsFlexed,
+    tint: "from-blue-100 via-cyan-50 to-white",
+    iconColor: "text-blue-600",
+  },
+  {
+    title: "Endocrinology",
+    price: "Rs 649",
+    icon: Dna,
+    tint: "from-purple-100 via-fuchsia-50 to-white",
+    iconColor: "text-purple-600",
+  },
+  {
+    title: "General surgery",
+    price: "Rs 699",
+    icon: Syringe,
+    tint: "from-slate-100 via-sky-50 to-white",
+    iconColor: "text-slate-700",
+  },
+  {
+    title: "Gastroenterology",
+    price: "Rs 649",
+    icon: Pill,
+    tint: "from-yellow-100 via-amber-50 to-white",
+    iconColor: "text-yellow-700",
+  },
+  {
+    title: "Nephrology",
+    price: "Rs 649",
+    icon: Droplets,
+    tint: "from-cyan-100 via-sky-50 to-white",
+    iconColor: "text-sky-600",
+  },
+  {
+    title: "Pain management",
+    price: "Rs 499",
+    icon: Bandage,
+    tint: "from-orange-100 via-rose-50 to-white",
+    iconColor: "text-orange-600",
+  },
+  {
+    title: "Infectious disease",
+    price: "Rs 599",
+    icon: Microscope,
+    tint: "from-red-100 via-orange-50 to-white",
+    iconColor: "text-red-600",
+  },
+  {
+    title: "Sleep medicine",
+    price: "Rs 499",
+    icon: MoonStar,
+    tint: "from-indigo-100 via-violet-50 to-white",
+    iconColor: "text-indigo-600",
   },
 ];
 
 export default function DoctorConsultationPage() {
-  const [specialtyStart, setSpecialtyStart] = useState(0);
-  const visibleSpecialties = CONSULTATION_SPECIALTIES.slice(
-    specialtyStart,
-    specialtyStart + 6
-  );
+  const [specialtyApi, setSpecialtyApi] = useState<CarouselApi>();
+  const [currentSpecialtySlide, setCurrentSpecialtySlide] = useState(0);
+  const [isSpecialtyPaused, setIsSpecialtyPaused] = useState(false);
 
-  const shiftSpecialties = (direction: "prev" | "next") => {
-    const maxStart = Math.max(CONSULTATION_SPECIALTIES.length - 6, 0);
-    setSpecialtyStart((current) => {
-      if (direction === "next") {
-        return current >= maxStart ? 0 : current + 1;
-      }
+  useEffect(() => {
+    if (!specialtyApi) {
+      return;
+    }
 
-      return current <= 0 ? maxStart : current - 1;
-    });
-  };
+    const updateSelection = () => {
+      setCurrentSpecialtySlide(specialtyApi.selectedScrollSnap());
+    };
+
+    updateSelection();
+    specialtyApi.on("select", updateSelection);
+
+    return () => {
+      specialtyApi.off("select", updateSelection);
+    };
+  }, [specialtyApi]);
+
+  useEffect(() => {
+    if (!specialtyApi || isSpecialtyPaused) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const autoplayId = window.setInterval(() => {
+      specialtyApi.scrollNext();
+    }, 2600);
+
+    return () => {
+      window.clearInterval(autoplayId);
+    };
+  }, [specialtyApi, isSpecialtyPaused]);
 
   return (
     <>
-      <Script
-        src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js"
-        type="module"
-        strategy="afterInteractive"
-      />
-
       <HeroSection
         headingPrefix="Online Doctor"
         headingHighlight="Consultation"
         typewriterPrefix="For"
         rotatingWords={DOCTOR_CONSULTATION_TOPICS}
         trustBadges={[
-          "General health concerns",
-          "Fever, cold, and cough",
-          "Women's health issues",
-          "Headache or body pain",
-          "Stomach and digestion problems",
-          "Skin and allergy issues",
-          "Medical certificate consultation",
-          "Follow-up medical advice",
-          "Minor infections",
-          "Stress, sleep, or fatigue issues",
-          "Diet and nutrition advice",
-          "Medication guidance or prescription clarification",
-          "Cold, flu, or seasonal illness symptoms",
-          "Basic health check advice",
+          "",
         ]}
         primaryCta={{
           label: "Book consultation",
@@ -367,6 +417,7 @@ export default function DoctorConsultationPage() {
           href: "/contact",
         }}
         usePrimaryIconTheme
+        heroFloatingIconStyle="consultation"
         heroImageSrc="/images/hero/docter.png"
         heroImageAlt="Online doctor consultation team"
       />
@@ -433,7 +484,7 @@ export default function DoctorConsultationPage() {
               transition={{ duration: 0.5, delay: 0.08 }}
               className="relative"
             >
-              <div className="absolute -inset-4 rounded-[2.25rem] bg-gradient-to-br from-primary/20 to-secondary/30 blur-xl opacity-80" />
+              <div className="absolute -inset-4 rounded-[2.25rem] bg-linear-to-br from-primary/20 to-secondary/30 blur-xl opacity-80" />
 
               <div className="relative rounded-[2.25rem] overflow-hidden border border-border shadow-2xl bg-card">
                 <Image
@@ -443,10 +494,10 @@ export default function DoctorConsultationPage() {
                   height={900}
                   quality={95}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 85vw, 700px"
-                  className="w-full h-[360px] sm:h-[430px] object-cover"
+                  className="h-90 w-full object-cover sm:h-107.5"
                 />
 
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/80 via-foreground/45 to-transparent px-6 py-6">
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-foreground/80 via-foreground/45 to-transparent px-6 py-6">
                   <p className="text-background font-semibold text-sm sm:text-base leading-relaxed">
                     Complete online process - From consultation to Certificate Delivery 
                   </p>
@@ -469,6 +520,7 @@ export default function DoctorConsultationPage() {
 
       
       <section className="relative overflow-hidden bg-primary/40 py-16 sm:py-20">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.14),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.16),transparent_30%)]" />
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col gap-4 lg:mb-12 lg:flex-row lg:items-start lg:justify-between">
             <div>
@@ -477,6 +529,9 @@ export default function DoctorConsultationPage() {
               </h2>
               <p className="mt-2 text-base text-muted-foreground sm:text-lg">
                 Consult with top doctors across specialities
+              </p>
+              <p className="mt-3 inline-flex rounded-full border border-primary/15 bg-white/80 px-4 py-1.5 text-sm font-medium text-primary shadow-sm backdrop-blur-sm">
+                26 cards • auto sliding consultation categories
               </p>
             </div>
 
@@ -488,11 +543,17 @@ export default function DoctorConsultationPage() {
             </Link>
           </div>
 
-          <div className="relative">
+          <div
+            className="relative"
+            onMouseEnter={() => setIsSpecialtyPaused(true)}
+            onMouseLeave={() => setIsSpecialtyPaused(false)}
+            onFocusCapture={() => setIsSpecialtyPaused(true)}
+            onBlurCapture={() => setIsSpecialtyPaused(false)}
+          >
             <button
               type="button"
               aria-label="Previous specialties"
-              onClick={() => shiftSpecialties("prev")}
+              onClick={() => specialtyApi?.scrollPrev()}
               className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-md transition hover:text-foreground lg:flex"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -501,72 +562,88 @@ export default function DoctorConsultationPage() {
             <button
               type="button"
               aria-label="Next specialties"
-              onClick={() => shiftSpecialties("next")}
+              onClick={() => specialtyApi?.scrollNext()}
               className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-md transition hover:text-foreground lg:flex"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
 
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
-              {visibleSpecialties.map((specialty, index) => {
-                return (
-                  <motion.div
-                    key={`${specialty.title}-${specialtyStart}`}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: index * 0.05 }}
-                    className="group rounded-md border border-zinc-200 bg-white p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+            <Carousel
+              setApi={setSpecialtyApi}
+              opts={{ align: "start", loop: true }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {CONSULTATION_SPECIALTIES.map((specialty, index) => (
+                  <CarouselItem
+                    key={`${specialty.title}-${index}`}
+                    className="pl-4 sm:basis-1/2 lg:basis-1/3 xl:basis-1/5 2xl:basis-1/6"
                   >
-                    <div
-                      className="mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full bg-[#d8dfef]"
+                    <motion.div
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.35, delay: (index % 6) * 0.05 }}
+                      className="group h-full rounded-[1.8rem] border border-white/70 bg-white/90 p-6 text-center shadow-[0_12px_30px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_44px_rgba(15,23,42,0.12)]"
                     >
-                      <Image
-                        src={specialty.svg}
-                        alt={specialty.title}
-                        width={76}
-                        height={76}
-                        className="h-[4.5rem] w-[4.5rem] object-contain"
-                      />
-                    </div>
+                      <div className={`mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full border border-primary/10 bg-linear-to-br shadow-[inset_0_1px_0_rgba(255,255,255,0.95)] ${specialty.tint}`}>
+                        <specialty.icon
+                          className={`h-11 w-11 ${specialty.iconColor}`}
+                          strokeWidth={1.9}
+                        />
+                      </div>
 
-                    <h3 className="min-h-[56px] text-[1.05rem] font-bold leading-tight text-foreground">
-                      {specialty.title}
-                    </h3>
+                      <h3 className="min-h-14 text-[1.05rem] font-bold leading-tight text-foreground">
+                        {specialty.title}
+                      </h3>
 
-                    <p className="mt-3 text-base font-medium text-muted-foreground">
-                      {specialty.price}
-                    </p>
+                      <p className="mt-3 inline-flex rounded-full border border-primary/10 bg-primary/5 px-3 py-1 text-sm font-semibold text-foreground">
+                        {specialty.price}
+                      </p>
 
-                    <Link
-                      href="/certificates/apply"
-                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-500 transition-colors hover:text-sky-600"
-                    >
-                      Consult now
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
+                      <Link
+                        href="/certificates/apply"
+                        className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+                      >
+                        Consult now
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </motion.div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
 
-            <div className="mt-6 flex items-center justify-center gap-3 lg:hidden">
-              <button
-                type="button"
-                onClick={() => shiftSpecialties("prev")}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm transition hover:text-foreground"
-                aria-label="Previous specialties"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => shiftSpecialties("next")}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm transition hover:text-foreground"
-                aria-label="Next specialties"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/85 px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
+                <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                Auto sliding through {CONSULTATION_SPECIALTIES.length} specialities
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="rounded-full border border-primary/15 bg-white/85 px-4 py-2 text-sm font-semibold text-foreground shadow-sm backdrop-blur-sm">
+                  {String(currentSpecialtySlide + 1).padStart(2, "0")} / {String(CONSULTATION_SPECIALTIES.length).padStart(2, "0")}
+                </span>
+
+                <div className="flex items-center gap-3 lg:hidden">
+                  <button
+                    type="button"
+                    onClick={() => specialtyApi?.scrollPrev()}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm transition hover:text-foreground"
+                    aria-label="Previous specialties"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => specialtyApi?.scrollNext()}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-400 shadow-sm transition hover:text-foreground"
+                    aria-label="Next specialties"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -625,8 +702,6 @@ export default function DoctorConsultationPage() {
       </section> */}
 
 
-      {/* <TestimonialsSection /> */}
-
       {/* Common Conditions for a Medical Certificate Section */}
       <section className="relative py-20 bg-linear-to-b from-background via-primary/5 to-background overflow-hidden">
           {/* Top ZigZak Border */}
@@ -639,6 +714,13 @@ export default function DoctorConsultationPage() {
         />
         <div className="pointer-events-none absolute -top-24 -left-12 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+        <GridPattern
+          width={34}
+          height={34}
+          x={-1}
+          y={-1}
+          className="mask-[radial-gradient(540px_circle_at_center,white,transparent)] opacity-[0.04]"
+        />
 
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -663,13 +745,13 @@ export default function DoctorConsultationPage() {
                     viewport={{ once: true }}
                     className="group relative overflow-hidden rounded-[26px] border border-primary/15 bg-white/90 p-5 sm:p-6 text-center shadow-[0_8px_26px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(15,23,42,0.16)] hover:border-primary/35"
                   >
-                    <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-primary/8 to-transparent" />
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary/8 to-transparent" />
 
                     <div className="absolute top-3 right-3 flex h-8 min-w-8 items-center justify-center rounded-full bg-primary text-primary-foreground px-2 text-[11px] font-extrabold tracking-wide shadow-md">
                       {condition.number}
                     </div>
 
-                    <div className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-2xl border border-primary/15 bg-gradient-to-br ${condition.tint} shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] transition-transform duration-300 group-hover:scale-105`}>
+                    <div className={`mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-2xl border border-primary/15 bg-linear-to-br ${condition.tint} shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] transition-transform duration-300 group-hover:scale-105`}>
                       <Image
                         src={condition.svg}
                         alt={condition.title}
@@ -683,7 +765,7 @@ export default function DoctorConsultationPage() {
                       {condition.title}
                     </h3>
 
-                    <p className="text-muted-foreground text-sm leading-relaxed min-h-[88px]">
+                    <p className="min-h-22 text-sm leading-relaxed text-muted-foreground">
                       {condition.description}
                     </p>
 
@@ -696,9 +778,13 @@ export default function DoctorConsultationPage() {
         </div>
       </section>
 
+      <TrustSection />
+      <FAQSection />
+
       <CTASection
         title="Connect With a Licensed Doctor Online"
         description="Book a guided online consultation, speak to a registered doctor, and move ahead with the right next step from home."
+        imageWrapperClassName="right-2 h-[64%] w-[280px] lg:w-[320px] xl:w-[360px]"
         buttonPrimary={{
           label: "Start consultation",
           href: "/certificates/apply",

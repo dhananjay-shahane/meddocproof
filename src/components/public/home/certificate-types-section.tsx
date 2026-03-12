@@ -1,248 +1,311 @@
 "use client";
 
 import Link from "next/link";
-import { CertificateCard } from "@/components/ui/certificate-card";
 import {
-  FadeIn,
-  StaggerContainer,
-  StaggerItem,
-  SectionReveal,
-} from "@/components/ui/fade-in";
-import {
-  FileText,
-  Home,
-  Heart,
-  Activity,
-  Dumbbell,
-  Plane,
-  Briefcase,
-  Car,
-  Stethoscope,
+  ArrowRight,
+  Sparkles,
+  ArrowUpRight,
+  FileBadge,
+  HeartPulse,
+  PlaneTakeoff,
+  HandHeart,
+  Laptop,
+  ShieldCheck,
+  FileX,
+  CircleSlash,
+  ScanLine,
+  Check,
 } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+
+// Animation Variants
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { y: 30, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 12,
+    },
+  },
+};
 
 const certificates = [
   {
     key: "SICK_LEAVE",
-    title: "Sick Leave Medical Certificate",
-    description:
-      "When health issues prevent you from attending work, school, or college, a Sick Leave Medical Certificate provides official medical confirmation of your condition. You can consult a certified doctor online and receive the required certificate without the need to visit a clinic.\n\nThis certificate helps organizations and institutions understand that your absence is medically advised. Our efficient process ensures timely delivery, allowing you to rest and recover without added pressure or formal hassles.",
-    icon: <FileText className="w-full h-full" />,
-    category: "Medical",
-    bestFor: "Employees & Students",
-    borderColor: "#ec4899",
-    iconBgColor: "#fce7f3",
-    iconColor: "#ec4899",
-    badgeBgColor: "#fce7f3",
-    badgeTextColor: "#be185d",
-    buttonBgColor: "#fce7f3",
-    buttonTextColor: "#be185d",
+    title: "Sick Leave Certificate",
+    description: "Official medical confirmation for work, school, or college.",
+    features: ["Employer accepted", "24-48hr delivery", "Doctor verified", "Digital & print"],
+    icon: FileBadge,
+    category: "Professional",
     href: "/certificates/apply?type=sick-leave",
-  },
-  {
-    key: "WORK_FROM_HOME",
-    title: "Work From Home Medical Certificate",
-    description:
-      "Certain medical conditions may allow you to work but make office attendance difficult. A Work from Home Medical Certificate supports remote working arrangements based on medical advice.\n\nAfter an online consultation, the doctor may recommend work from home for a specified period, helping you continue your responsibilities while prioritizing your health and recovery.",
-    icon: <Home className="w-full h-full" />,
-    category: "Employment",
-    bestFor: "Remote Workers",
-    borderColor: "#10b981",
-    iconBgColor: "#d1fae5",
-    iconColor: "#10b981",
-    badgeBgColor: "#d1fae5",
-    badgeTextColor: "#047857",
-    buttonBgColor: "#d1fae5",
-    buttonTextColor: "#047857",
-    href: "/certificates/apply?type=work-from-home",
-  },
-  {
-    key: "CARETAKER",
-    title: "Caretaker Medical Certificate",
-    description:
-      "When a family member requires medical care, a Caretaker Medical Certificate confirms the need for your presence as a caregiver during their recovery.\n\nThis document supports leave or work-from-home requests and helps employers or institutions understand your caregiving responsibility during the specified period.",
-    icon: <Heart className="w-full h-full" />,
-    category: "Family",
-    bestFor: "Family Caregivers",
-    borderColor: "#f97316",
-    iconBgColor: "#ffedd5",
-    iconColor: "#f97316",
-    badgeBgColor: "#ffedd5",
-    badgeTextColor: "#c2410c",
-    buttonBgColor: "#ffedd5",
-    buttonTextColor: "#c2410c",
-    href: "/certificates/apply?type=caretaker",
-  },
-  {
-    key: "RECOVERY",
-    title: "Recovery Medical Certificate",
-    description:
-      "A Recovery Medical Certificate confirms that an individual has recovered from a medical condition and is fit to resume regular activities such as work, studies, or travel.\n\nDoctors issue this certificate after reviewing the current health status to ensure a safe and appropriate return to daily routines.",
-    icon: <Activity className="w-full h-full" />,
-    category: "Medical Clearance",
-    bestFor: "Post Recovery",
-    borderColor: "#14b8a6",
-    iconBgColor: "#ccfbf1",
-    iconColor: "#14b8a6",
-    badgeBgColor: "#ccfbf1",
-    badgeTextColor: "#0f766e",
-    buttonBgColor: "#ccfbf1",
-    buttonTextColor: "#0f766e",
-    href: "/certificates/apply?type=recovery",
   },
   {
     key: "FITNESS",
     title: "Medical Fitness Certificate",
-    description:
-      "A Medical Fitness Certificate is often required before starting a job, academic program, sports activity, or travel plan. Through an online consultation, our doctors review your health details and issue a fitness certificate where appropriate.\n\nThe certificate confirms that you are medically fit to carry out specific responsibilities. Each assessment is handled carefully to ensure the document meets standard professional and institutional expectations.",
-    icon: <Dumbbell className="w-full h-full" />,
-    category: "Health & Lifestyle",
-    bestFor: "Employment & Sports",
-    borderColor: "#a855f7",
-    iconBgColor: "#f3e8ff",
-    iconColor: "#a855f7",
-    badgeBgColor: "#f3e8ff",
-    badgeTextColor: "#7c3aed",
-    buttonBgColor: "#f3e8ff",
-    buttonTextColor: "#7c3aed",
+    description: "Required for job joining, academic programs, or sports.",
+    features: ["Thorough evaluation", "Pan-India valid", "Quick processing", "Official format"],
+    icon: HeartPulse,
+    category: "Health",
     href: "/certificates/apply?type=fitness",
   },
   {
     key: "FIT_TO_FLY",
-    title: "Fit-to-Fly Medical Certificate",
-    description:
-      "A Fit-to-Fly Medical Certificate confirms that an individual is medically safe to travel by air. Doctors assess your current health condition to ensure that flying will not pose any risk to you or others during the journey.\n\nThe certificate is issued after an online consultation and is accepted by airlines, travel authorities, and immigration officials.",
-    icon: <Plane className="w-full h-full" />,
+    title: "Fit-to-Fly Certificate",
+    description: "Safe travel confirmation for airlines and international travel.",
+    features: ["Airline accepted", "Immigration valid", "Quick consultation", "Travel ready"],
+    icon: PlaneTakeoff,
     category: "Travel",
-    bestFor: "Air Travelers",
-    borderColor: "#3b82f6",
-    iconBgColor: "#dbeafe",
-    iconColor: "#3b82f6",
-    badgeBgColor: "#dbeafe",
-    badgeTextColor: "#2563eb",
-    buttonBgColor: "#dbeafe",
-    buttonTextColor: "#2563eb",
     href: "/certificates/apply?type=fit-to-fly",
   },
   {
+    key: "CARETAKER",
+    title: "Caretaker Certificate",
+    description: "Supports leave requests for family caregiving duties.",
+    features: ["Leave support", "Family care proof", "HR accepted", "Quick issuance"],
+    icon: HandHeart,
+    category: "Family",
+    href: "/certificates/apply?type=caretaker",
+  },
+  {
+    key: "WORK_FROM_HOME",
+    title: "Work From Home Certificate",
+    description: "Medical recommendation for remote work arrangements.",
+    features: ["WFH support", "Health based", "Employer valid", "Flexible period"],
+    icon: Laptop,
+    category: "Employment",
+    href: "/certificates/apply?type=work-from-home",
+  },
+  {
+    key: "RECOVERY",
+    title: "Recovery Certificate",
+    description: "Confirms recovery and fitness to resume activities.",
+    features: ["Fitness clearance", "Return to work", "Health verified", "Official stamp"],
+    icon: ShieldCheck,
+    category: "Health",
+    href: "/certificates/apply?type=recovery",
+  },
+  {
     key: "UNFIT_TO_WORK",
-    title: "Unfit To Work Medical Certificate",
-    description:
-      "When illness or injury affects your ability to perform work duties safely, an Unfit To Work Medical Certificate provides clear medical documentation of your condition.\n\nDoctors assess your health status and issue the certificate only when medically necessary, helping ensure personal well-being and workplace safety.",
-    icon: <Briefcase className="w-full h-full" />,
+    title: "Unfit to Work",
+    description: "Medical documentation when illness prevents work.",
+    features: ["Work exemption", "Medical proof", "Legal validity", "Dated record"],
+    icon: FileX,
     category: "Medical",
-    bestFor: "Medical Leave",
-    borderColor: "#f43f5e",
-    iconBgColor: "#ffe4e6",
-    iconColor: "#f43f5e",
-    badgeBgColor: "#ffe4e6",
-    badgeTextColor: "#e11d48",
-    buttonBgColor: "#ffe4e6",
-    buttonTextColor: "#e11d48",
     href: "/certificates/apply?type=unfit-to-work",
   },
   {
     key: "UNFIT_TO_TRAVEL",
-    title: "Unfit To Travel Medical Certificate",
-    description:
-      "Medical conditions or recovery phases may make travel unsafe or inadvisable. An Unfit To Travel Medical Certificate formally states that travel should be avoided for a defined duration.\n\nThis certificate is commonly used for travel postponements, cancellations, or official communication with employers and travel authorities and is issued only after medical evaluation.",
-    icon: <Car className="w-full h-full" />,
+    title: "Unfit to Travel",
+    description: "Documentation for travel postponements due to health.",
+    features: ["Travel exemption", "Refund support", "Insurance valid", "Medical basis"],
+    icon: CircleSlash,
     category: "Travel",
-    bestFor: "Travel Postponement",
-    borderColor: "#f59e0b",
-    iconBgColor: "#fef3c7",
-    iconColor: "#f59e0b",
-    badgeBgColor: "#fef3c7",
-    badgeTextColor: "#d97706",
-    buttonBgColor: "#fef3c7",
-    buttonTextColor: "#d97706",
     href: "/certificates/apply?type=unfit-to-travel",
   },
   {
     key: "MEDICAL_DIAGNOSIS",
-    title: "Medical Diagnosis Certificate",
-    description:
-      "A Medical Diagnosis Certificate serves as official documentation of a diagnosed medical condition following professional medical assessment.\n\nIt is commonly required for insurance purposes, academic submissions, workplace records, or administrative and legal documentation. Each certificate is issued responsibly based on clinical findings.",
-    icon: <Stethoscope className="w-full h-full" />,
-    category: "Personal Record",
-    bestFor: "Documentation",
-    borderColor: "#6366f1",
-    iconBgColor: "#e0e7ff",
-    iconColor: "#6366f1",
-    badgeBgColor: "#e0e7ff",
-    badgeTextColor: "#4f46e5",
-    buttonBgColor: "#e0e7ff",
-    buttonTextColor: "#4f46e5",
+    title: "Diagnosis Record",
+    description: "Official record of medical assessment and findings.",
+    features: ["Clinical findings", "Official record", "Insurance ready", "Detailed report"],
+    icon: ScanLine,
+    category: "Record",
     href: "/certificates/apply?type=medical-diagnosis",
   },
 ];
 
 export function CertificateTypesSection() {
   return (
-    <section id="certificates" className="py-16 lg:py-20 xl:py-28 bg-gradient-to-b from-background via-background to-muted/20 relative overflow-hidden">
-      {/* Modern geometric background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      </div>
+    <section id="certificates" className="relative overflow-hidden bg-slate-50 py-24 lg:py-32">
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionReveal blur={true} scale={true}>
-          <div className="text-center mb-10 lg:mb-14">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-3">
-              Types of <span className="text-primary">Certificates</span> We Offer
-            </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              We provide a variety of medical certificates, including Sick Leave, Fitness, Work From Home (WFH), Fit-to-Fly, and custom certificates. All certificates are issued by certified doctors through a quick and convenient online consultation.
-            </p>
+      {/* Modern Background Decorations */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:32px_32px]" />
+
+      {/* Gradient Orbs */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.4 }}
+        transition={{ duration: 1.5 }}
+        className="pointer-events-none absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-primary/20 to-blue-400/20 blur-[120px]"
+      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.3 }}
+        transition={{ duration: 1.5, delay: 0.5 }}
+        className="pointer-events-none absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-cyan-400/20 to-primary/20 blur-[120px]"
+      />
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-16 max-w-2xl text-center lg:mb-20"
+        >
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+            <Sparkles className="h-3.5 w-3.5" />
+            Our Services
           </div>
-        </SectionReveal>
 
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-7xl mx-auto">
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            Types of Certificates{" "}
+            <span className="text-primary">We Offer</span>
+          </h2>
+
+          <p className="mt-4 text-base leading-relaxed text-slate-600 lg:text-lg">
+            Professionally issued medical documents by registered practitioners,
+            tailored to your specific needs.
+          </p>
+        </motion.div>
+
+        {/* Certificate Grid with Stagger Animation */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-6"
+        >
           {certificates.map((cert) => (
-            <StaggerItem key={cert.key}>
-              <CertificateCard
-                title={cert.title}
-                description={cert.description}
-                icon={cert.icon}
-                category={cert.category}
-                bestFor={cert.bestFor}
-                borderColor={cert.borderColor}
-                iconBgColor={cert.iconBgColor}
-                iconColor={cert.iconColor}
-                badgeBgColor={cert.badgeBgColor}
-                badgeTextColor={cert.badgeTextColor}
-                buttonBgColor={cert.buttonBgColor}
-                buttonTextColor={cert.buttonTextColor}
-                href={cert.href}
-              />
-            </StaggerItem>
+            <CertificateCard key={cert.key} certificate={cert} />
           ))}
-        </StaggerContainer>
+        </motion.div>
 
-        <FadeIn delay={0.2}>
-          <div className="text-center mt-10 lg:mt-14">
-            <Link
-              href="/certificates"
-              className="group inline-flex items-center justify-center gap-3 bg-primary text-white hover:bg-primary/90 font-semibold py-4 px-10 rounded-full transition-all duration-300 shadow-2xl hover:shadow-primary/25 hover:-translate-y-1"
-            >
-              View All Certificate Types
-              <svg
-                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Link>
-          </div>
-        </FadeIn>
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          className="mt-16 text-center lg:mt-20"
+        >
+          <Link
+            href="/certificates"
+            className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/30"
+          >
+            Explore All Formats
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </section>
+  );
+}
+
+// Modern Split Card Component - Left light colored section, Right white section
+function CertificateCard({ certificate }: { certificate: typeof certificates[0] }) {
+  const { title, description, features, icon: Icon, category, href } = certificate;
+
+  return (
+    <motion.div 
+      variants={cardVariants}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
+      <Link href={href} className="group block h-full">
+        <div className="relative h-full overflow-hidden rounded-3xl shadow-lg shadow-primary/10 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-primary/25">
+          
+          {/* Split Layout Container */}
+          <div className="flex h-full">
+            
+            {/* Left Light Primary Section */}
+            <div className="relative flex w-1/3 flex-col items-center justify-between bg-primary/10 p-4">
+              {/* Background decoration */}
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_60%)]" />
+              
+              {/* Top Badge */}
+              <motion.div 
+                className="relative z-10 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                initial={{ opacity: 0, y: -10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                {category}
+              </motion.div>
+
+              {/* Center Icon - No circle, larger size */}
+              <motion.div 
+                className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                whileHover={{ rotate: [0, -5, 5, 0] }}
+                transition={{ duration: 0.4 }}
+              >
+                <Icon className="h-28 w-28 text-primary" strokeWidth={0.75} />
+              </motion.div>
+
+              {/* Bottom Info */}
+              <motion.div 
+                className="relative z-10 text-center"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="text-[10px] font-medium uppercase tracking-wider text-primary/60">Verified</div>
+                <div className="text-xs font-bold text-primary">Doctor Signed</div>
+              </motion.div>
+            </div>
+
+            {/* Right White Section */}
+            <div className="flex flex-1 flex-col bg-white p-5">
+              {/* Title */}
+              <h3 className="text-lg font-bold text-gray-900 transition-colors duration-300 group-hover:text-primary">
+                {title}
+              </h3>
+
+              {/* Description */}
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                {description}
+              </p>
+
+              {/* Feature Points */}
+              <ul className="mt-4 flex-1 space-y-1.5">
+                {features.map((feature, idx) => (
+                  <motion.li
+                    key={idx}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.08 }}
+                    className="flex items-center gap-2 text-xs text-gray-600"
+                  >
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary/10">
+                      <Check className="h-2.5 w-2.5 text-primary" strokeWidth={3} />
+                    </span>
+                    {feature}
+                  </motion.li>
+                ))}
+              </ul>
+
+              {/* Bottom Button */}
+              <motion.div 
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-primary/20 transition-all duration-300 group-hover:gap-3 group-hover:shadow-lg"
+                whileHover={{ scale: 1.03 }}
+              >
+                Get Certificate
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </motion.div>
+
+              {/* Hover info text */}
+              <p className="mt-2 text-center text-[10px] text-gray-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                Click for more info
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
   );
 }

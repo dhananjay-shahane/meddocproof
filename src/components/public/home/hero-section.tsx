@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, CheckCircle, Phone, MessageCircle, Heart, Star, Stethoscope, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle, Phone, MessageCircle, Heart, Star, Stethoscope, Video } from "lucide-react";
 import { FadeIn, Float } from "@/components/ui/fade-in";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { TypewriterEffect } from "@/components/ui/typewriter";
@@ -47,6 +47,7 @@ interface HeroSectionProps {
   heroImageSrc?: string;
   heroImageAlt?: string;
   usePrimaryIconTheme?: boolean;
+  heroFloatingIconStyle?: "default" | "consultation";
 }
 
 export function HeroSection({
@@ -66,6 +67,7 @@ export function HeroSection({
   heroImageSrc = "/images/hero/doctor-team-hero.png",
   heroImageAlt = "Professional Doctor Team",
   usePrimaryIconTheme = false,
+  heroFloatingIconStyle = "default",
 }: HeroSectionProps) {
   return (
     <section className="relative min-h-[85vh] lg:min-h-[90vh] xl:min-h-screen flex items-center overflow-hidden bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
@@ -86,7 +88,7 @@ export function HeroSection({
       />
 
       {/* Bottom Right Wave Shape */}
-      <div className="absolute bottom-0 right-0 w-full h-[400px] pointer-events-none">
+      <div className="absolute bottom-0 right-0 w-full h-100 pointer-events-none">
         <svg
           className="w-full h-full"
           viewBox="0 0 1440 400"
@@ -136,12 +138,12 @@ export function HeroSection({
 
       {/* Floating Decorative Circles */}
       <motion.div
-        className="absolute top-40 right-1/3 w-32 h-32 rounded-full bg-gradient-to-br from-cyan-200/20 to-blue-200/20 blur-xl"
+        className="absolute top-40 right-1/3 h-32 w-32 rounded-full bg-linear-to-br from-cyan-200/20 to-blue-200/20 blur-xl"
         animate={{ y: [0, -20, 0], scale: [1, 1.1, 1] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-40 left-1/3 w-24 h-24 rounded-full bg-gradient-to-br from-teal-200/20 to-cyan-200/20 blur-xl"
+        className="absolute bottom-40 left-1/3 h-24 w-24 rounded-full bg-linear-to-br from-teal-200/20 to-cyan-200/20 blur-xl"
         animate={{ y: [0, 20, 0], scale: [1, 1.05, 1] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
@@ -215,77 +217,125 @@ export function HeroSection({
           {/* Right Content - Doctor Image with Responsive Cards */}
           <FadeIn direction="left" delay={0.2} className="relative">
             <div className="flex justify-center lg:block">
-              <div className="relative w-full max-w-[280px] sm:max-w-[340px] md:max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
+              <div className="relative mx-auto w-full max-w-70 sm:max-w-85 md:max-w-100 lg:mx-0 lg:max-w-none">
                 
                 {/* Decorative Rings - Responsive sizing */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-[240px] h-[240px] sm:w-[300px] sm:h-[300px] md:w-[360px] md:h-[360px] lg:w-[560px] lg:h-[560px] border border-slate-200/50 rounded-full bg-slate-100/40" />
-                  <div className="absolute w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px] lg:w-[450px] lg:h-[450px] border border-slate-200/30 rounded-full bg-slate-50/60" />
+                  <div className="h-60 w-60 rounded-full border border-slate-200/50 bg-slate-100/40 sm:h-75 sm:w-75 md:h-90 md:w-90 lg:h-140 lg:w-140" />
+                  <div className="absolute h-45 w-45 rounded-full border border-slate-200/30 bg-slate-50/60 sm:h-60 sm:w-60 md:h-70 md:w-70 lg:h-112.5 lg:w-112.5" />
                 </div>
 
-                {/* Floating Phone Icon - Top Left */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                  className="absolute -top-2 -left-2 sm:top-0 sm:left-0 md:top-2 md:left-2 lg:top-8 lg:left-2 z-20"
-                >
-                  <Float duration={5} distance={8}>
-                    <div
-                      className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 rounded-full flex items-center justify-center shadow-lg ${
-                        usePrimaryIconTheme
-                          ? "bg-primary text-primary-foreground shadow-primary/30"
-                          : "bg-blue-500 text-white shadow-blue-500/30"
-                      }`}
+                {heroFloatingIconStyle === "consultation" ? (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5, duration: 0.4 }}
+                      className="absolute top-6 left-0 z-20 sm:top-8 sm:left-2 lg:top-10 lg:-left-2"
                     >
-                      <Phone className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
-                    </div>
-                  </Float>
-                </motion.div>
+                      <Float duration={5} distance={8}>
+                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-50 text-sky-500 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                            <Phone className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5 lg:w-5" />
+                          </div>
+                        </div>
+                      </Float>
+                    </motion.div>
 
-                {/* Floating Chat Icon - Top Right */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6, duration: 0.4 }}
-                  className="absolute -top-1 right-0 sm:top-1 sm:right-1 md:top-2 md:right-2 lg:top-4 lg:right-4 z-20"
-                >
-                  <Float duration={4} distance={6}>
-                    <div
-                      className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-11 lg:h-11 rounded-lg flex items-center justify-center shadow-lg ${
-                        usePrimaryIconTheme
-                          ? "bg-primary text-primary-foreground shadow-primary/30"
-                          : "bg-emerald-500 text-white shadow-emerald-500/30"
-                      }`}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.6, duration: 0.4 }}
+                      className="absolute top-8 right-1 z-20 sm:top-10 sm:right-2 lg:top-10 lg:right-6"
                     >
-                      <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
-                    </div>
-                  </Float>
-                </motion.div>
+                      <Float duration={4} distance={6}>
+                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                            <Video className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5 lg:w-5" />
+                          </div>
+                        </div>
+                      </Float>
+                    </motion.div>
 
-                {/* Small Floating Stethoscope Icon - Left Middle */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7, duration: 0.4 }}
-                  className="absolute top-[15%] -left-3 sm:top-[50%] sm:-left-2 md:top-[1%] md:-left-1 lg:top-1/3 lg:-left-4 z-20"
-                >
-                  <Float duration={6} distance={10}>
-                    <div
-                      className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-full border-2 shadow-lg flex items-center justify-center ${
-                        usePrimaryIconTheme
-                          ? "bg-primary/10 border-primary/20"
-                          : "bg-slate-100 border-white"
-                      }`}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.7, duration: 0.4 }}
+                      className="absolute top-[62%] left-1 z-20 sm:left-2 lg:left-0"
                     >
-                      <Stethoscope
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 ${
-                          usePrimaryIconTheme ? "text-primary" : "text-orange-500"
-                        }`}
-                      />
-                    </div>
-                  </Float>
-                </motion.div>
+                      <Float duration={6} distance={10}>
+                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-50 text-indigo-500 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                            <MessageCircle className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5 lg:w-5" />
+                          </div>
+                        </div>
+                      </Float>
+                    </motion.div>
+                  </>
+                ) : (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5, duration: 0.4 }}
+                      className="absolute -top-2 -left-2 z-20 sm:top-0 sm:left-0 md:top-2 md:left-2 lg:top-8 lg:left-2"
+                    >
+                      <Float duration={5} distance={8}>
+                        <div
+                          className={`flex h-9 w-9 items-center justify-center rounded-full shadow-lg sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 ${
+                            usePrimaryIconTheme
+                              ? "bg-primary text-primary-foreground shadow-primary/30"
+                              : "bg-blue-500 text-white shadow-blue-500/30"
+                          }`}
+                        >
+                          <Phone className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
+                        </div>
+                      </Float>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.6, duration: 0.4 }}
+                      className="absolute -top-1 right-0 z-20 sm:top-1 sm:right-1 md:top-2 md:right-2 lg:top-4 lg:right-4"
+                    >
+                      <Float duration={4} distance={6}>
+                        <div
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg shadow-lg sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-11 lg:w-11 ${
+                            usePrimaryIconTheme
+                              ? "bg-primary text-primary-foreground shadow-primary/30"
+                              : "bg-emerald-500 text-white shadow-emerald-500/30"
+                          }`}
+                        >
+                          <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
+                        </div>
+                      </Float>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.7, duration: 0.4 }}
+                      className="absolute top-[15%] -left-3 z-20 sm:top-[50%] sm:-left-2 md:top-[1%] md:-left-1 lg:top-1/3 lg:-left-4"
+                    >
+                      <Float duration={6} distance={10}>
+                        <div
+                          className={`flex h-8 w-8 items-center justify-center rounded-full border-2 shadow-lg sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-12 lg:w-12 ${
+                            usePrimaryIconTheme
+                              ? "bg-primary/10 border-primary/20"
+                              : "bg-slate-100 border-white"
+                          }`}
+                        >
+                          <Stethoscope
+                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 ${
+                              usePrimaryIconTheme ? "text-primary" : "text-orange-500"
+                            }`}
+                          />
+                        </div>
+                      </Float>
+                    </motion.div>
+                  </>
+                )}
 
                 {/* 2500+ Happy Patients Badge - Right Side */}
                 <motion.div
@@ -317,7 +367,7 @@ export function HeroSection({
                     priority
                     quality={95}
                     sizes="(max-width: 640px) 280px, (max-width: 768px) 340px, (max-width: 1024px) 400px, 680px"
-                    className="relative z-10 w-full h-auto max-h-[280px] sm:max-h-[340px] md:max-h-[400px] lg:max-h-[680px] object-contain drop-shadow-2xl"
+                    className="relative z-10 h-auto w-full max-h-70 object-contain drop-shadow-2xl sm:max-h-85 md:max-h-100 lg:max-h-170"
                   />
                 </Float>
 
@@ -331,9 +381,9 @@ export function HeroSection({
                   <div className="bg-white/95 backdrop-blur-md rounded-lg sm:rounded-xl lg:rounded-2xl px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 md:py-2.5 lg:px-4 lg:py-3 shadow-xl border border-white/50">
                     <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
                       <div className="flex -space-x-1 sm:-space-x-1.5 lg:-space-x-2">
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-bold">R</div>
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white flex items-center justify-center text-white text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-bold">S</div>
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 border-2 border-white flex items-center justify-center text-white text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-bold">M</div>
+                        <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-linear-to-br from-blue-400 to-blue-600 text-[7px] font-bold text-white sm:h-6 sm:w-6 sm:text-[8px] md:h-7 md:w-7 md:text-[9px] lg:h-8 lg:w-8 lg:text-[10px]">R</div>
+                        <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-linear-to-br from-purple-400 to-purple-600 text-[7px] font-bold text-white sm:h-6 sm:w-6 sm:text-[8px] md:h-7 md:w-7 md:text-[9px] lg:h-8 lg:w-8 lg:text-[10px]">S</div>
+                        <div className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-linear-to-br from-teal-400 to-teal-600 text-[7px] font-bold text-white sm:h-6 sm:w-6 sm:text-[8px] md:h-7 md:w-7 md:text-[9px] lg:h-8 lg:w-8 lg:text-[10px]">M</div>
                       </div>
                       <div className="flex items-center gap-0.5">
                         {[...Array(5)].map((_, i) => (
@@ -386,7 +436,7 @@ export function HeroSection({
       </div>
 
       {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-white to-transparent" />
     </section>
   );
 }

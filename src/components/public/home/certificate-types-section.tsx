@@ -1,19 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Sparkles,
-  ArrowUpRight,
-  FileBadge,
-  HeartPulse,
-  PlaneTakeoff,
-  HandHeart,
-  Laptop,
-  ShieldCheck,
-  FileX,
-  CircleSlash,
-  ScanLine,
   Check,
 } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
@@ -49,7 +40,7 @@ const certificates = [
     title: "Sick Leave Certificate",
     description: "Official medical confirmation for work, school, or college.",
     features: ["Employer accepted", "24-48hr delivery", "Doctor verified", "Digital & print"],
-    icon: FileBadge,
+    svgSrc: "/svg/Certificatesvg/Sickleave-svgrepo-com.svg",
     category: "Professional",
     href: "/certificates/apply?type=sick-leave",
   },
@@ -58,7 +49,7 @@ const certificates = [
     title: "Medical Fitness Certificate",
     description: "Required for job joining, academic programs, or sports.",
     features: ["Thorough evaluation", "Pan-India valid", "Quick processing", "Official format"],
-    icon: HeartPulse,
+    svgSrc: "/svg/Certificatesvg/MedicalFitness-svgrepo-com.svg",
     category: "Health",
     href: "/certificates/apply?type=fitness",
   },
@@ -67,7 +58,7 @@ const certificates = [
     title: "Fit-to-Fly Certificate",
     description: "Safe travel confirmation for airlines and international travel.",
     features: ["Airline accepted", "Immigration valid", "Quick consultation", "Travel ready"],
-    icon: PlaneTakeoff,
+    svgSrc: "/svg/Certificatesvg/FittoFly-svgrepo-com.svg",
     category: "Travel",
     href: "/certificates/apply?type=fit-to-fly",
   },
@@ -76,7 +67,7 @@ const certificates = [
     title: "Caretaker Certificate",
     description: "Supports leave requests for family caregiving duties.",
     features: ["Leave support", "Family care proof", "HR accepted", "Quick issuance"],
-    icon: HandHeart,
+    svgSrc: "/svg/Certificatesvg/caretaker-svgrepo-com.svg",
     category: "Family",
     href: "/certificates/apply?type=caretaker",
   },
@@ -85,7 +76,7 @@ const certificates = [
     title: "Work From Home Certificate",
     description: "Medical recommendation for remote work arrangements.",
     features: ["WFH support", "Health based", "Employer valid", "Flexible period"],
-    icon: Laptop,
+    svgSrc: "/svg/Certificatesvg/WorkfromHome-svgrepo-com.svg",
     category: "Employment",
     href: "/certificates/apply?type=work-from-home",
   },
@@ -94,7 +85,7 @@ const certificates = [
     title: "Recovery Certificate",
     description: "Confirms recovery and fitness to resume activities.",
     features: ["Fitness clearance", "Return to work", "Health verified", "Official stamp"],
-    icon: ShieldCheck,
+    svgSrc: "/svg/Certificatesvg/Recovery-svgrepo-com.svg",
     category: "Health",
     href: "/certificates/apply?type=recovery",
   },
@@ -103,7 +94,7 @@ const certificates = [
     title: "Unfit to Work",
     description: "Medical documentation when illness prevents work.",
     features: ["Work exemption", "Medical proof", "Legal validity", "Dated record"],
-    icon: FileX,
+    svgSrc: "/svg/Certificatesvg/Unfitforwork-svgrepo-com.svg",
     category: "Medical",
     href: "/certificates/apply?type=unfit-to-work",
   },
@@ -112,7 +103,7 @@ const certificates = [
     title: "Unfit to Travel",
     description: "Documentation for travel postponements due to health.",
     features: ["Travel exemption", "Refund support", "Insurance valid", "Medical basis"],
-    icon: CircleSlash,
+    svgSrc: "/svg/Certificatesvg/Unfitfortravel-svgrepo-com.svg",
     category: "Travel",
     href: "/certificates/apply?type=unfit-to-travel",
   },
@@ -121,7 +112,7 @@ const certificates = [
     title: "Diagnosis Record",
     description: "Official record of medical assessment and findings.",
     features: ["Clinical findings", "Official record", "Insurance ready", "Detailed report"],
-    icon: ScanLine,
+    svgSrc: "/svg/Certificatesvg/DagnosisRecord-svgrepo-com.svg",
     category: "Record",
     href: "/certificates/apply?type=medical-diagnosis",
   },
@@ -209,7 +200,7 @@ export function CertificateTypesSection() {
 
 // Modern Split Card Component - Left light colored section, Right white section
 function CertificateCard({ certificate }: { certificate: typeof certificates[0] }) {
-  const { title, description, features, icon: Icon, category, href } = certificate;
+  const { title, description, features, svgSrc, category, href } = certificate;
 
   return (
     <motion.div 
@@ -244,7 +235,13 @@ function CertificateCard({ certificate }: { certificate: typeof certificates[0] 
                 whileHover={{ rotate: [0, -5, 5, 0] }}
                 transition={{ duration: 0.4 }}
               >
-                <Icon className="h-28 w-28 text-primary" strokeWidth={0.75} />
+                <Image
+                  src={svgSrc}
+                  alt={title}
+                  width={112}
+                  height={112}
+                  className="h-28 w-28 object-contain"
+                />
               </motion.div>
 
               {/* Bottom Info */}

@@ -1,13 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
   Sparkles,
-  Check,
 } from "lucide-react";
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants, AnimatePresence } from "framer-motion";
 
 // Animation Variants
 const containerVariants: Variants = {
@@ -38,82 +38,64 @@ const certificates = [
   {
     key: "SICK_LEAVE",
     title: "Sick Leave Certificate",
-    description: "Official medical confirmation for work, school, or college.",
-    features: ["Employer accepted", "24-48hr delivery", "Doctor verified", "Digital & print"],
+    description: "When health issues prevent you from attending work, school, or college, a Sick Leave Medical Certificate provides official medical confirmation of your condition.",
     svgSrc: "/svg/Certificatesvg/Sickleave-svgrepo-com.svg",
-    category: "Professional",
     href: "/certificates/apply?type=sick-leave",
   },
   {
     key: "FITNESS",
     title: "Medical Fitness Certificate",
-    description: "Required for job joining, academic programs, or sports.",
-    features: ["Thorough evaluation", "Pan-India valid", "Quick processing", "Official format"],
+    description: "A Medical Fitness Certificate is often required before starting a job, academic program, sports activity, or travel plan. Our doctors review your health details and issue a fitness certificate.",
     svgSrc: "/svg/Certificatesvg/MedicalFitness-svgrepo-com.svg",
-    category: "Health",
     href: "/certificates/apply?type=fitness",
   },
   {
     key: "FIT_TO_FLY",
     title: "Fit-to-Fly Certificate",
-    description: "Safe travel confirmation for airlines and international travel.",
-    features: ["Airline accepted", "Immigration valid", "Quick consultation", "Travel ready"],
+    description: "A Fit-to-Fly Medical Certificate confirms that an individual is medically safe to travel by air. Accepted by airlines, travel authorities, and immigration officials.",
     svgSrc: "/svg/Certificatesvg/FittoFly-svgrepo-com.svg",
-    category: "Travel",
     href: "/certificates/apply?type=fit-to-fly",
   },
   {
     key: "CARETAKER",
     title: "Caretaker Certificate",
-    description: "Supports leave requests for family caregiving duties.",
-    features: ["Leave support", "Family care proof", "HR accepted", "Quick issuance"],
+    description: "When a family member requires medical care, a Caretaker Medical Certificate confirms the need for your presence as a caregiver during their recovery.",
     svgSrc: "/svg/Certificatesvg/caretaker-svgrepo-com.svg",
-    category: "Family",
     href: "/certificates/apply?type=caretaker",
   },
   {
     key: "WORK_FROM_HOME",
     title: "Work From Home Certificate",
-    description: "Medical recommendation for remote work arrangements.",
-    features: ["WFH support", "Health based", "Employer valid", "Flexible period"],
+    description: "Certain medical conditions may allow you to work but make office attendance difficult. A Work from Home Medical Certificate supports remote working arrangements based on medical advice.",
     svgSrc: "/svg/Certificatesvg/WorkfromHome-svgrepo-com.svg",
-    category: "Employment",
     href: "/certificates/apply?type=work-from-home",
   },
   {
     key: "RECOVERY",
     title: "Recovery Certificate",
-    description: "Confirms recovery and fitness to resume activities.",
-    features: ["Fitness clearance", "Return to work", "Health verified", "Official stamp"],
+    description: "A Recovery Medical Certificate confirms that an individual has recovered from a medical condition and is fit to resume regular activities such as work, studies, or travel.",
     svgSrc: "/svg/Certificatesvg/Recovery-svgrepo-com.svg",
-    category: "Health",
     href: "/certificates/apply?type=recovery",
   },
   {
     key: "UNFIT_TO_WORK",
-    title: "Unfit to Work",
-    description: "Medical documentation when illness prevents work.",
-    features: ["Work exemption", "Medical proof", "Legal validity", "Dated record"],
+    title: "Unfit to Work Certificate",
+    description: "When illness or injury affects your ability to perform work duties safely, an Unfit To Work Medical Certificate provides clear medical documentation of your condition.",
     svgSrc: "/svg/Certificatesvg/Unfitforwork-svgrepo-com.svg",
-    category: "Medical",
     href: "/certificates/apply?type=unfit-to-work",
   },
   {
     key: "UNFIT_TO_TRAVEL",
-    title: "Unfit to Travel",
-    description: "Documentation for travel postponements due to health.",
-    features: ["Travel exemption", "Refund support", "Insurance valid", "Medical basis"],
+    title: "Unfit to Travel Certificate",
+    description: "Medical conditions or recovery phases may make travel unsafe or inadvisable. An Unfit To Travel Medical Certificate formally states that travel should be avoided for a defined duration.",
     svgSrc: "/svg/Certificatesvg/Unfitfortravel-svgrepo-com.svg",
-    category: "Travel",
     href: "/certificates/apply?type=unfit-to-travel",
   },
   {
     key: "MEDICAL_DIAGNOSIS",
-    title: "Diagnosis Record",
-    description: "Official record of medical assessment and findings.",
-    features: ["Clinical findings", "Official record", "Insurance ready", "Detailed report"],
+    title: "Medical Diagnosis Certificate",
+    description: "A Medical Diagnosis Certificate serves as official documentation of a diagnosed medical condition for insurance or workplace records. Provides verified medical information.",
     svgSrc: "/svg/Certificatesvg/DagnosisRecord-svgrepo-com.svg",
-    category: "Record",
     href: "/certificates/apply?type=medical-diagnosis",
   },
 ];
@@ -170,10 +152,14 @@ export function CertificateTypesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-6"
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {certificates.map((cert) => (
-            <CertificateCard key={cert.key} certificate={cert} />
+          {certificates.map((cert, index) => (
+            <CertificateCard 
+              key={cert.key} 
+              certificate={cert} 
+              isMiddle={index === 1 || index === 4 || index === 7}
+            />
           ))}
         </motion.div>
 
@@ -198,109 +184,123 @@ export function CertificateTypesSection() {
   );
 }
 
-// Modern Split Card Component - Left light colored section, Right white section
-function CertificateCard({ certificate }: { certificate: typeof certificates[0] }) {
-  const { title, description, features, svgSrc, category, href } = certificate;
+// Service Card Component matching the design image with hover animation
+function CertificateCard({ 
+  certificate, 
+  isMiddle
+}: { 
+  certificate: typeof certificates[0];
+  isMiddle: boolean;
+}) {
+  const { title, description, svgSrc, href } = certificate;
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Card is active (blue) if it's the middle card OR if it's being hovered
+  const isActive = isMiddle || isHovered;
 
   return (
     <motion.div 
       variants={cardVariants}
-      whileHover={{ y: -8, scale: 1.02 }}
+      whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="h-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={href} className="group block h-full">
-        <div className="relative h-full overflow-hidden rounded-3xl shadow-lg shadow-primary/10 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-primary/25">
-          
-          {/* Split Layout Container */}
-          <div className="flex h-full">
+      <Link href={href} className="block h-full">
+        <div 
+          className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border-b-4 border-b-primary bg-white shadow-lg"
+        >
+          {/* Animated Blue Background - slides up from bottom */}
+          <motion.div
+            className="absolute inset-0 bg-primary"
+            initial={isMiddle ? { y: 0 } : { y: "100%" }}
+            animate={{ 
+              y: isActive ? 0 : "100%"
+            }}
+            transition={{ 
+              type: "spring",
+              stiffness: 100,
+              damping: 15,
+              duration: 0.4
+            }}
+          />
+
+          {/* Card Content */}
+          <div className="relative z-10 flex flex-1 flex-col items-center p-6 pt-8 text-center">
             
-            {/* Left Light Primary Section */}
-            <div className="relative flex w-1/3 flex-col items-center justify-between bg-primary/10 p-4">
-              {/* Background decoration */}
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_60%)]" />
-              
-              {/* Top Badge */}
-              <motion.div 
-                className="relative z-10 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
-                initial={{ opacity: 0, y: -10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                {category}
-              </motion.div>
+            {/* Icon in Circle - White circle on blue card, icon keeps original color */}
+            <motion.div 
+              className={`
+                mb-5 flex h-20 w-20 items-center justify-center rounded-full 
+                transition-all duration-300
+                ${isActive 
+                  ? 'bg-white shadow-lg' 
+                  : 'bg-primary/10 ring-2 ring-primary/20'
+                }
+              `}
+              animate={{
+                scale: isHovered ? 1.05 : 1
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <Image
+                src={svgSrc}
+                alt={title}
+                width={44}
+                height={44}
+                className="h-11 w-11 object-contain"
+              />
+            </motion.div>
 
-              {/* Center Icon - No circle, larger size */}
-              <motion.div 
-                className="relative z-10 flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                whileHover={{ rotate: [0, -5, 5, 0] }}
-                transition={{ duration: 0.4 }}
-              >
-                <Image
-                  src={svgSrc}
-                  alt={title}
-                  width={112}
-                  height={112}
-                  className="h-28 w-28 object-contain"
-                />
-              </motion.div>
+            {/* Title */}
+            <h3 
+              className={`
+                mb-3 text-lg font-bold transition-colors duration-300
+                ${isActive ? 'text-white' : 'text-gray-900'}
+              `}
+            >
+              {title}
+            </h3>
 
-              {/* Bottom Info */}
-              <motion.div 
-                className="relative z-10 text-center"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <div className="text-[10px] font-medium uppercase tracking-wider text-primary/60">Verified</div>
-                <div className="text-xs font-bold text-primary">Doctor Signed</div>
-              </motion.div>
-            </div>
+            {/* Description */}
+            <p 
+              className={`
+                mb-6 flex-1 text-sm leading-relaxed transition-colors duration-300
+                ${isActive ? 'text-white/90' : 'text-gray-600'}
+              `}
+            >
+              {description}
+            </p>
 
-            {/* Right White Section */}
-            <div className="flex flex-1 flex-col bg-white p-5">
-              {/* Title */}
-              <h3 className="text-lg font-bold text-gray-900 transition-colors duration-300 group-hover:text-primary">
-                {title}
-              </h3>
-
-              {/* Description */}
-              <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                {description}
-              </p>
-
-              {/* Feature Points */}
-              <ul className="mt-4 flex-1 space-y-1.5">
-                {features.map((feature, idx) => (
-                  <motion.li
-                    key={idx}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.08 }}
-                    className="flex items-center gap-2 text-xs text-gray-600"
-                  >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary/10">
-                      <Check className="h-2.5 w-2.5 text-primary" strokeWidth={3} />
-                    </span>
-                    {feature}
-                  </motion.li>
-                ))}
-              </ul>
-
-              {/* Bottom Button */}
-              <motion.div 
-                className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-primary/20 transition-all duration-300 group-hover:gap-3 group-hover:shadow-lg"
-                whileHover={{ scale: 1.03 }}
-              >
-                Get Certificate
-                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-              </motion.div>
-
-              {/* Hover info text */}
-              <p className="mt-2 text-center text-[10px] text-gray-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                Click for more info
-              </p>
-            </div>
+            {/* Apply Button */}
+            <motion.div
+              className={`
+                inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2.5 
+                text-sm font-semibold transition-all duration-300
+                ${isActive 
+                  ? 'bg-white text-primary hover:bg-white/90' 
+                  : 'bg-primary text-white hover:bg-primary/90'
+                }
+              `}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Apply Now
+              <ArrowRight className="h-4 w-4" />
+            </motion.div>
           </div>
+
+          {/* Bottom Gradient Bar */}
+          <div 
+            className={`
+              relative z-10 h-1 w-full bg-gradient-to-r transition-all duration-300
+              ${isActive 
+                ? 'from-blue-300 via-blue-400 to-blue-300' 
+                : 'from-primary via-blue-500 to-primary'
+              }
+            `}
+          />
         </div>
       </Link>
     </motion.div>

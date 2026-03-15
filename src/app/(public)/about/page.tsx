@@ -104,20 +104,22 @@ export default function AboutPage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="px-4 py-16 bg-linear-to-b from-[#7ea4cc] via-[#9fbfe0] to-[#c1d6ea]">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="text-center text-2xl font-bold">
-            Why Choose MediProofDocs?
+      <section className="px-4 py-16 bg-white">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-center text-3xl font-bold text-gray-900 mb-12">
+            Why Choose Us
           </h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {ABOUT_SECTIONS.whyChooseUs.map((item, idx) => {
               const icons = [Shield, Heart, Globe, Lock, FileCheck];
               const Icon = icons[idx % icons.length];
               return (
-                <div key={idx} className="rounded-xl border bg-card p-6">
-                  <Icon className="h-6 w-6 text-primary" />
-                  <h3 className="mt-3 font-semibold">{item.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
+                <div key={idx} className="flex flex-col items-center text-center p-6">
+                  <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center mb-5 shadow-lg">
+                    <Icon className="h-9 w-9 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">{item.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">
                     {item.description}
                   </p>
                 </div>

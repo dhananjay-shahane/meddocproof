@@ -410,92 +410,50 @@ export function CertificatesIndex() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 lg:py-28">
+      <section className="py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left Content */}
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
-                Why Choose MediProofDocs?
-              </h2>
-              <p className="text-lg text-gray-600 mb-8">
-                We provide genuine, legally valid medical certificates with unmatched convenience and reliability.
-              </p>
-
-              <div className="space-y-6">
-                {[
-                  {
-                    icon: Users,
-                    title: "Qualified Doctors",
-                    description: "All certificates issued by registered medical practitioners with valid credentials.",
-                  },
-                  {
-                    icon: Clock,
-                    title: "Lightning Fast",
-                    description: "Receive your verified certificate within 30-90 minutes via email and WhatsApp.",
-                  },
-                  {
-                    icon: Shield,
-                    title: "100% Authentic",
-                    description: "Every certificate includes doctor registration details and QR code verification.",
-                  },
-                  {
-                    icon: HeadphonesIcon,
-                    title: "24/7 Support",
-                    description: "Round-the-clock assistance from our dedicated support team.",
-                  },
-                ].map((feature, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex gap-4"
-                  >
-                    <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center shrink-0">
-                      <feature.icon className="w-6 h-6 text-teal-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop"
-                  alt="Medical Professional"
-                  width={600}
-                  height={450}
-                  className="object-cover w-full"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-                {/* Floating Card */}
-                <div className="absolute bottom-6 left-6 right-6 bg-white rounded-xl p-4 shadow-lg">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-6 h-6 text-teal-600" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">Verified Certificate</p>
-                      <p className="text-sm text-gray-600">Issued by Registered Doctors</p>
-                    </div>
-                  </div>
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+            Why Choose Us
+          </h2>
+          
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                icon: Users,
+                title: "Qualified Doctors",
+                description: "All certificates issued by registered medical practitioners with valid credentials.",
+              },
+              {
+                icon: Clock,
+                title: "Lightning Fast",
+                description: "Receive your verified certificate within 30-90 minutes via email and WhatsApp.",
+              },
+              {
+                icon: Shield,
+                title: "100% Authentic",
+                description: "Every certificate includes doctor registration details and QR code verification.",
+              },
+              {
+                icon: HeadphonesIcon,
+                title: "24/7 Support",
+                description: "Round-the-clock assistance from our dedicated support team.",
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex flex-col items-center text-center p-6"
+              >
+                <div className="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center mb-5 shadow-lg">
+                  <feature.icon className="w-9 h-9 text-white" />
                 </div>
-              </div>
-            </motion.div>
+                <h3 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{feature.description}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

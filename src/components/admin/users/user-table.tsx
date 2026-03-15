@@ -8,7 +8,7 @@ import { Pagination } from "@/components/ui/pagination";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageLoader } from "@/components/ui/loading-spinner";
 import { Button } from "@/components/ui/button";
-import { UserSearch, MessageCircle } from "lucide-react";
+import { UserSearch, Eye, Phone, CheckCircle } from "lucide-react";
 import type { UserListItem, PaginatedResponse } from "@/types";
 
 interface UserTableProps {
@@ -48,19 +48,6 @@ export function UserTable({
 
   return (
     <div>
-      {/* Bulk action bar */}
-      {selectedIds.size > 0 && (
-        <div className="mb-3 flex items-center gap-3 rounded-lg border bg-muted/50 px-4 py-2.5">
-          <span className="text-sm font-medium">
-            {selectedIds.size} user{selectedIds.size > 1 ? "s" : ""} selected
-          </span>
-          <Button size="sm" onClick={onBulkWhatsApp} className="gap-1.5">
-            <MessageCircle className="h-3.5 w-3.5" />
-            Send WhatsApp
-          </Button>
-        </div>
-      )}
-
       <div className="rounded-xl border bg-card shadow-sm">
         <div className="overflow-auto">
           <table className="w-full text-sm">
@@ -76,6 +63,9 @@ export function UserTable({
                   User
                 </th>
                 <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                  Contact
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
                   Status
                 </th>
                 <th className="px-4 py-3 text-left font-medium text-muted-foreground">
@@ -88,7 +78,10 @@ export function UserTable({
                   Total Spent
                 </th>
                 <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-                  Last Active
+                  Last Activity
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -109,49 +102,53 @@ export function UserTable({
                       <Avatar
                         fallback={getInitials(user.fullName)}
                         size="sm"
+                        className="bg-blue-100 text-blue-600"
                       />
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <p className="font-medium">{user.fullName}</p>
-                          {user.hasPaidOrder && (
-                            <Badge variant="default" className="text-[10px] px-1.5 py-0">
-                              Paid
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          {user.phoneNumber}
-                          {user.email && ` · ${user.email}`}
-                        </p>
+                      <span className="font-medium">{user.fullName}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 text-sm">
+                        <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                        <span>{user.phoneNumber}</span>
                       </div>
+                      {user.email && (
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     <Badge
-                      variant={
+                      variant="outline"
+                      className={
                         user.status === "active"
-                          ? "default"
+                          ? "border-green-200 bg-green-50 text-green-700"
                           : user.status === "blocked"
-                            ? "destructive"
-                            : "secondary"
+                            ? "border-red-200 bg-red-50 text-red-700"
+                            : "border-gray-200 bg-gray-50 text-gray-700"
                       }
                     >
+                      <CheckCircle className="mr-1 h-3 w-3" />
                       {user.status}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 font-medium">{user.applicationCount}</td>
-                  <td className="px-4 py-3 font-medium">{user.certificateCount}</td>
-                  <td className="px-4 py-3 font-medium">
-                    {user.totalSpent > 0
-                      ? formatCurrency(user.totalSpent)
-                      : "—"}
+                  <td className="px-4 py-3 text-center">{user.applicationCount}</td>
+                  <td className="px-4 py-3 text-center">{user.certificateCount}</td>
+                  <td className="px-4 py-3">
+                    {formatCurrency(user.totalSpent || 0)}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {user.lastApplicationAt
                       ? formatRelativeDate(user.lastApplicationAt)
                       : user.lastLoginAt
-                        ? formatRelativeDate(user.lastLoginAt)
+                        ? `Joined ${formatRelativeDate(user.lastLoginAt)}`
                         : "Never"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Eye className="h-4 w-4" />
+                    </Button>
                   </td>
                 </tr>
               ))}

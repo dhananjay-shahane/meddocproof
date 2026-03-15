@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import { useApplications } from "@/hooks/use-applications";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ApplicationFilters } from "@/components/admin/applications/application-filters";
 import { ApplicationList } from "@/components/admin/applications/application-list";
-import { ApplicationDetailsModal } from "@/components/admin/applications/application-details-modal";
-import type { Application, ApplicationFiltersState } from "@/types";
+import type { ApplicationFiltersState } from "@/types";
 
 const defaultFilters: ApplicationFiltersState = {
   search: "",
@@ -17,14 +16,11 @@ const defaultFilters: ApplicationFiltersState = {
 };
 
 export default function ApplicationsPage() {
-  const [tab, setTab] = useState("all");
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<ApplicationFiltersState>(defaultFilters);
-  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
 
-  const { data, tabCounts, loading, refetch } = useApplications({
-    tab,
+  const { data, loading } = useApplications({
+    tab: "all",
     filters,
     page,
   });
@@ -42,87 +38,52 @@ export default function ApplicationsPage() {
     setPage(1);
   }, []);
 
-  const handleTabChange = useCallback((newTab: string) => {
-    setTab(newTab);
-    setPage(1);
-  }, []);
-
-  const handleSelect = useCallback((app: Application) => {
-    setSelectedAppId(app.id);
-    setModalOpen(true);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setModalOpen(false);
-    setSelectedAppId(null);
-  }, []);
-
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Applications</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Applications Management</h2>
         <p className="text-muted-foreground">
-          Manage all medical certificate applications.
+          View and manage all certificate applications in one place
         </p>
       </div>
 
-      <Tabs value={tab} onValueChange={handleTabChange}>
-        <TabsList>
-          <TabsTrigger value="all" badge={tabCounts.all}>
-            All
-          </TabsTrigger>
-          <TabsTrigger value="temporary" badge={tabCounts.temporary}>
-            Temporary
-          </TabsTrigger>
-          <TabsTrigger value="completed" badge={tabCounts.completed}>
-            Completed
-          </TabsTrigger>
-        </TabsList>
+      {/* Tab Navigation */}
+      <div className="border-b">
+        <nav className="flex gap-4">
+          <Link
+            href="/admin/applications"
+            className="border-b-2 border-primary px-1 pb-3 text-sm font-medium text-primary"
+          >
+            All Applications
+          </Link>
+          <Link
+            href="/admin/applications/temporary"
+            className="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            Temporary Applications
+          </Link>
+          <Link
+            href="/admin/applications/completed"
+            className="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            Completed Applications
+          </Link>
+        </nav>
+      </div>
 
-        {/* Filters (shared across tabs) */}
-        <div className="mt-4">
-          <ApplicationFilters
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onReset={handleResetFilters}
-          />
-        </div>
+      {/* Filters */}
+      <ApplicationFilters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onReset={handleResetFilters}
+      />
 
-        <TabsContent value="all" className="mt-4">
-          <ApplicationList
-            data={data}
-            loading={loading}
-            onSelect={handleSelect}
-            onPageChange={setPage}
-          />
-        </TabsContent>
-
-        <TabsContent value="temporary" className="mt-4">
-          <ApplicationList
-            data={data}
-            loading={loading}
-            showConversion
-            onSelect={handleSelect}
-            onPageChange={setPage}
-          />
-        </TabsContent>
-
-        <TabsContent value="completed" className="mt-4">
-          <ApplicationList
-            data={data}
-            loading={loading}
-            onSelect={handleSelect}
-            onPageChange={setPage}
-          />
-        </TabsContent>
-      </Tabs>
-
-      {/* Detail Modal */}
-      <ApplicationDetailsModal
-        applicationId={selectedAppId}
-        open={modalOpen}
-        onClose={handleCloseModal}
-        onUpdated={refetch}
+      {/* Application List */}
+      <ApplicationList
+        data={data}
+        loading={loading}
+        onPageChange={setPage}
       />
     </div>
   );

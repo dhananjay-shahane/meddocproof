@@ -36,6 +36,7 @@ interface HeroSectionProps {
   typewriterPrefix?: string;
   rotatingWords?: string[];
   trustBadges?: string[];
+  hideTrustBadges?: boolean;
   primaryCta?: {
     label: string;
     href: string;
@@ -56,6 +57,7 @@ export function HeroSection({
   typewriterPrefix = "For",
   rotatingWords = defaultCertificateTypes,
   trustBadges = defaultTrustBadges,
+  hideTrustBadges = false,
   primaryCta = {
     label: "Get Certificate Now",
     href: "/certificates/apply",
@@ -176,20 +178,22 @@ export function HeroSection({
             </h1>
 
             {/* Checklist Points */}
-            <ul className="space-y-2 mb-6 lg:mb-8 max-w-lg">
-              {trustBadges.map((point, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.08 }}
-                  className="flex items-start gap-2 text-slate-600 text-sm sm:text-base"
-                >
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 shrink-0 fill-primary/20" />
-                  <span>{point}</span>
-                </motion.li>
-              ))}
-            </ul>
+            {!hideTrustBadges && (
+              <ul className="space-y-2 mb-6 lg:mb-8 max-w-lg">
+                {trustBadges.map((point, index) => (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 + index * 0.08 }}
+                    className="flex items-start gap-2 text-slate-600 text-sm sm:text-base"
+                  >
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 shrink-0 fill-primary/20" />
+                    <span>{point}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            )}
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-2.5 mb-6 lg:mb-8">
@@ -227,6 +231,7 @@ export function HeroSection({
 
                 {heroFloatingIconStyle === "consultation" ? (
                   <>
+                    {/* Phone Icon - 3D Style with Ringing Effect */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -234,14 +239,22 @@ export function HeroSection({
                       className="absolute top-6 left-0 z-20 sm:top-8 sm:left-2 lg:top-10 lg:-left-2"
                     >
                       <Float duration={5} distance={8}>
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-50 text-sky-500 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
-                            <Phone className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5 lg:w-5" />
+                        {/* <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-white via-white to-slate-50 shadow-[0_8px_32px_rgba(59,130,246,0.25),0_4px_16px_rgba(0,0,0,0.1)] sm:h-16 sm:w-16 lg:h-20 lg:w-20"> */}
+                          {/* Ringing waves */}
+                          {/* <div className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5">
+                            <svg className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-amber-400" viewBox="0 0 24 24" fill="none">
+                              <path d="M12 3C16.97 3 21 7.03 21 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="animate-pulse" />
+                              <path d="M12 7C14.76 7 17 9.24 17 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="animate-pulse" style={{ animationDelay: '0.2s' }} />
+                            </svg>
+                          </div> */}
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-sky-400 via-blue-500 to-blue-600 shadow-lg shadow-blue-500/30 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                            <Phone className="h-4 w-4 text-white drop-shadow-sm sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
                           </div>
-                        </div>
+                        {/* </div> */}
                       </Float>
                     </motion.div>
 
+                    {/* Video Icon - 3D Style Rounded Square */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -249,14 +262,13 @@ export function HeroSection({
                       className="absolute top-8 right-1 z-20 sm:top-10 sm:right-2 lg:top-10 lg:right-6"
                     >
                       <Float duration={4} distance={6}>
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
-                            <Video className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5 lg:w-5" />
+                         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 via-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                            <Video className="h-4 w-4 text-white drop-shadow-sm sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
                           </div>
-                        </div>
                       </Float>
                     </motion.div>
 
+                    {/* WhatsApp Icon - 3D Style */}
                     <motion.div
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -264,10 +276,11 @@ export function HeroSection({
                       className="absolute top-[62%] left-1 z-20 sm:left-2 lg:left-0"
                     >
                       <Float duration={6} distance={10}>
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-50 text-indigo-500 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
-                            <MessageCircle className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5 lg:w-5" />
-                          </div>
+                        <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-green-400 via-green-500 to-green-600 shadow-lg shadow-green-500/30 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
+                            {/* WhatsApp Icon */}
+                            <svg className="h-5 w-5 text-white drop-shadow-sm sm:h-6 sm:w-6 lg:h-7 lg:w-7" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
                         </div>
                       </Float>
                     </motion.div>
@@ -281,15 +294,15 @@ export function HeroSection({
                       className="absolute -top-2 -left-2 z-20 sm:top-0 sm:left-0 md:top-2 md:left-2 lg:top-8 lg:left-2"
                     >
                       <Float duration={5} distance={8}>
-                        <div
+                        {/* <div
                           className={`flex h-9 w-9 items-center justify-center rounded-full shadow-lg sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 ${
                             usePrimaryIconTheme
                               ? "bg-primary text-primary-foreground shadow-primary/30"
                               : "bg-blue-500 text-white shadow-blue-500/30"
                           }`}
-                        >
+                        > */}
                           <Phone className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
-                        </div>
+                        {/* </div> */}
                       </Float>
                     </motion.div>
 

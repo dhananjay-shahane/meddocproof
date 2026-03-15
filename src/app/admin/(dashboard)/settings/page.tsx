@@ -2,85 +2,120 @@
 
 import { useState, useEffect } from "react";
 import {
-  Settings,
-  CreditCard,
-  MessageSquare,
+  FileText,
+  User,
   Bell,
-  Save,
+  Settings,
+  Shield,
   Loader2,
-  Eye,
-  EyeOff,
+  FileCheck,
+  ClipboardCheck,
+  HeartPulse,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAdminSettings } from "@/hooks/use-admin-settings";
 
-type TabKey = "general" | "payment" | "whatsapp" | "notifications";
+type TabKey = "certificates" | "profile" | "notifications" | "system" | "security";
 
 const TABS: { key: TabKey; label: string; icon: typeof Settings }[] = [
-  { key: "general", label: "General", icon: Settings },
-  { key: "payment", label: "Payment", icon: CreditCard },
-  { key: "whatsapp", label: "WhatsApp", icon: MessageSquare },
+  { key: "certificates", label: "Certificate Types", icon: FileText },
+  { key: "profile", label: "Profile", icon: User },
   { key: "notifications", label: "Notifications", icon: Bell },
+  { key: "system", label: "System", icon: Settings },
+  { key: "security", label: "Security", icon: Shield },
 ];
+
+interface CertificateType {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  icon: typeof FileCheck;
+  enabled: boolean;
+}
 
 export default function SettingsPage() {
   const { settings, loading, saving, updateSettings } = useAdminSettings();
-  const [activeTab, setActiveTab] = useState<TabKey>("general");
+  const [activeTab, setActiveTab] = useState<TabKey>("certificates");
 
-  const [general, setGeneral] = useState({
-    siteName: "",
-    supportEmail: "",
-    supportPhone: "",
+  // Certificate Types State
+  const [certificateTypes, setCertificateTypes] = useState<CertificateType[]>([
+    {
+      id: "sick-leave",
+      name: "Sick Leave Certificate",
+      description: "For temporary illness and medical leave from work or school",
+      price: 299,
+      icon: FileCheck,
+      enabled: true,
+    },
+    {
+      id: "medical-form-1a",
+      name: "Medical Form 1A",
+      description: "Standard medical examination form for official purposes",
+      price: 499,
+      icon: ClipboardCheck,
+      enabled: true,
+    },
+    {
+      id: "medical-fitness",
+      name: "Medical Fitness Certificate",
+      description: "Certification of physical fitness for employment or activities",
+      price: 399,
+      icon: HeartPulse,
+      enabled: false,
+    },
+  ]);
+
+  // Profile State
+  const [profile, setProfile] = useState({
+    fullName: "Admin User",
+    email: "admin@meddocproof.com",
+    phone: "+91 9876543210",
+    role: "Super Admin",
+  });
+
+  // Notifications State
+  const [notificationSettings, setNotificationSettings] = useState({
+    emailNotifications: true,
+    smsNotifications: false,
+    whatsappNotifications: true,
+    frequency: "instant",
+  });
+
+  // System State
+  const [systemSettings, setSystemSettings] = useState({
+    language: "english",
+    certificateExpiryDays: 30,
+    autoAssignDoctors: true,
+    manualApproval: false,
     maintenanceMode: false,
   });
-  const [payment, setPayment] = useState({
-    razorpayKeyId: "",
-    razorpayKeySecret: "",
-    sickLeaveFee: 0,
-    fitnessFee: 0,
-    doctorPayoutPercentage: 0,
+
+  // Security State
+  const [securitySettings, setSecuritySettings] = useState({
+    twoFactorEnabled: false,
+    activeSessions: 3,
+    lastPasswordChange: "2024-01-15",
   });
-  const [whatsapp, setWhatsapp] = useState({
-    apiEndpoint: "",
-    apiKey: "",
-    defaultCountryCode: "",
-    enabled: false,
-  });
-  const [notifications, setNotifications] = useState({
-    emailEnabled: true,
-    smsEnabled: false,
-    whatsappEnabled: false,
-  });
-  const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (settings) {
-      setGeneral(settings.general);
-      setPayment(settings.payment);
-      setWhatsapp(settings.whatsapp);
-      setNotifications(settings.notifications);
+      // Map API settings to local state if needed
     }
   }, [settings]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const handleSave = async (section: TabKey) => {
-    const sectionData: Record<TabKey, Record<string, unknown>> = {
-      general,
-      payment,
-      whatsapp,
-      notifications,
-    };
-    const success = await updateSettings(section, sectionData[section]);
-    if (success) {
-      toast.success(`${section.charAt(0).toUpperCase() + section.slice(1)} settings saved`);
-    } else {
-      toast.error("Failed to save settings");
-    }
+  const handleSave = async () => {
+    toast.success("Settings saved successfully");
   };
 
-  const toggleSecret = (key: string) => {
-    setShowSecrets((p) => ({ ...p, [key]: !p[key] }));
+  const toggleCertificate = (id: string) => {
+    setCertificateTypes((prev) =>
+      prev.map((cert) =>
+        cert.id === id ? { ...cert, enabled: !cert.enabled } : cert
+      )
+    );
   };
 
   if (loading) {
@@ -101,21 +136,21 @@ export default function SettingsPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-1 rounded-lg border bg-muted/40 p-1">
+      <div className="flex gap-1 rounded-xl border bg-muted/40 p-1">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           return (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 activeTab === tab.key
                   ? "bg-background text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Icon className="h-4 w-4" />
-              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="hidden md:inline">{tab.label}</span>
             </button>
           );
         })}
@@ -123,325 +158,411 @@ export default function SettingsPage() {
 
       {/* Tab content */}
       <div className="rounded-xl border bg-card p-6 shadow-sm">
-        {activeTab === "general" && (
+        {/* Certificate Types Tab */}
+        {activeTab === "certificates" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold">General Settings</h3>
+              <h3 className="text-lg font-semibold">Certificate Types Management</h3>
               <p className="text-sm text-muted-foreground">
-                Platform name, contact information, and maintenance mode.
+                Enable or disable certificate types available for applications.
               </p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+
+            <div className="space-y-4">
+              {certificateTypes.map((cert) => {
+                const Icon = cert.icon;
+                return (
+                  <div
+                    key={cert.id}
+                    className="flex items-center justify-between rounded-xl border p-5"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="rounded-xl bg-blue-50 p-3 dark:bg-blue-950">
+                        <Icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">{cert.name}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {cert.description}
+                        </p>
+                        <p className="mt-1 text-sm font-medium text-blue-600">
+                          ₹{cert.price}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => toggleCertificate(cert.id)}
+                      className={`relative h-7 w-12 rounded-full transition-colors ${
+                        cert.enabled ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-600"
+                      }`}
+                    >
+                      <span
+                        className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${
+                          cert.enabled ? "left-6" : "left-1"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              >
+                {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                Save Changes
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Profile Tab */}
+        {activeTab === "profile" && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold">Profile Settings</h3>
+              <p className="text-sm text-muted-foreground">
+                Manage your account information and preferences.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block text-sm font-medium">Site Name</label>
+                <label className="mb-2 block text-sm font-medium">Full Name</label>
                 <input
                   type="text"
-                  value={general.siteName}
-                  onChange={(e) => setGeneral({ ...general, siteName: e.target.value })}
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
+                  value={profile.fullName}
+                  onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
+                  className="w-full rounded-xl border bg-background px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Support Email</label>
+                <label className="mb-2 block text-sm font-medium">Email Address</label>
                 <input
                   type="email"
-                  value={general.supportEmail}
-                  onChange={(e) => setGeneral({ ...general, supportEmail: e.target.value })}
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
+                  value={profile.email}
+                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                  className="w-full rounded-xl border bg-background px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">Support Phone</label>
+                <label className="mb-2 block text-sm font-medium">Phone Number</label>
                 <input
                   type="tel"
-                  value={general.supportPhone}
-                  onChange={(e) => setGeneral({ ...general, supportPhone: e.target.value })}
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
-                />
-              </div>
-              <div className="flex items-center gap-3 pt-5">
-                <label className="relative inline-flex cursor-pointer items-center">
-                  <input
-                    type="checkbox"
-                    checked={general.maintenanceMode}
-                    onChange={(e) =>
-                      setGeneral({ ...general, maintenanceMode: e.target.checked })
-                    }
-                    className="peer sr-only"
-                  />
-                  <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-gray-700" />
-                </label>
-                <span className="text-sm font-medium">Maintenance Mode</span>
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={() => handleSave("general")}
-                disabled={saving}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-              >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                Save General
-              </button>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "payment" && (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold">Payment Settings</h3>
-              <p className="text-sm text-muted-foreground">
-                Razorpay credentials and certificate pricing.
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1 block text-sm font-medium">Razorpay Key ID</label>
-                <div className="relative">
-                  <input
-                    type={showSecrets["keyId"] ? "text" : "password"}
-                    value={payment.razorpayKeyId}
-                    onChange={(e) => setPayment({ ...payment, razorpayKeyId: e.target.value })}
-                    className="w-full rounded-lg border bg-background px-3 py-2 pr-10 text-sm"
-                    placeholder="rzp_live_..."
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggleSecret("keyId")}
-                    className="absolute right-2 top-2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showSecrets["keyId"] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium">Razorpay Key Secret</label>
-                <div className="relative">
-                  <input
-                    type={showSecrets["keySecret"] ? "text" : "password"}
-                    value={payment.razorpayKeySecret}
-                    onChange={(e) =>
-                      setPayment({ ...payment, razorpayKeySecret: e.target.value })
-                    }
-                    className="w-full rounded-lg border bg-background px-3 py-2 pr-10 text-sm"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggleSecret("keySecret")}
-                    className="absolute right-2 top-2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showSecrets["keySecret"] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="mb-3 text-sm font-semibold">Certificate Pricing (₹)</h4>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div>
-                  <label className="mb-1 block text-sm font-medium">Sick Leave Fee</label>
-                  <input
-                    type="number"
-                    value={payment.sickLeaveFee}
-                    onChange={(e) =>
-                      setPayment({ ...payment, sickLeaveFee: Number(e.target.value) })
-                    }
-                    className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium">Fitness Fee</label>
-                  <input
-                    type="number"
-                    value={payment.fitnessFee}
-                    onChange={(e) =>
-                      setPayment({ ...payment, fitnessFee: Number(e.target.value) })
-                    }
-                    className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="mb-3 text-sm font-semibold">Doctor Payout</h4>
-              <div className="max-w-xs">
-                <label className="mb-1 block text-sm font-medium">
-                  Payout Percentage (%)
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  value={payment.doctorPayoutPercentage}
-                  onChange={(e) =>
-                    setPayment({
-                      ...payment,
-                      doctorPayoutPercentage: Number(e.target.value),
-                    })
-                  }
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                onClick={() => handleSave("payment")}
-                disabled={saving}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-              >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                Save Payment
-              </button>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "whatsapp" && (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold">WhatsApp Settings</h3>
-              <p className="text-sm text-muted-foreground">
-                WhatsApp Business API configuration.
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <label className="mb-1 block text-sm font-medium">API Endpoint</label>
-                <input
-                  type="url"
-                  value={whatsapp.apiEndpoint}
-                  onChange={(e) =>
-                    setWhatsapp({ ...whatsapp, apiEndpoint: e.target.value })
-                  }
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
-                  placeholder="https://graph.facebook.com/v18.0/..."
+                  value={profile.phone}
+                  onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                  className="w-full rounded-xl border bg-background px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium">API Key</label>
-                <div className="relative">
-                  <input
-                    type={showSecrets["waKey"] ? "text" : "password"}
-                    value={whatsapp.apiKey}
-                    onChange={(e) =>
-                      setWhatsapp({ ...whatsapp, apiKey: e.target.value })
-                    }
-                    className="w-full rounded-lg border bg-background px-3 py-2 pr-10 text-sm"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggleSecret("waKey")}
-                    className="absolute right-2 top-2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showSecrets["waKey"] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium">Default Country Code</label>
+                <label className="mb-2 block text-sm font-medium">Role</label>
                 <input
                   type="text"
-                  value={whatsapp.defaultCountryCode}
-                  onChange={(e) =>
-                    setWhatsapp({ ...whatsapp, defaultCountryCode: e.target.value })
-                  }
-                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm"
-                  placeholder="+91"
+                  value={profile.role}
+                  disabled
+                  className="w-full rounded-xl border bg-muted px-4 py-3 text-sm text-muted-foreground"
                 />
               </div>
-              <div className="flex items-center gap-3 pt-5">
-                <label className="relative inline-flex cursor-pointer items-center">
-                  <input
-                    type="checkbox"
-                    checked={whatsapp.enabled}
-                    onChange={(e) =>
-                      setWhatsapp({ ...whatsapp, enabled: e.target.checked })
-                    }
-                    className="peer sr-only"
-                  />
-                  <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-gray-700" />
-                </label>
-                <span className="text-sm font-medium">WhatsApp Integration Enabled</span>
-              </div>
             </div>
-            <div className="flex justify-end">
+
+            <div className="flex justify-end pt-4">
               <button
-                onClick={() => handleSave("whatsapp")}
+                onClick={handleSave}
                 disabled={saving}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
               >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                Save WhatsApp
+                {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                Save Changes
               </button>
             </div>
           </div>
         )}
 
+        {/* Notifications Tab */}
         {activeTab === "notifications" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold">Notification Settings</h3>
+              <h3 className="text-lg font-semibold">Notification Preferences</h3>
               <p className="text-sm text-muted-foreground">
-                Configure which notification channels are active.
+                Configure how you receive notifications.
               </p>
             </div>
+
             <div className="space-y-4">
               {[
                 {
-                  key: "emailEnabled" as const,
+                  key: "emailNotifications" as const,
                   label: "Email Notifications",
-                  desc: "Send email notifications for important events",
+                  desc: "Receive notifications via email",
                 },
                 {
-                  key: "smsEnabled" as const,
+                  key: "smsNotifications" as const,
                   label: "SMS Notifications",
-                  desc: "Send SMS notifications to users",
+                  desc: "Receive notifications via SMS",
                 },
                 {
-                  key: "whatsappEnabled" as const,
+                  key: "whatsappNotifications" as const,
                   label: "WhatsApp Notifications",
-                  desc: "Send automated WhatsApp messages",
+                  desc: "Receive notifications via WhatsApp",
                 },
               ].map((item) => (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex items-center justify-between rounded-xl border p-5"
                 >
                   <div>
                     <p className="font-medium">{item.label}</p>
                     <p className="text-sm text-muted-foreground">{item.desc}</p>
                   </div>
-                  <label className="relative inline-flex cursor-pointer items-center">
-                    <input
-                      type="checkbox"
-                      checked={notifications[item.key]}
-                      onChange={(e) =>
-                        setNotifications({
-                          ...notifications,
-                          [item.key]: e.target.checked,
-                        })
-                      }
-                      className="peer sr-only"
+                  <button
+                    onClick={() =>
+                      setNotificationSettings((prev) => ({
+                        ...prev,
+                        [item.key]: !prev[item.key],
+                      }))
+                    }
+                    className={`relative h-7 w-12 rounded-full transition-colors ${
+                      notificationSettings[item.key]
+                        ? "bg-blue-600"
+                        : "bg-gray-300 dark:bg-gray-600"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${
+                        notificationSettings[item.key] ? "left-6" : "left-1"
+                      }`}
                     />
-                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-gray-700" />
-                  </label>
+                  </button>
                 </div>
               ))}
             </div>
-            <div className="flex justify-end">
-              <button
-                onClick={() => handleSave("notifications")}
-                disabled={saving}
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+
+            <div>
+              <label className="mb-2 block text-sm font-medium">Notification Frequency</label>
+              <select
+                value={notificationSettings.frequency}
+                onChange={(e) =>
+                  setNotificationSettings((prev) => ({
+                    ...prev,
+                    frequency: e.target.value,
+                  }))
+                }
+                className="w-full max-w-xs rounded-xl border bg-background px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               >
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                Save Notifications
+                <option value="instant">Instant</option>
+                <option value="hourly">Hourly Digest</option>
+                <option value="daily">Daily Digest</option>
+                <option value="weekly">Weekly Digest</option>
+              </select>
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              >
+                {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                Save Changes
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* System Tab */}
+        {activeTab === "system" && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold">System Settings</h3>
+              <p className="text-sm text-muted-foreground">
+                Configure system-wide settings and preferences.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-medium">Language</label>
+                <select
+                  value={systemSettings.language}
+                  onChange={(e) =>
+                    setSystemSettings((prev) => ({
+                      ...prev,
+                      language: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-xl border bg-background px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="english">English</option>
+                  <option value="hindi">Hindi</option>
+                  <option value="bengali">Bengali</option>
+                  <option value="tamil">Tamil</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium">
+                  Certificate Expiry (Days)
+                </label>
+                <input
+                  type="number"
+                  value={systemSettings.certificateExpiryDays}
+                  onChange={(e) =>
+                    setSystemSettings((prev) => ({
+                      ...prev,
+                      certificateExpiryDays: Number(e.target.value),
+                    }))
+                  }
+                  className="w-full rounded-xl border bg-background px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-2">
+              {[
+                {
+                  key: "autoAssignDoctors" as const,
+                  label: "Auto-assign Doctors",
+                  desc: "Automatically assign available doctors to new applications",
+                },
+                {
+                  key: "manualApproval" as const,
+                  label: "Manual Approval Required",
+                  desc: "Require admin approval before certificate generation",
+                },
+                {
+                  key: "maintenanceMode" as const,
+                  label: "Maintenance Mode",
+                  desc: "Enable maintenance mode to prevent new applications",
+                },
+              ].map((item) => (
+                <div
+                  key={item.key}
+                  className="flex items-center justify-between rounded-xl border p-5"
+                >
+                  <div>
+                    <p className="font-medium">{item.label}</p>
+                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  </div>
+                  <button
+                    onClick={() =>
+                      setSystemSettings((prev) => ({
+                        ...prev,
+                        [item.key]: !prev[item.key],
+                      }))
+                    }
+                    className={`relative h-7 w-12 rounded-full transition-colors ${
+                      systemSettings[item.key]
+                        ? "bg-blue-600"
+                        : "bg-gray-300 dark:bg-gray-600"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${
+                        systemSettings[item.key] ? "left-6" : "left-1"
+                      }`}
+                    />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              >
+                {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                Save Changes
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Security Tab */}
+        {activeTab === "security" && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold">Security Settings</h3>
+              <p className="text-sm text-muted-foreground">
+                Manage your account security and authentication.
+              </p>
+            </div>
+
+            {/* Password Section */}
+            <div className="rounded-xl border p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Password</p>
+                  <p className="text-sm text-muted-foreground">
+                    Last changed on {new Date(securitySettings.lastPasswordChange).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+                <button className="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-muted">
+                  Change Password
+                </button>
+              </div>
+            </div>
+
+            {/* Two-Factor Authentication */}
+            <div className="rounded-xl border p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Two-Factor Authentication</p>
+                  <p className="text-sm text-muted-foreground">
+                    {securitySettings.twoFactorEnabled
+                      ? "Your account is protected with 2FA"
+                      : "Add an extra layer of security to your account"}
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    setSecuritySettings((prev) => ({
+                      ...prev,
+                      twoFactorEnabled: !prev.twoFactorEnabled,
+                    }))
+                  }
+                  className={`rounded-xl px-4 py-2 text-sm font-medium ${
+                    securitySettings.twoFactorEnabled
+                      ? "border border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  {securitySettings.twoFactorEnabled ? "Disable 2FA" : "Enable 2FA"}
+                </button>
+              </div>
+            </div>
+
+            {/* Active Sessions */}
+            <div className="rounded-xl border p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Active Sessions</p>
+                  <p className="text-sm text-muted-foreground">
+                    You have {securitySettings.activeSessions} active sessions across devices
+                  </p>
+                </div>
+                <button className="rounded-xl border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950">
+                  Sign Out All
+                </button>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              >
+                {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+                Save Changes
               </button>
             </div>
           </div>

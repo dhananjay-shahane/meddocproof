@@ -1,8 +1,8 @@
 "use client";
 
-import { SearchInput } from "@/components/ui/search-input";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import type { ApplicationFiltersState } from "@/types";
 
 interface ApplicationFiltersProps {
@@ -12,7 +12,7 @@ interface ApplicationFiltersProps {
 }
 
 const statusOptions = [
-  { value: "all", label: "All Status" },
+  { value: "all", label: "All Statuses" },
   { value: "submitted", label: "Submitted" },
   { value: "pending", label: "Pending" },
   { value: "pending_review", label: "Pending Review" },
@@ -38,71 +38,104 @@ const certTypeOptions = [
   { value: "medical_diagnosis", label: "Medical Diagnosis" },
 ];
 
+const dateRangeOptions = [
+  { value: "all", label: "All Time" },
+  { value: "today", label: "Today" },
+  { value: "week", label: "This Week" },
+  { value: "month", label: "This Month" },
+  { value: "quarter", label: "Last 3 Months" },
+];
+
 export function ApplicationFilters({
   filters,
   onFilterChange,
   onReset,
 }: ApplicationFiltersProps) {
-  const hasActiveFilters =
-    filters.search ||
-    filters.status !== "all" ||
-    filters.certificateType !== "all" ||
-    filters.dateFrom ||
-    filters.dateTo;
+  const [searchInput, setSearchInput] = useState(filters.search || "");
+  const [dateRange, setDateRange] = useState("all");
+
+  const handleFilter = () => {
+    onFilterChange({ search: searchInput });
+  };
+
+  const handleReset = () => {
+    setSearchInput("");
+    setDateRange("all");
+    onReset();
+  };
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-      <SearchInput
-        value={filters.search}
-        onChange={(value) => onFilterChange({ search: value })}
-        placeholder="Search by ID, name, phone..."
-        className="w-full sm:w-64"
-      />
-      <select
-        value={filters.status}
-        onChange={(e) => onFilterChange({ status: e.target.value })}
-        className="h-9 rounded-lg border border-input bg-transparent px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        {statusOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-      <select
-        value={filters.certificateType}
-        onChange={(e) => onFilterChange({ certificateType: e.target.value })}
-        className="h-9 rounded-lg border border-input bg-transparent px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        {certTypeOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-      <div className="flex items-center gap-2">
-        <input
-          type="date"
-          value={filters.dateFrom}
-          onChange={(e) => onFilterChange({ dateFrom: e.target.value })}
-          className="h-9 rounded-lg border border-input bg-transparent px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="From"
-        />
-        <span className="text-muted-foreground">—</span>
-        <input
-          type="date"
-          value={filters.dateTo}
-          onChange={(e) => onFilterChange({ dateTo: e.target.value })}
-          className="h-9 rounded-lg border border-input bg-transparent px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="To"
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 items-end">
+      {/* Status */}
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium text-muted-foreground">Status</label>
+        <select
+          value={filters.status}
+          onChange={(e) => onFilterChange({ status: e.target.value })}
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          {statusOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Certificate Type */}
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium text-muted-foreground">Certificate Type</label>
+        <select
+          value={filters.certificateType}
+          onChange={(e) => onFilterChange({ certificateType: e.target.value })}
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          {certTypeOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Date Range */}
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium text-muted-foreground">Date Range</label>
+        <select
+          value={dateRange}
+          onChange={(e) => setDateRange(e.target.value)}
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          {dateRangeOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Search */}
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium text-muted-foreground">Search</label>
+        <Input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleFilter()}
+          placeholder="Search name, email, ID..."
+          className="h-10"
         />
       </div>
-      {hasActiveFilters && (
-        <Button variant="ghost" size="sm" onClick={onReset} className="gap-1.5">
-          <RotateCcw className="h-3.5 w-3.5" />
+
+      {/* Action Buttons */}
+      <div className="flex gap-2">
+        <Button onClick={handleFilter} className="flex-1">
+          Filter
+        </Button>
+        <Button variant="outline" onClick={handleReset}>
           Reset
         </Button>
-      )}
+      </div>
     </div>
   );
 }

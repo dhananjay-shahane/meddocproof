@@ -8,7 +8,7 @@ import { Phone, X, Send, Sparkles, Loader2, MessageSquare, HelpCircle, Clock, Fi
 const WEBSITE_KNOWLEDGE = {
   company: {
     name: "MediProofDocs",
-    tagline: "QuickMedicalCertificate.com",
+    tagline: "MediProofDocs.com",
     description: "Your trusted online platform for genuine medical certificates issued by registered Indian doctors through compliant digital consultations.",
   },
   certificates: [
@@ -105,7 +105,7 @@ const WEBSITE_KNOWLEDGE = {
     ],
   },
   contact: {
-    email: "contact@quickmedicalcertificate.com",
+    email: "contact@mediproofdocs.com",
     whatsapp: "+91 99999 99999",
     phone: "+91 99999 99999",
     hours: "24/7 Online Service",
@@ -155,7 +155,7 @@ function generateAIResponse(userMessage: string): string {
 
   // Contact inquiry
   if (message.includes("contact") || message.includes("call") || message.includes("email") || message.includes("reach") || message.includes("support")) {
-    return `📞 **Contact Us:**\n\n• **Email:** contact@quickmedicalcertificate.com\n• **Phone/WhatsApp:** +91 99999 99999\n• **Service Hours:** 24/7 Online\n\nYou can also click the WhatsApp or Phone buttons at the bottom left to connect with us instantly!`;
+    return `📞 **Contact Us:**\n\n• **Email:** contact@mediproofdocs.com\n• **Phone/WhatsApp:** +91 99999 99999\n• **Service Hours:** 24/7 Online\n\nYou can also click the WhatsApp or Phone buttons at the bottom left to connect with us instantly!`;
   }
 
   // Cities inquiry

@@ -78,7 +78,7 @@ export function SampleCertificateSvg({ sampleName, sampleSlug }: SampleCertifica
               <rect x="0" y="2" width="14" height="10" rx="1" fill="none" stroke="#888" strokeWidth="1"/>
               <path d="M0 3 L7 8 L14 3" fill="none" stroke="#888" strokeWidth="1"/>
             </g>
-            <text x="325" y="98" fontSize="11" fill="#555">Shravan@easymedicalcertificate.com</text>
+            <text x="325" y="98" fontSize="11" fill="#555">Shravan@mediproofdocs.com</text>
 
             {/* Horizontal Line */}
             <line x1="20" y1="110" x2="580" y2="110" stroke="#111" strokeWidth="1.5" />
@@ -129,7 +129,7 @@ export function SampleCertificateSvg({ sampleName, sampleSlug }: SampleCertifica
               This medical certificate is valid only with the recipient's signature and reflects the details provided during the online consultation.
             </text>
             <text x="20" y="615" fontSize="9" fill="#e8f4ff">
-              Medical Docs Services and EasyMedicalCertificate.com are not liable for any inaccuracies resulting from incorrect information shared by the user.
+              Medical Docs Services and MediProofDocs.com are not liable for any inaccuracies resulting from incorrect information shared by the user.
             </text>
             <text x="20" y="630" fontSize="9" fill="#e8f4ff">
               The certificate is valid solely for the dates specified by the consulting doctor and is intended exclusively for the organization to which it is

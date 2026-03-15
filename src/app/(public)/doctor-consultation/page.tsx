@@ -171,6 +171,7 @@ const CONSULTATION_SPECIALTIES: Array<{
   title: string;
   price: string;
   icon: LucideIcon;
+  image?: string;
   tint: string;
   iconColor: string;
 }> = [
@@ -178,6 +179,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Sexology",
     price: "Rs 499",
     icon: HeartHandshake,
+    image: "/images/25+specialities/sexology.png",
     tint: "from-cyan-100 via-sky-50 to-white",
     iconColor: "text-cyan-600",
   },
@@ -185,6 +187,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "General physician",
     price: "Rs 399",
     icon: Stethoscope,
+    image: "/images/25+specialities/doctors-office.gif",
     tint: "from-emerald-100 via-teal-50 to-white",
     iconColor: "text-emerald-700",
   },
@@ -192,6 +195,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Dermatology",
     price: "Rs 449",
     icon: Sparkles,
+    image: "/images/25+specialities/allergy.gif",
     tint: "from-sky-100 via-cyan-50 to-white",
     iconColor: "text-sky-600",
   },
@@ -199,6 +203,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Psychiatry",
     price: "Rs 499",
     icon: Brain,
+    image: "/images/25+specialities/dissociation.gif",
     tint: "from-indigo-100 via-blue-50 to-white",
     iconColor: "text-indigo-600",
   },
@@ -206,6 +211,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Stomach and digestion",
     price: "Rs 399",
     icon: UtensilsCrossed,
+    image: "/images/25+specialities/digestive-system.gif",
     tint: "from-amber-100 via-yellow-50 to-white",
     iconColor: "text-amber-600",
   },
@@ -213,6 +219,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Pediatrics",
     price: "Rs 499",
     icon: Baby,
+    image: "/images/25+specialities/doctors-office.gif",
     tint: "from-pink-100 via-rose-50 to-white",
     iconColor: "text-pink-600",
   },
@@ -220,6 +227,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Orthopedics",
     price: "Rs 549",
     icon: Bone,
+    image: "/images/25+specialities/joint-pain.png",
     tint: "from-slate-100 via-blue-50 to-white",
     iconColor: "text-slate-600",
   },
@@ -227,6 +235,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "ENT",
     price: "Rs 449",
     icon: Ear,
+    image: "/images/25+specialities/throat.gif",
     tint: "from-teal-100 via-cyan-50 to-white",
     iconColor: "text-teal-600",
   },
@@ -234,6 +243,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Neurology",
     price: "Rs 649",
     icon: BrainCircuit,
+    image: "/images/25+specialities/brain.gif",
     tint: "from-violet-100 via-indigo-50 to-white",
     iconColor: "text-violet-600",
   },
@@ -241,6 +251,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Cardiology",
     price: "Rs 699",
     icon: HeartPulse,
+    image: "/images/25+specialities/hypertension.gif",
     tint: "from-rose-100 via-red-50 to-white",
     iconColor: "text-rose-600",
   },
@@ -248,6 +259,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Pulmonology",
     price: "Rs 599",
     icon: Activity,
+    image: "/images/25+specialities/lungs.gif",
     tint: "from-cyan-100 via-blue-50 to-white",
     iconColor: "text-cyan-600",
   },
@@ -255,6 +267,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Diabetology",
     price: "Rs 499",
     icon: Droplets,
+    image: "/images/25+specialities/blood-test.gif",
     tint: "from-lime-100 via-green-50 to-white",
     iconColor: "text-lime-600",
   },
@@ -262,6 +275,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Gynecology",
     price: "Rs 599",
     icon: Flower2,
+    image: "/images/25+specialities/female-reproductive-organ.gif",
     tint: "from-pink-100 via-fuchsia-50 to-white",
     iconColor: "text-fuchsia-600",
   },
@@ -269,6 +283,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Urology",
     price: "Rs 549",
     icon: Droplets,
+    image: "/images/25+specialities/kidney.png",
     tint: "from-cyan-100 via-teal-50 to-white",
     iconColor: "text-teal-600",
   },
@@ -283,6 +298,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Dentistry",
     price: "Rs 449",
     icon: Sparkles,
+    image: "/images/25+specialities/dental-care.gif",
     tint: "from-emerald-100 via-lime-50 to-white",
     iconColor: "text-emerald-600",
   },
@@ -290,6 +306,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Rheumatology",
     price: "Rs 599",
     icon: Bandage,
+    image: "/images/25+specialities/joint-pain.png",
     tint: "from-amber-100 via-orange-50 to-white",
     iconColor: "text-orange-600",
   },
@@ -297,6 +314,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Nutrition",
     price: "Rs 399",
     icon: Apple,
+    image: "/images/25+specialities/salad-bowl.gif",
     tint: "from-green-100 via-emerald-50 to-white",
     iconColor: "text-green-600",
   },
@@ -304,6 +322,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Physiotherapy",
     price: "Rs 499",
     icon: BicepsFlexed,
+    image: "/images/25+specialities/joint-pain.png",
     tint: "from-blue-100 via-cyan-50 to-white",
     iconColor: "text-blue-600",
   },
@@ -311,6 +330,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Endocrinology",
     price: "Rs 649",
     icon: Dna,
+    image: "/images/25+specialities/thyroid.png",
     tint: "from-purple-100 via-fuchsia-50 to-white",
     iconColor: "text-purple-600",
   },
@@ -318,6 +338,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "General surgery",
     price: "Rs 699",
     icon: Syringe,
+    image: "/images/25+specialities/surgery.gif",
     tint: "from-slate-100 via-sky-50 to-white",
     iconColor: "text-slate-700",
   },
@@ -325,6 +346,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Gastroenterology",
     price: "Rs 649",
     icon: Pill,
+    image: "/images/25+specialities/digestive-system (1).gif",
     tint: "from-yellow-100 via-amber-50 to-white",
     iconColor: "text-yellow-700",
   },
@@ -332,6 +354,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Nephrology",
     price: "Rs 649",
     icon: Droplets,
+    image: "/images/25+specialities/kidney (1).png",
     tint: "from-cyan-100 via-sky-50 to-white",
     iconColor: "text-sky-600",
   },
@@ -339,6 +362,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Pain management",
     price: "Rs 499",
     icon: Bandage,
+    image: "/images/25+specialities/joint-pain.png",
     tint: "from-orange-100 via-rose-50 to-white",
     iconColor: "text-orange-600",
   },
@@ -346,6 +370,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Infectious disease",
     price: "Rs 599",
     icon: Microscope,
+    image: "/images/25+specialities/infectious-disease.png",
     tint: "from-red-100 via-orange-50 to-white",
     iconColor: "text-red-600",
   },
@@ -353,6 +378,7 @@ const CONSULTATION_SPECIALTIES: Array<{
     title: "Sleep medicine",
     price: "Rs 499",
     icon: MoonStar,
+    image: "/images/25+specialities/sleep.gif",
     tint: "from-indigo-100 via-violet-50 to-white",
     iconColor: "text-indigo-600",
   },
@@ -360,6 +386,7 @@ const CONSULTATION_SPECIALTIES: Array<{
 
 export default function DoctorConsultationPage() {
   const [specialtyApi, setSpecialtyApi] = useState<CarouselApi>();
+  const [mobileSpecialtyApi, setMobileSpecialtyApi] = useState<CarouselApi>();
   const [currentSpecialtySlide, setCurrentSpecialtySlide] = useState(0);
   const [isSpecialtyPaused, setIsSpecialtyPaused] = useState(false);
 
@@ -398,6 +425,25 @@ export default function DoctorConsultationPage() {
     };
   }, [specialtyApi, isSpecialtyPaused]);
 
+  // Mobile carousel auto-scroll
+  useEffect(() => {
+    if (!mobileSpecialtyApi) {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const autoplayId = window.setInterval(() => {
+      mobileSpecialtyApi.scrollNext();
+    }, 2400);
+
+    return () => {
+      window.clearInterval(autoplayId);
+    };
+  }, [mobileSpecialtyApi]);
+
   return (
     <>
       <HeroSection
@@ -405,9 +451,7 @@ export default function DoctorConsultationPage() {
         headingHighlight="Consultation"
         typewriterPrefix="For"
         rotatingWords={DOCTOR_CONSULTATION_TOPICS}
-        trustBadges={[
-          "",
-        ]}
+        hideTrustBadges
         primaryCta={{
           label: "Book consultation",
           href: "/certificates/apply",
@@ -423,9 +467,9 @@ export default function DoctorConsultationPage() {
       />
 
       {/* Certificate Benefits Section */}
-      <section className="relative py-16 sm:py-20 overflow-hidden bg-muted/30">
-        <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 right-0 h-80 w-80 rounded-full bg-secondary/30 blur-3xl" />
+      <section className="relative py-16 sm:py-20 overflow-hidden">
+        {/* <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 right-0 h-80 w-80 rounded-full bg-secondary/30 blur-3xl" /> */}
 
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -522,29 +566,93 @@ export default function DoctorConsultationPage() {
       <section className="relative overflow-hidden bg-primary/40 py-16 sm:py-20">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.14),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.16),transparent_30%)]" />
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 flex flex-col gap-4 lg:mb-12 lg:flex-row lg:items-start lg:justify-between">
+          <div className="mb-8 flex flex-col gap-4 sm:mb-10 lg:mb-12 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
                 25+ Specialities
               </h2>
-              <p className="mt-2 text-base text-muted-foreground sm:text-lg">
+              <p className="mt-1.5 text-sm text-muted-foreground sm:mt-2 sm:text-base lg:text-lg">
                 Consult with top doctors across specialities
               </p>
-              <p className="mt-3 inline-flex rounded-full border border-primary/15 bg-white/80 px-4 py-1.5 text-sm font-medium text-primary shadow-sm backdrop-blur-sm">
+              <p className="mt-3 hidden rounded-full border border-primary/15 bg-white/80 px-4 py-1.5 text-sm font-medium text-primary shadow-sm backdrop-blur-sm sm:inline-flex">
                 26 cards • auto sliding consultation categories
               </p>
             </div>
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-xl border border-zinc-300 bg-white px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-zinc-50 sm:self-start"
+              className="hidden items-center justify-center rounded-xl border border-zinc-300 bg-white px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-zinc-50 sm:inline-flex sm:self-start"
             >
               See all Specialities
             </Link>
           </div>
 
+          {/* Mobile Carousel - 3 cards auto-scroll */}
+          <div className="sm:hidden">
+            <Carousel
+              setApi={setMobileSpecialtyApi}
+              opts={{ align: "start", loop: true }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-2">
+                {CONSULTATION_SPECIALTIES.map((specialty, index) => (
+                  <CarouselItem
+                    key={`mobile-${specialty.title}-${index}`}
+                    className="basis-1/3 pl-2"
+                  >
+                    <div className="flex flex-col items-center rounded-2xl border border-white/70 bg-white/95 px-2 py-4 text-center shadow-sm">
+                      <div className={`mb-3 flex h-20 w-20 items-center justify-center rounded-full border border-primary/10 bg-linear-to-br ${specialty.tint}`}>
+                        {specialty.image ? (
+                          <Image
+                            src={specialty.image}
+                            alt={specialty.title}
+                            width={68}
+                            height={68}
+                            className="h-17 w-17 rounded-full object-contain"
+                            unoptimized={specialty.image.endsWith('.gif')}
+                          />
+                        ) : (
+                          <specialty.icon
+                            className={`h-9 w-9 ${specialty.iconColor}`}
+                            strokeWidth={1.8}
+                          />
+                        )}
+                      </div>
+
+                      <h3 className="mb-1 line-clamp-2 min-h-[2.25rem] text-[11px] font-semibold leading-tight text-foreground">
+                        {specialty.title}
+                      </h3>
+
+                      <p className="mb-2 text-[11px] font-medium text-muted-foreground">
+                        ₹{specialty.price.replace("Rs ", "")}
+                      </p>
+
+                      <Link
+                        href="/certificates/apply"
+                        className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-primary"
+                      >
+                        Consult now
+                        <ChevronRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+
+            <div className="mt-5">
+              <Link
+                href="/contact"
+                className="flex w-full items-center justify-center rounded-xl border border-zinc-300 bg-white px-6 py-3.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-zinc-50"
+              >
+                See all Specialities
+              </Link>
+            </div>
+          </div>
+
+          {/* Desktop/Tablet Carousel */}
           <div
-            className="relative"
+            className="relative hidden sm:block"
             onMouseEnter={() => setIsSpecialtyPaused(true)}
             onMouseLeave={() => setIsSpecialtyPaused(false)}
             onFocusCapture={() => setIsSpecialtyPaused(true)}
@@ -586,11 +694,22 @@ export default function DoctorConsultationPage() {
                       transition={{ duration: 0.35, delay: (index % 6) * 0.05 }}
                       className="group h-full rounded-[1.8rem] border border-white/70 bg-white/90 p-6 text-center shadow-[0_12px_30px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_44px_rgba(15,23,42,0.12)]"
                     >
-                      <div className={`mx-auto mb-5 flex h-28 w-28 items-center justify-center rounded-full border border-primary/10 bg-linear-to-br shadow-[inset_0_1px_0_rgba(255,255,255,0.95)] ${specialty.tint}`}>
-                        <specialty.icon
-                          className={`h-11 w-11 ${specialty.iconColor}`}
-                          strokeWidth={1.9}
-                        />
+                      <div className={`mx-auto mb-5 flex h-36 w-36 items-center justify-center rounded-full border border-primary/10 bg-linear-to-br shadow-[inset_0_1px_0_rgba(255,255,255,0.95)] ${specialty.tint}`}>
+                        {specialty.image ? (
+                          <Image
+                            src={specialty.image}
+                            alt={specialty.title}
+                            width={120}
+                            height={120}
+                            className="h-[7.5rem] w-[7.5rem] rounded-full object-contain"
+                            unoptimized={specialty.image.endsWith('.gif')}
+                          />
+                        ) : (
+                          <specialty.icon
+                            className={`h-16 w-16 ${specialty.iconColor}`}
+                            strokeWidth={1.9}
+                          />
+                        )}
                       </div>
 
                       <h3 className="min-h-14 text-[1.05rem] font-bold leading-tight text-foreground">
@@ -648,58 +767,6 @@ export default function DoctorConsultationPage() {
           </div>
         </div>
       </section>
-
-      {/* Three-step process section */}
-      {/* <section className="relative overflow-hidden bg-primary/40 py-20">
-        <div
-          className="absolute left-0 right-0 -bottom-6 h-6 bg-muted/20"
-          style={{
-            clipPath:
-              "polygon(0 100%, 4% 0, 8% 100%, 12% 0, 16% 100%, 20% 0, 24% 100%, 28% 0, 32% 100%, 36% 0, 40% 100%, 44% 0, 48% 100%, 52% 0, 56% 100%, 60% 0, 64% 100%, 68% 0, 72% 100%, 76% 0, 80% 100%, 84% 0, 88% 100%, 92% 0, 96% 100%, 100% 0, 100% 100%)",
-          }}
-        />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-              Three Easy Steps To Get Your <span className="text-primary">Medical Priscption</span>
-            </h2>
-          </div>
-
-          <div className="relative mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-8">
-              {CONSULTATION_STEPS.map((step, index) => {
-                const StepIcon = step.icon;
-
-                return (
-                  <motion.div
-                    key={step.id}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                    viewport={{ once: true }}
-                    className="relative"
-                  >
-                    {index < CONSULTATION_STEPS.length - 1 && (
-                      <div className="pointer-events-none absolute -right-10 top-12 z-0 hidden h-0.5 w-20 border-t-2 border-dashed border-primary/35 md:block" />
-                    )}
-
-                    <div className="relative z-10 min-h-[320px] overflow-hidden rounded-[22px] border border-green-400/20 bg-green-400/40 px-6 pb-8 pt-48 text-center shadow-[0_10px_24px_rgba(0,0,0,0.09)]">
-                      <div className="pointer-events-none absolute left-1/2 top-0 flex h-48 w-[90%] -translate-x-1/2 items-end justify-center overflow-hidden rounded-b-[130px] bg-card pb-2" />
-
-                      <div className="absolute left-1/2 top-10 z-10 flex h-40 w-40 -translate-x-1/2 items-center justify-center overflow-hidden text-primary">
-                        <StepIcon />
-                      </div>
-
-                      <p className="mb-2 text-4xl font-extrabold text-primary">{step.id}</p>
-                      <h3 className="text-xl font-semibold text-white">{step.title}</h3>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section> */}
 
 
       {/* Common Conditions for a Medical Certificate Section */}

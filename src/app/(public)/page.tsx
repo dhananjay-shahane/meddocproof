@@ -5,6 +5,8 @@ import { TrustSection } from "@/components/public/home/trust-section";
 import { TestimonialsSection } from "@/components/public/home/testimonials-section";
 import { FAQSection } from "@/components/public/home/faq-section";
 import { CTASection } from "@/components/public/home/cta-section";
+import { InfoSection } from "@/components/public/home/info-section";
+
 export default function HomePage() {
   return (
     <>
@@ -14,6 +16,7 @@ export default function HomePage() {
       <HowItWorksSection />
       <TestimonialsSection />
       <FAQSection />
+      <InfoSection />
       <CTASection />
     </>
   );

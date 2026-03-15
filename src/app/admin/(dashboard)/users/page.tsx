@@ -6,6 +6,9 @@ import { UserStats } from "@/components/admin/users/user-stats";
 import { UserFilters } from "@/components/admin/users/user-filters";
 import { UserTable } from "@/components/admin/users/user-table";
 import { BulkWhatsAppDialog } from "@/components/admin/users/bulk-whatsapp-dialog";
+import { Button } from "@/components/ui/button";
+import { RefreshCw, Download } from "lucide-react";
+import { toast } from "sonner";
 import type { UserFiltersState } from "@/types";
 
 const defaultFilters: UserFiltersState = {
@@ -60,13 +63,35 @@ export default function UsersPage() {
     setSelectedIds(new Set());
   }, []);
 
+  const handleRefresh = () => {
+    refetch();
+    toast.success("Users refreshed");
+  };
+
+  const handleExport = () => {
+    toast.info("Exporting users...");
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Users</h2>
-        <p className="text-muted-foreground">
-          Manage platform users and their accounts.
-        </p>
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Users Management</h2>
+          <p className="text-muted-foreground">
+            Manage registered users and send bulk notifications
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleRefresh}>
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Refresh
+          </Button>
+          <Button variant="outline" onClick={handleExport}>
+            <Download className="mr-2 h-4 w-4" />
+            Export
+          </Button>
+        </div>
       </div>
 
       <UserStats stats={stats} loading={loading} />
@@ -75,6 +100,8 @@ export default function UsersPage() {
         filters={filters}
         onFilterChange={handleFilterChange}
         onReset={handleResetFilters}
+        onBulkWhatsApp={() => setWhatsappOpen(true)}
+        selectedCount={selectedIds.size}
       />
 
       <UserTable

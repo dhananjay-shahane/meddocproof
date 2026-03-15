@@ -472,6 +472,7 @@ export interface UserStats {
   paidUsers: number;
   unpaidUsers: number;
   totalApplications: number;
+  totalCertificates: number;
   totalRevenue: number;
   avgRevenuePerUser: number;
   conversionRate: number;
@@ -544,6 +545,7 @@ export interface DoctorRegistration {
   qualification: string;
   experience: number;
   hospitalAffiliation: string | null;
+  consultationFee: number | null;
   createdAt: string;
 }
 
@@ -561,7 +563,7 @@ export interface CouponFormData {
 
 export interface CouponFiltersState {
   search: string;
-  filter: "all" | "active" | "expired";
+  filter: "all" | "active" | "inactive" | "expired";
   sortBy: string;
   sortOrder: "asc" | "desc";
 }

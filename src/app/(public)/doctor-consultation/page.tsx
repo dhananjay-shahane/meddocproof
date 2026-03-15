@@ -39,6 +39,7 @@ import { HeroSection } from "@/components/public/home/hero-section";
 import { CTASection } from "@/components/public/home/cta-section";
 import { FAQSection } from "@/components/public/home/faq-section";
 import { TrustSection } from "@/components/public/home/trust-section";
+import { TestimonialsSection } from "@/components/public/home/testimonials-section";
 import {
   Carousel,
   CarouselApi,
@@ -846,6 +847,7 @@ export default function DoctorConsultationPage() {
       </section>
 
       <TrustSection />
+      <TestimonialsSection />
       <FAQSection />
 
       <CTASection

@@ -1,41 +1,27 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useState, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import api from "@/lib/api";
 import { toast } from "sonner";
-import { Loader2, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import {
-  SignInPage,
-  Testimonial,
-  GlassInputWrapper,
-} from "@/components/ui/sign-in";
-
-type View = "login" | "forgot" | "reset";
-
-const testimonials: Testimonial[] = [
-  {
-    name: "Rohit Mehta",
-    handle: "Platform Admin",
-    text: "The admin dashboard gives me complete visibility and control over all certificate operations.",
-  },
-  {
-    name: "System Admin",
-    handle: "Operations",
-    text: "Efficient management of doctors, certificates, and payments all in one place.",
-  },
-];
+  Loader2,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
+import { SmokeyBackground } from "@/components/ui/login-form";
 
 export default function AdminLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-background">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex min-h-screen items-center justify-center bg-gray-950">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
         </div>
       }
     >
@@ -46,25 +32,13 @@ export default function AdminLoginPage() {
 
 function AdminLoginContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+
   const { login } = useAuth();
 
-  const [view, setView] = useState<View>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [resetToken, setResetToken] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const token = searchParams.get("reset");
-    if (token) {
-      setResetToken(token);
-      setView("reset");
-    }
-  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,297 +60,97 @@ function AdminLoginContent() {
     }
   };
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast.error("Please enter your email");
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await api.post("/auth/admin/forgot-password", { email });
-      toast.success(res.data.message);
-      if (res.data.resetToken) {
-        setResetToken(res.data.resetToken);
-        setView("reset");
-      }
-    } catch {
-      toast.error("Failed to send reset link");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPassword || !confirmPassword) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
-    if (newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await api.post("/auth/admin/reset-password", {
-        token: resetToken,
-        password: newPassword,
-      });
-      toast.success(res.data.message);
-      setView("login");
-      setNewPassword("");
-      setConfirmPassword("");
-      setResetToken("");
-      router.replace("/admin/login");
-    } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } };
-      toast.error(err.response?.data?.message || "Failed to reset password");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getSubtitle = () => {
-    switch (view) {
-      case "forgot":
-        return "Enter your email to receive a reset link";
-      case "reset":
-        return "Enter your new password";
-      default:
-        return "Sign in to your admin account";
-    }
-  };
 
   return (
-    <div className="auth-gradient-bg min-h-screen">
-      <SignInPage
-        title={
-          <>
-            <span className="text-primary">Admin</span> Panel
-          </>
-        }
-        description={getSubtitle()}
-        heroImageSrc="/images/auth/admin-hero.jpg"
-        testimonials={testimonials}
-        footer={
-          view === "login" ? (
-            <div className="mt-8 space-y-4">
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                Back to User Login
-              </Link>
-              <p className="text-xs text-muted-foreground">
-                MediProofDocs — Admin Console
-              </p>
-            </div>
-          ) : (
-            <div className="mt-8 space-y-4">
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full"
-                onClick={() => setView("login")}
-              >
-                <ArrowLeft className="mr-2 h-3.5 w-3.5" />
-                Back to Sign In
-              </Button>
-              <p className="text-center text-xs text-muted-foreground">
-                MediProofDocs — Admin Console
-              </p>
-            </div>
-          )
-        }
-      >
-        <AnimatePresence mode="wait">
-          {view === "login" && (
-            <motion.form
-              key="login"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.2 }}
-              onSubmit={handleLogin}
-              className="space-y-5"
-            >
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Email Address</label>
-                <GlassInputWrapper>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <input
-                      name="email"
-                      type="email"
-                      placeholder="admin@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="h-12 w-full rounded-xl bg-transparent pl-11 pr-4 text-sm focus:outline-none"
-                    />
-                  </div>
-                </GlassInputWrapper>
+    <main className="relative w-screen h-screen bg-gray-950 overflow-hidden">
+      {/* WebGL Smokey Background */}
+      <SmokeyBackground
+        color="#1d4ed8"
+        backdropBlurAmount="none"
+        className="absolute inset-0"
+      />
+
+      {/* Dark overlay for depth */}
+      <div className="absolute inset-0 bg-gray-950/60" />
+
+      {/* Centered card */}
+      <div className="relative z-10 flex items-center justify-center w-full h-full p-4">
+        <div className="w-full max-w-sm">
+            {/* Glass card */}
+            <div className="p-8 space-y-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl">
+              {/* Brand */}
+              <div className="flex flex-col items-center gap-3 text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600/80 backdrop-blur-sm shadow-lg shadow-blue-600/30">
+                  <ShieldCheck className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">Admin Portal</h2>
+                  <p className="mt-1 text-sm text-gray-300">Sign in to manage MediProofDocs</p>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium">Password</label>
-                  <button
-                    type="button"
-                    onClick={() => setView("forgot")}
-                    className="text-xs text-primary hover:underline"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-                <GlassInputWrapper>
+              {/* Login form */}
+              <form onSubmit={handleLogin} className="space-y-5">
+                  {/* Email */}
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                      <Mail size={15} />
+                    </div>
                     <input
-                      name="password"
+                      type="email"
+                      id="admin_email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-xl bg-white/10 border border-white/20 text-sm text-white placeholder-gray-400 pl-9 pr-4 py-3 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
+                      placeholder="Email address"
+                      required
+                    />
+                  </div>
+
+                  {/* Password */}
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                      <Lock size={15} />
+                    </div>
+                    <input
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      id="admin_password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="h-12 w-full rounded-xl bg-transparent pl-11 pr-12 text-sm focus:outline-none"
+                      className="w-full rounded-xl bg-white/10 border border-white/20 text-sm text-white placeholder-gray-400 pl-9 pr-10 py-3 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
+                      placeholder="Password"
+                      required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="h-4 w-4 text-muted-foreground" />
-                      )}
+                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>
-                </GlassInputWrapper>
-              </div>
 
-              <Button
-                type="submit"
-                size="lg"
-                disabled={loading}
-                className="w-full"
-              >
-                {loading ? (
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                ) : (
-                  "Sign In"
-                )}
-              </Button>
-            </motion.form>
-          )}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group w-full flex items-center justify-center py-3 px-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 rounded-xl text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 shadow-lg shadow-blue-600/30"
+                  >
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        Sign In
+                        <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </button>
+                </form>
 
-          {view === "forgot" && (
-            <motion.form
-              key="forgot"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              onSubmit={handleForgotPassword}
-              className="space-y-5"
-            >
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Email Address</label>
-                <GlassInputWrapper>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <input
-                      name="email"
-                      type="email"
-                      placeholder="admin@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="h-12 w-full rounded-xl bg-transparent pl-11 pr-4 text-sm focus:outline-none"
-                    />
-                  </div>
-                </GlassInputWrapper>
-              </div>
 
-              <Button
-                type="submit"
-                size="lg"
-                disabled={loading}
-                className="w-full"
-              >
-                {loading ? (
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                ) : (
-                  "Send Reset Link"
-                )}
-              </Button>
-            </motion.form>
-          )}
-
-          {view === "reset" && (
-            <motion.form
-              key="reset"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              onSubmit={handleResetPassword}
-              className="space-y-5"
-            >
-              <div className="space-y-2">
-                <label className="text-sm font-medium">New Password</label>
-                <GlassInputWrapper>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <input
-                      name="newPassword"
-                      type="password"
-                      placeholder="At least 6 characters"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="h-12 w-full rounded-xl bg-transparent pl-11 pr-4 text-sm focus:outline-none"
-                    />
-                  </div>
-                </GlassInputWrapper>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Confirm Password</label>
-                <GlassInputWrapper>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <input
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="Re-enter your password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="h-12 w-full rounded-xl bg-transparent pl-11 pr-4 text-sm focus:outline-none"
-                    />
-                  </div>
-                </GlassInputWrapper>
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                disabled={loading}
-                className="w-full"
-              >
-                {loading ? (
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                ) : (
-                  "Reset Password"
-                )}
-              </Button>
-            </motion.form>
-          )}
-        </AnimatePresence>
-      </SignInPage>
-    </div>
+            </div>
+        </div>
+      </div>
+    </main>
   );
 }

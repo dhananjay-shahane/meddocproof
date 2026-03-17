@@ -354,9 +354,9 @@ export default function CouponsPage() {
 
       {/* Search and Filters */}
       <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           {/* Search Input */}
-          <div className="flex-1 relative">
+          <div className="flex-1 sm:min-w-[180px] relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
@@ -368,41 +368,43 @@ export default function CouponsPage() {
             />
           </div>
 
-          {/* Type Filter */}
-          <div className="relative">
-            <select
-              className="h-11 px-4 pr-10 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-              defaultValue="all"
-            >
-              <option value="all">Type: All</option>
-              <option value="percentage">Percentage</option>
-              <option value="fixed">Fixed Amount</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
-          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Type Filter */}
+            <div className="relative">
+              <select
+                className="h-11 px-4 pr-10 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                defaultValue="all"
+              >
+                <option value="all">Type: All</option>
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed Amount</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+            </div>
 
-          {/* Status Filter */}
-          <div className="relative">
-            <select
-              value={statusFilter}
-              onChange={(e) => handleFilterChange(e.target.value as CouponFiltersState["filter"])}
-              className="h-11 px-4 pr-10 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Status: All</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="expired">Expired</option>
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
-          </div>
+            {/* Status Filter */}
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => handleFilterChange(e.target.value as CouponFiltersState["filter"])}
+                className="h-11 px-4 pr-10 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Status: All</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="expired">Expired</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+            </div>
 
-          {/* Search Button */}
-          <button
-            onClick={handleSearch}
-            className="h-11 px-6 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Search
-          </button>
+            {/* Search Button */}
+            <button
+              onClick={handleSearch}
+              className="h-11 px-6 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
 
@@ -468,7 +470,7 @@ export default function CouponsPage() {
                 </div>
 
                 {/* Info Row */}
-                <div className="flex items-center gap-8 mb-4 text-sm">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-4 text-sm">
                   {coupon.expiresAt && (
                     <div className="flex items-center gap-2 text-gray-600">
                       <Calendar className="h-4 w-4 text-gray-400" />
@@ -510,7 +512,7 @@ export default function CouponsPage() {
                 </div>
 
                 {/* Bottom Row */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100">
                   <p className="text-sm text-gray-500">
                     Created on{" "}
                     <span className="text-gray-700 font-medium">
@@ -518,7 +520,7 @@ export default function CouponsPage() {
                     </span>
                   </p>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     {coupon.isActive && !expired ? (
                       <button
                         onClick={() => handleDeactivate(coupon)}

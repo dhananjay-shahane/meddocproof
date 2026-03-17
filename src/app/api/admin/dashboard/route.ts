@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
           assignedDoctor: { select: { id: true, fullName: true } },
         },
       }),
-      // Top 5 doctors by earnings
+      // Top 5 doctors by earnings (wallet relation may not exist in older DB schemas)
       prisma.doctor.findMany({
         where: { status: "approved" },
         take: 5,
@@ -124,7 +124,7 @@ export async function GET(request: NextRequest) {
           avgRating: true,
           wallet: { select: { totalEarnings: true } },
         },
-      }),
+      }).catch(() => [] as { id: string; fullName: string; specialization: string; completedCertificates: number; avgRating: number; wallet: { totalEarnings: number } | null }[]),
       // Failed payments
       prisma.payment.findMany({
         where: { status: "failed" },

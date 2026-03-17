@@ -178,9 +178,9 @@ export default function PaymentTransactionsPage() {
 
         {/* Filters */}
         <div className="px-6 pb-4">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             {/* Search */}
-            <div className="relative flex-1 max-w-xs">
+            <div className="relative flex-1 min-w-[160px] max-w-xs">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
@@ -217,22 +217,21 @@ export default function PaymentTransactionsPage() {
               ))}
             </select>
 
-            {/* Spacer */}
-            <div className="flex-1" />
-
             {/* Action Buttons */}
-            <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2">
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <FileText className="h-4 w-4" />
-              Update Fees
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
+            <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
+              <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2">
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </Button>
+              <Button variant="outline" size="sm" className="gap-2">
+                <FileText className="h-4 w-4" />
+                Update Fees
+              </Button>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Download className="h-4 w-4" />
+                Export
+              </Button>
+            </div>
           </div>
         </div>
 

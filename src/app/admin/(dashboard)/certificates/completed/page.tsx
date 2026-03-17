@@ -130,8 +130,8 @@ export default function CompletedCertificatesPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="flex items-center gap-4 rounded-xl border bg-card p-4">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center rounded-xl border bg-card p-4">
+        <div className="relative flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -143,19 +143,18 @@ export default function CompletedCertificatesPage() {
           />
         </div>
 
-        <select
-          value={priorityFilter}
-          onChange={(e) => setPriorityFilter(e.target.value)}
-          className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
-        >
-          {priorityOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+          >
+            {priorityOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
           <FileText className="h-4 w-4 text-muted-foreground" />
           <select
             value={certTypeFilter}
@@ -168,11 +167,10 @@ export default function CompletedCertificatesPage() {
               </option>
             ))}
           </select>
+          <p className="text-sm text-muted-foreground whitespace-nowrap">
+            {data?.total || 0} certificates found
+          </p>
         </div>
-
-        <p className="text-sm text-muted-foreground whitespace-nowrap ml-auto">
-          {data?.total || 0} certificates found
-        </p>
       </div>
 
       {/* Certificate Cards */}
@@ -191,11 +189,11 @@ export default function CompletedCertificatesPage() {
               key={cert.id}
               className="rounded-xl border bg-card p-5 transition-shadow hover:shadow-md"
             >
-              <div className="flex items-start justify-between">
-                {/* Left Side - Info */}
-                <div className="flex-1">
+              <div className="space-y-3">
+                {/* Info */}
+                <div>
                   {/* Row 1: Name, Type, Phone */}
-                  <div className="flex items-center gap-4 mb-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
                     <h3 className="font-semibold text-base">{cert.userName}</h3>
                     <span className="text-sm text-muted-foreground">
                       {formatCertType(cert.certificateType)}
@@ -212,7 +210,7 @@ export default function CompletedCertificatesPage() {
                   </p>
 
                   {/* Row 3: Certificate # and Submitted date */}
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mb-3">
                     <span>
                       <span className="font-medium text-foreground">Certificate #:</span>{" "}
                       {cert.certificateNumber || cert.applicationDisplayId}
@@ -224,7 +222,7 @@ export default function CompletedCertificatesPage() {
                   </div>
 
                   {/* Row 4: Badges */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {/* Priority Badge */}
                     <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">
                       Urgent
@@ -246,8 +244,8 @@ export default function CompletedCertificatesPage() {
                   </div>
                 </div>
 
-                {/* Right Side - Actions */}
-                <div className="flex items-center gap-2">
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"

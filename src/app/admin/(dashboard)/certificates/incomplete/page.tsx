@@ -187,8 +187,8 @@ export default function IncompleteCertificatesPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="flex items-center gap-4 rounded-xl border bg-card p-4">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center rounded-xl border bg-card p-4">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -200,7 +200,7 @@ export default function IncompleteCertificatesPage() {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <select
             value={statusFilter}
@@ -268,56 +268,56 @@ export default function IncompleteCertificatesPage() {
                 className="rounded-xl border bg-card p-5 transition-shadow hover:shadow-md"
               >
                 {/* Top Row */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-1">
-                      <h3 className="font-semibold text-base">{cert.userName}</h3>
-                      <span className="text-sm text-blue-600 font-medium">
-                        {formatCertType(cert.certificateType)}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {cert.userPhone || "—"}
-                      </span>
+                <div className="mb-3">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    {/* Left: info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mb-1">
+                        <h3 className="font-semibold text-base">{cert.userName}</h3>
+                        <span className="text-sm text-blue-600 font-medium">
+                          {formatCertType(cert.certificateType)}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          {cert.userPhone || "—"}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-x-4 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5" />
+                          {formatTimeAgo(cert.createdAt)}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <FileText className="h-3.5 w-3.5" />
+                          #{cert.certificateNumber || cert.applicationDisplayId}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5" />
-                        {formatTimeAgo(cert.createdAt)}
+
+                    {/* Right: Priority + Status (always visible) */}
+                    <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium">
+                        Medium
                       </span>
-                      <span className="flex items-center gap-1.5">
-                        <FileText className="h-3.5 w-3.5" />
-                        #{cert.certificateNumber || cert.applicationDisplayId}
-                      </span>
+                      <div className={`rounded-lg border px-2.5 py-1.5 max-w-[180px] ${statusInfo.color}`}>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {statusInfo.label === "Certificate In Progress" && (
+                            <FileCheck className="h-3.5 w-3.5 shrink-0" />
+                          )}
+                          {statusInfo.label === "Consultation Done" && (
+                            <ClipboardList className="h-3.5 w-3.5 shrink-0" />
+                          )}
+                          {statusInfo.label === "Doctor Assigned" && (
+                            <User className="h-3.5 w-3.5 shrink-0" />
+                          )}
+                          <span className="text-xs font-medium">{statusInfo.label}</span>
+                        </div>
+                        <p className="text-xs opacity-70 truncate">Next: {statusInfo.nextAction}</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    {/* Priority Badge */}
-                    <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium">
-                      Medium
-                    </span>
-
-                    {/* Status Card */}
-                    <div className={`rounded-lg border px-3 py-2 ${statusInfo.color}`}>
-                      <div className="flex items-center gap-2 mb-0.5">
-                        {statusInfo.label === "Certificate In Progress" && (
-                          <FileCheck className="h-4 w-4" />
-                        )}
-                        {statusInfo.label === "Consultation Done" && (
-                          <ClipboardList className="h-4 w-4" />
-                        )}
-                        {statusInfo.label === "Doctor Assigned" && (
-                          <User className="h-4 w-4" />
-                        )}
-                        <span className="text-sm font-medium">{statusInfo.label}</span>
-                        <span className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700">
-                          Assessment
-                        </span>
-                      </div>
-                      <p className="text-xs opacity-80">Next: {statusInfo.nextAction}</p>
-                    </div>
-
-                    {/* Action Buttons */}
+                  {/* Action Buttons — always on their own wrapping row */}
+                  <div className="flex flex-wrap items-center gap-2">
                     <Button
                       variant="outline"
                       size="sm"

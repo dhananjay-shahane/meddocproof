@@ -89,13 +89,13 @@ export async function GET(request: NextRequest) {
         where: { status: "approved" },
       }),
       
-      // Withdrawals & Payouts
+      // Withdrawals & Payouts (tables may not exist in older DB schemas)
       prisma.doctorWithdrawal.count({
         where: { status: "pending" },
-      }),
+      }).catch(() => 0),
       prisma.doctorPayout.count({
         where: { status: "pending" },
-      }),
+      }).catch(() => 0),
     ]);
 
     return NextResponse.json({

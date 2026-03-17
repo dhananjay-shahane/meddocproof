@@ -184,8 +184,8 @@ export default function CompletedApplicationsPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="flex items-center gap-4 rounded-xl border bg-card p-4">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center rounded-xl border bg-card p-4">
+        <div className="relative flex-1 sm:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -197,7 +197,7 @@ export default function CompletedApplicationsPage() {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <select
             value={filters.status}
@@ -210,9 +210,6 @@ export default function CompletedApplicationsPage() {
               </option>
             ))}
           </select>
-        </div>
-
-        <div className="flex items-center gap-2">
           <FileText className="h-4 w-4 text-muted-foreground" />
           <select
             value={filters.certificateType}
@@ -225,11 +222,10 @@ export default function CompletedApplicationsPage() {
               </option>
             ))}
           </select>
+          <p className="text-sm text-muted-foreground whitespace-nowrap">
+            {data?.total || 0} applications found
+          </p>
         </div>
-
-        <p className="text-sm text-muted-foreground whitespace-nowrap">
-          {data?.total || 0} applications found
-        </p>
       </div>
 
       {/* Application Cards */}
@@ -249,25 +245,29 @@ export default function CompletedApplicationsPage() {
               className="rounded-xl border bg-card p-5 transition-shadow hover:shadow-md"
             >
               {/* Top Row */}
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-4 mb-2">
-                    <h3 className="font-semibold text-base">
-                      {app.user?.fullName || "Unknown"}
-                    </h3>
-                    <span className="text-sm text-muted-foreground">
-                      {app.certificateType.replace(/_/g, "-")}
-                    </span>
+              <div className="mb-3">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-base">
+                        {app.user?.fullName || "Unknown"}
+                      </h3>
+                      <span className="text-sm text-muted-foreground">
+                        {app.certificateType.replace(/_/g, "-")}
+                      </span>
+                    </div>
+                    <p className="text-sm text-blue-600 truncate">
+                      {app.user?.email || "—"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {app.user?.phoneNumber || "—"}
+                    </p>
                   </div>
-                  <p className="text-sm text-blue-600">
-                    {app.user?.email || "—"}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {app.user?.phoneNumber || "—"}
-                  </p>
+                  <div className="flex-shrink-0">
+                    {getStatusBadge(app)}
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  {getStatusBadge(app)}
+                <div className="flex flex-wrap items-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"
@@ -326,7 +326,7 @@ export default function CompletedApplicationsPage() {
               </div>
 
               {/* Info Row */}
-              <div className="flex items-center gap-6 mt-4 text-sm">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4 text-sm">
                 <div className="flex items-center gap-1.5 text-muted-foreground">
                   <DollarSign className="h-4 w-4" />
                   <span className="font-medium text-foreground">

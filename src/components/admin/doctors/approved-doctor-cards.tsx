@@ -85,7 +85,7 @@ export function ApprovedDoctorCards({
           </div>
 
           {/* Contact Info Row */}
-          <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center gap-2 text-slate-600">
               <Mail className="h-4 w-4 text-slate-400" />
               <span>{doctor.email}</span>
@@ -101,7 +101,7 @@ export function ApprovedDoctorCards({
           </div>
 
           {/* Details Row */}
-          <div className="mt-3 grid grid-cols-3 gap-4 text-sm">
+          <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center gap-2 text-slate-600">
               <FileText className="h-4 w-4 text-slate-400" />
               <span>Reg: {doctor.registrationNumber}</span>
@@ -118,7 +118,7 @@ export function ApprovedDoctorCards({
               <MessageSquare className="h-4 w-4" />
               <span>Certificate Fee Structure</span>
             </div>
-            <div className="grid grid-cols-3 gap-4 text-sm">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
               <div>
                 <span className="text-slate-500">Digital Certificate: </span>
                 <span className="text-green-700 font-medium">₹200</span>

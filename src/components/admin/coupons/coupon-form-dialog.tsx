@@ -101,7 +101,7 @@ export function CouponFormDialog({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="discountType">Discount Type</Label>
               <select
@@ -133,7 +133,7 @@ export function CouponFormDialog({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="maxUses">Max Uses (0 = unlimited)</Label>
               <Input

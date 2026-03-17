@@ -39,7 +39,7 @@ export function ReviewList({
     <div className="space-y-4">
       {/* Stats Row */}
       {stats && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="rounded-xl border bg-card p-4 text-center shadow-sm">
             <p className="text-2xl font-bold">{stats.total}</p>
             <p className="text-xs text-muted-foreground">Total Reviews</p>

@@ -49,23 +49,23 @@ export default function ApplicationsPage() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="border-b">
-        <nav className="flex gap-4">
+      <div className="border-b overflow-x-auto">
+        <nav className="flex gap-4 min-w-max">
           <Link
             href="/admin/applications"
-            className="border-b-2 border-primary px-1 pb-3 text-sm font-medium text-primary"
+            className="border-b-2 border-primary px-1 pb-3 text-sm font-medium text-primary whitespace-nowrap"
           >
             All Applications
           </Link>
           <Link
             href="/admin/applications/temporary"
-            className="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground hover:text-foreground whitespace-nowrap"
           >
             Temporary Applications
           </Link>
           <Link
             href="/admin/applications/completed"
-            className="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground hover:text-foreground whitespace-nowrap"
           >
             Completed Applications
           </Link>

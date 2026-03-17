@@ -47,8 +47,8 @@ export function LatestApplicationsTable({
           No applications yet
         </div>
       ) : (
-        <div className="overflow-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[480px] text-sm">
             <thead>
               <tr className="border-b bg-muted/30">
                 <th className="px-6 py-3 text-left font-medium text-muted-foreground">

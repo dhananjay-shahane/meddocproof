@@ -160,7 +160,7 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
               )}
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-96">
+          <DropdownMenuContent align="end" className="w-80 sm:w-96">
             {/* Notification Header */}
             <div className="flex items-center justify-between px-3 py-2 border-b">
               <div className="flex items-center gap-2">

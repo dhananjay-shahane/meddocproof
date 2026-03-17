@@ -86,7 +86,7 @@ export default function DoctorPaymentDetailsPage({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
@@ -103,7 +103,7 @@ export default function DoctorPaymentDetailsPage({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" className="gap-2">
             <Download className="h-4 w-4" />
             Export CSV
@@ -141,7 +141,7 @@ export default function DoctorPaymentDetailsPage({
         </div>
 
         {/* Three Column Info */}
-        <div className="mt-6 grid grid-cols-3 gap-8">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-8">
           {/* Contact Information */}
           <div>
             <h3 className="mb-3 text-sm font-medium text-slate-500">

@@ -186,7 +186,7 @@ export function RegistrationCards({
             </div>
 
             {/* Contact & Details Row */}
-            <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-4 w-4" />
                 <span>{doctor.email}</span>
@@ -201,7 +201,7 @@ export function RegistrationCards({
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
                 <span>Reg: {doctor.registrationNumber || "N/A"}</span>

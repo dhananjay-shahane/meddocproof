@@ -215,7 +215,7 @@ export function ApplicationDetailsDialog({
             onValueChange={setActiveTab}
             className="flex-1 flex flex-col overflow-hidden"
           >
-            <TabsList className="grid w-full grid-cols-5 shrink-0">
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 shrink-0">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="progress">Progress</TabsTrigger>
@@ -236,7 +236,7 @@ export function ApplicationDetailsDialog({
                 {/* Basic Information */}
                 <div>
                   <h3 className="text-base font-semibold mb-4">Basic Information</h3>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <div>
                       <p className="text-sm text-muted-foreground">Full Name</p>
                       <p className="font-medium">{application?.user?.fullName || "—"}</p>
@@ -281,7 +281,7 @@ export function ApplicationDetailsDialog({
                 {/* Address Details */}
                 <div>
                   <h3 className="text-base font-semibold mb-4">Address Details</h3>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <div className="col-span-2">
                       <p className="text-sm text-muted-foreground">Address</p>
                       <p className="font-medium">{getFormDataValue("address")}</p>
@@ -306,7 +306,7 @@ export function ApplicationDetailsDialog({
                 {/* Certificate Details */}
                 <div>
                   <h3 className="text-base font-semibold mb-4">Certificate Details</h3>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <div>
                       <p className="text-sm text-muted-foreground">Certificate Type</p>
                       <p className="font-medium">

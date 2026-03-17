@@ -185,7 +185,7 @@ export function CertificateDetailsDialog({
             onValueChange={setActiveTab}
             className="flex-1 flex flex-col overflow-hidden"
           >
-            <TabsList className="grid w-full grid-cols-4 shrink-0">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 shrink-0">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="assessment" className="flex items-center gap-1.5">
                 <ClipboardList className="h-4 w-4" />

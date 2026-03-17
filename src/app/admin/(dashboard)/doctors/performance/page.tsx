@@ -62,7 +62,7 @@ export default function DoctorPerformancePage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/doctors">
             <Button variant="ghost" size="sm" className="gap-1">
@@ -88,7 +88,7 @@ export default function DoctorPerformancePage() {
       {/* Performance Filters */}
       <div className="rounded-xl border bg-card p-6 shadow-sm">
         <h2 className="text-lg font-semibold mb-4">Performance Filters</h2>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label className="text-sm text-slate-500 mb-1.5 block">Doctor</label>
             <select
@@ -240,7 +240,7 @@ export default function DoctorPerformancePage() {
       {topPerformers.length > 0 && (
         <div className="rounded-xl border bg-card p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Top Performers</h2>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {topPerformers.map((doctor, index) => (
               <div key={doctor.id} className="flex items-start gap-3">
                 <Trophy
@@ -342,7 +342,7 @@ function DoctorRankingRow({ doctor, rank }: { doctor: Doctor; rank: number }) {
       {expanded && (
         <tr className="bg-slate-50">
           <td colSpan={9} className="px-6 py-4">
-            <div className="grid grid-cols-4 gap-6 text-sm">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
               <div>
                 <p className="text-slate-500">Email</p>
                 <p className="font-medium">{doctor.email}</p>

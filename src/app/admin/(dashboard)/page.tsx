@@ -59,14 +59,14 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">
             Overview of your medical certificate platform.
           </p>
         </div>
-        <Button variant="ghost" size="icon" onClick={refetch} title="Refresh">
+        <Button variant="ghost" size="icon" onClick={refetch} title="Refresh" className="self-start sm:self-auto">
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>

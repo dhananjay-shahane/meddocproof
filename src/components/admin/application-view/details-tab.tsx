@@ -30,7 +30,7 @@ export function DetailsTab({ application }: DetailsTabProps) {
         <h3 className="text-sm font-medium text-blue-600">
           Personal Information
         </h3>
-        <div className="grid grid-cols-2 gap-x-12 gap-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4">
           <div>
             <p className="text-sm text-blue-600 mb-1">Full Name</p>
             <p className="font-medium">
@@ -66,7 +66,7 @@ export function DetailsTab({ application }: DetailsTabProps) {
         <h3 className="text-sm font-medium text-blue-600">
           Certificate Information
         </h3>
-        <div className="grid grid-cols-2 gap-x-12 gap-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4">
           <div>
             <p className="text-sm text-blue-600 mb-1">Certificate Type</p>
             <p className="font-medium">

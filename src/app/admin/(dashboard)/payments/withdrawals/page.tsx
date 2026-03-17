@@ -156,7 +156,7 @@ export default function WithdrawalsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
             Withdrawal Management
@@ -165,7 +165,7 @@ export default function WithdrawalsPage() {
             Review and process doctor withdrawal requests
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" className="gap-2">
             <RefreshCw className="h-4 w-4" />
             Refresh

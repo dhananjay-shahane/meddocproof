@@ -172,14 +172,14 @@ export default function TransactionsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
           <p className="text-gray-500">
             Medical certificate app transactions from Razorpay API (current month)
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={refetch}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -195,7 +195,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Top Stats Cards - Row 1 */}
-      <div className="grid gap-4 grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {/* Total Transactions */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
@@ -249,7 +249,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Stats Cards - Row 2 */}
-      <div className="grid gap-4 grid-cols-5">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
         {/* Successful */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
@@ -318,7 +318,7 @@ export default function TransactionsPage() {
           </button>
         </div>
 
-        <div className="grid gap-4 grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {/* Search */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">

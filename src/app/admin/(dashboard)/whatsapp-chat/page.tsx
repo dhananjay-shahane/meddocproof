@@ -27,6 +27,8 @@ export default function WhatsAppChatPage() {
   const [showTemplates, setShowTemplates] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const [showMobileChat, setShowMobileChat] = useState(false);
+
   const selectedConversation = conversations.find(
     (c) => c.phoneNumber === selectedPhone
   );
@@ -90,7 +92,7 @@ export default function WhatsAppChatPage() {
 
       <div className="flex h-[calc(100vh-220px)] min-h-[500px] overflow-hidden rounded-xl border bg-card shadow-sm">
         {/* Left sidebar — Conversation list */}
-        <div className="flex w-80 flex-col border-r">
+        <div className={`flex flex-col border-r w-full lg:w-80 lg:flex ${showMobileChat ? "hidden lg:flex" : "flex"}`}>
           {/* Search */}
           <div className="border-b p-3">
             <div className="relative">
@@ -120,7 +122,10 @@ export default function WhatsAppChatPage() {
                   key={conv.phoneNumber}
                   conversation={conv}
                   isSelected={selectedPhone === conv.phoneNumber}
-                  onClick={() => setSelectedPhone(conv.phoneNumber)}
+                  onClick={() => {
+                    setSelectedPhone(conv.phoneNumber);
+                    setShowMobileChat(true);
+                  }}
                 />
               ))
             )}
@@ -128,11 +133,18 @@ export default function WhatsAppChatPage() {
         </div>
 
         {/* Right side — Chat area */}
-        <div className="flex flex-1 flex-col">
+        <div className={`flex-col flex-1 ${showMobileChat ? "flex" : "hidden lg:flex"}`}>
           {selectedConversation ? (
             <>
               {/* Chat header */}
               <div className="flex items-center gap-3 border-b px-4 py-3">
+                <button
+                  onClick={() => setShowMobileChat(false)}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-muted lg:hidden"
+                  title="Back to conversations"
+                >
+                  <ChevronDown className="h-5 w-5 rotate-90" />
+                </button>
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
                   <User className="h-5 w-5" />
                 </div>

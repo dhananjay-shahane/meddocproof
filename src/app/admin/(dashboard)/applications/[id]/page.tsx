@@ -115,7 +115,7 @@ export default function ApplicationViewPage({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>
             <Link href="/admin/applications">
@@ -143,7 +143,7 @@ export default function ApplicationViewPage({
       </div>
 
       {/* Status Cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Status Card */}
         <div className="rounded-xl border bg-card p-4">
           <div className="flex items-center gap-3">

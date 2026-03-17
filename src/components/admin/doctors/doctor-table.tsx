@@ -53,8 +53,8 @@ export function DoctorTable({
   return (
     <div>
       <div className="rounded-xl border bg-card shadow-sm">
-        <div className="overflow-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[750px] text-sm">
             <thead>
               <tr className="border-b bg-muted/30">
                 <th className="px-4 py-3 text-left font-medium text-muted-foreground">

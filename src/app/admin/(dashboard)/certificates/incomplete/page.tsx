@@ -166,14 +166,14 @@ export default function IncompleteCertificatesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Incomplete Certificates</h2>
           <p className="text-muted-foreground">
             Track certificate completion progress and manage workflow
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/admin/certificates">
               <ArrowLeft className="mr-2 h-4 w-4" />

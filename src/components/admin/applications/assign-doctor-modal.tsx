@@ -180,7 +180,7 @@ export function AssignDoctorModal({
         </div>
 
         {/* Consultation Date & Time */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="flex items-center gap-1.5 text-sm font-medium">
               <Calendar className="h-4 w-4" />

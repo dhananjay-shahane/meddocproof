@@ -219,7 +219,7 @@ function PersonalDetailsTab({ doctor }: { doctor: Doctor }) {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           Personal Information
         </h3>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
           <div>
             <p className="text-sm text-slate-500">Full Name</p>
             <p className="font-medium text-slate-900">{doctor.fullName}</p>
@@ -271,7 +271,7 @@ function PerformanceTab({ doctor }: { doctor: Doctor }) {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           Financial Overview
         </h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="rounded-xl border bg-white p-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-sm text-slate-500">Total Earnings</p>
@@ -306,7 +306,7 @@ function PerformanceTab({ doctor }: { doctor: Doctor }) {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           Performance Metrics
         </h3>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-xl border bg-white p-4">
             <p className="text-sm text-slate-500">Total Applications</p>
             <p className="text-2xl font-bold text-slate-900 text-right">
@@ -342,7 +342,7 @@ function PerformanceTab({ doctor }: { doctor: Doctor }) {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           Rating & Reviews
         </h3>
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div>
             <div className="flex items-center gap-2">
               <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
@@ -369,7 +369,7 @@ function PerformanceTab({ doctor }: { doctor: Doctor }) {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           Activity Information
         </h3>
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div>
             <p className="text-sm text-slate-500">Last Consultation</p>
             <p className="font-medium text-slate-900">

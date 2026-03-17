@@ -24,7 +24,7 @@ export function EarningsTicker({ earnings }: EarningsTickerProps) {
 
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <div className="rounded-lg bg-green-50 p-2">
             <IndianRupee className="h-4 w-4 text-green-600" />

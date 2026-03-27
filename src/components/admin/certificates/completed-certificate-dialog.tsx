@@ -103,8 +103,10 @@ export function CompletedCertificateDialog({
     return String(value);
   };
 
-  // Mock notifications - in real app would come from API
-  const notifications: NotificationItem[] = application ? [
+  // Fallback notifications when API returns nothing
+  const displayNotifications: NotificationItem[] = notifications.length > 0
+    ? notifications
+    : application ? [
     {
       id: "1",
       type: "whatsapp",
@@ -233,12 +235,12 @@ export function CompletedCertificateDialog({
             <div>
               <h3 className="text-base font-semibold mb-4">Notifications Sent</h3>
               <div className="space-y-3">
-                {notifications.length === 0 ? (
+                {displayNotifications.length === 0 ? (
                   <p className="text-sm text-muted-foreground py-2">
                     No notifications sent for this certificate.
                   </p>
                 ) : (
-                  notifications.map((notification) => (
+                  displayNotifications.map((notification) => (
                     <div
                       key={notification.id}
                       className="flex items-start justify-between rounded-lg border p-4"

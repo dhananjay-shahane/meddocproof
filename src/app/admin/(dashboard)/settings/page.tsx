@@ -242,14 +242,6 @@ export default function SettingsPage() {
     setCertificateTypes((prev) => prev.map((cert) => cert.id === id ? { ...cert, price } : cert));
   };
 
-  const toggleCertificate = (id: string) => {
-    setCertificateTypes((prev) => prev.map((cert) => cert.id === id ? { ...cert, enabled: !cert.enabled } : cert));
-  };
-
-  const updateCertPrice = (id: string, price: number) => {
-    setCertificateTypes((prev) => prev.map((cert) => cert.id === id ? { ...cert, price } : cert));
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">

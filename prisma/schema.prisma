@@ -115,6 +115,8 @@ enum SeverityOfIllness {
 
 model User {
   id          String   @id @default(uuid())
+  firstName   String?
+  lastName    String?
   fullName    String
   phoneNumber String   @unique
   email       String?  @unique
@@ -166,6 +168,8 @@ model AdminUser {
   passwordResetToken  String?   @unique
   passwordResetExpiry DateTime?
 
+  approvedDoctors Doctor[] @relation("ApprovedDoctors")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -181,11 +185,38 @@ model Doctor {
   password            String
   phoneNumber         String?      @unique
 
+  // Profile Information
+  profilePhotoUrl     String?
+  gender              String?
+  dateOfBirth         DateTime?
+  bio                 String?      @db.Text
+
+  // Professional Credentials
   registrationNumber  String       @unique
+  medicalCouncil      String?
+  registrationYear    Int?
   specialization      String
   qualification       String
   experience          Int
   hospitalAffiliation String?
+
+  // Address
+  address             String?
+  city                String?
+  state               String?
+  pincode             String?
+
+  // Document Uploads
+  medicalLicenseUrl   String?
+  govtIdProofUrl      String?
+  degreeCertificateUrl String?
+  signatureUrl        String?
+
+  // Terms Acceptance Timestamps
+  termsAcceptedAt          DateTime?
+  ethicsAcceptedAt         DateTime?
+  dataProtectionAcceptedAt DateTime?
+  platformTermsAcceptedAt  DateTime?
 
   status              DoctorStatus @default(pending)
   isActive            Boolean      @default(false)
@@ -201,6 +232,12 @@ model Doctor {
 
   lastActive DateTime?
 
+  // Admin approval audit fields
+  approvedByAdminId String?
+  approvedByAdmin   AdminUser?   @relation("ApprovedDoctors", fields: [approvedByAdminId], references: [id])
+  approvedAt        DateTime?
+  rejectedReason    String?
+
   passwordResetToken  String?   @unique
   passwordResetExpiry DateTime?
 
@@ -215,6 +252,7 @@ model Doctor {
 
   @@index([status])
   @@index([registrationNumber])
+  @@index([approvedByAdminId])
 }
 
 model DoctorAvailability {
@@ -307,6 +345,10 @@ model Application {
 
   paymentCompleted     Boolean @default(false)
   conversionLikelihood Int?
+
+  // Live step tracking (socket.io)
+  currentStep          Int     @default(0)
+  lastActiveAt         DateTime @default(now())
 
   // Phase 4 — Application form overhaul
   paymentTier          String?
@@ -542,6 +584,12 @@ model Coupon {
   isActive      Boolean   @default(true)
   expiresAt     DateTime?
 
+  // Extended fields
+  couponType        String  @default("general")  // "general" | "specific"
+  phoneNumber       String?
+  maxDiscountAmount Float?
+  applicableFor     String  @default("all")       // "all" | "certificates" | "consultations"
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -567,7 +615,11 @@ model Notification {
 
   @@index([userId])
   @@index([doctorId])
+  @@index([adminId])
   @@index([isRead])
+  @@index([createdAt(sort: Desc)])
+  @@index([isRead, createdAt(sort: Desc)])
+  @@index([adminId, isRead, createdAt(sort: Desc)])
 }
 
 // ============================================
@@ -658,4 +710,25 @@ model SampleCertificate {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// CERTIFICATE TEMPLATES
+// ============================================
+
+model CertificateTemplate {
+  id          String  @id @default(uuid())
+  name        String
+  type        String
+  description String? @db.Text
+  isDefault   Boolean @default(false)
+  isActive    Boolean @default(true)
+  formFields  Json?
+  sections    Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
 }

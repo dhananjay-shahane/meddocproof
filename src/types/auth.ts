@@ -34,6 +34,8 @@ export interface DoctorAuthUser {
 
 export interface UserAuthUser {
   id: string;
+  firstName?: string | null;
+  lastName?: string | null;
   fullName: string;
   phoneNumber: string;
   email?: string | null;

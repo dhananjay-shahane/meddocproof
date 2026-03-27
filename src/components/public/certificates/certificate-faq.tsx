@@ -35,7 +35,7 @@ interface CertificateFAQProps {
 const defaultFAQs: FAQItem[] = [
   {
     question: 'When will I receive my medical certificate?',
-    answer: 'You will receive your digital medical certificate within 30–90 minutes after completing the online doctor consultation. If you choose a physical copy, it will be delivered within 8–10 business days.',
+    answer: 'You will receive your digital medical certificate within 30–60 minutes after completing the online doctor consultation. If you choose a physical copy, it will be delivered within 8–10 business days.',
   },
   {
     question: 'Are online medical certificates valid in India?',

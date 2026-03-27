@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -11,6 +11,8 @@ import {
   Trash2,
   MoreHorizontal,
   Copy,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import api from "@/lib/api";
 
 interface Template {
   id: string;
@@ -34,59 +37,61 @@ interface Template {
   updatedAt: string;
 }
 
-// Empty by default to show empty state
-const mockTemplates: Template[] = [];
-
 export default function CertificateTemplatesPage() {
   const router = useRouter();
-  const [templates, setTemplates] = useState<Template[]>(mockTemplates);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleInitializeDefaults = () => {
-    toast.info("Initializing default templates...");
-    // Add default templates
-    const defaults: Template[] = [
-      {
-        id: "1",
-        name: "Standard Sick Leave",
-        type: "sick_leave",
-        description: "Default template for sick leave certificates",
-        isDefault: true,
-        isActive: true,
-        createdAt: "2024-01-15",
-        updatedAt: "2024-02-20",
-      },
-      {
-        id: "2",
-        name: "Fitness Certificate",
-        type: "fitness",
-        description: "Standard fitness certificate template",
-        isDefault: true,
-        isActive: true,
-        createdAt: "2024-01-20",
-        updatedAt: "2024-02-18",
-      },
-    ];
-    setTemplates(defaults);
-    toast.success("Default templates initialized!");
+  const fetchTemplates = useCallback(async () => {
+    try {
+      setError(null);
+      const res = await api.get("/admin/certificates/templates");
+      setTemplates(res.data.data ?? []);
+    } catch {
+      setError("Failed to load templates");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTemplates();
+  }, [fetchTemplates]);
+
+  const handleDelete = async (id: string) => {
+    try {
+      await api.delete(`/admin/certificates/templates?id=${id}`);
+      setTemplates((prev) => prev.filter((t) => t.id !== id));
+      toast.success("Template deleted");
+    } catch {
+      toast.error("Failed to delete template");
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setTemplates((prev) => prev.filter((t) => t.id !== id));
-    toast.success("Template deleted");
+  const handleDuplicate = async (template: Template) => {
+    try {
+      const res = await api.post("/admin/certificates/templates", {
+        name: `${template.name} (Copy)`,
+        type: template.type,
+        description: template.description,
+        isDefault: false,
+        isActive: template.isActive,
+      });
+      setTemplates((prev) => [...prev, res.data.data]);
+      toast.success("Template duplicated");
+    } catch {
+      toast.error("Failed to duplicate template");
+    }
   };
 
-  const handleDuplicate = (template: Template) => {
-    const duplicate: Template = {
-      ...template,
-      id: Date.now().toString(),
-      name: `${template.name} (Copy)`,
-      isDefault: false,
-      createdAt: new Date().toISOString().split("T")[0],
-      updatedAt: new Date().toISOString().split("T")[0],
-    };
-    setTemplates((prev) => [...prev, duplicate]);
-    toast.success("Template duplicated");
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -99,6 +104,10 @@ export default function CertificateTemplatesPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" onClick={fetchTemplates}>
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Refresh
+          </Button>
           <Button variant="outline" asChild>
             <Link href="/admin/certificates/demo-templates">
               <Eye className="mr-2 h-4 w-4" />
@@ -113,6 +122,12 @@ export default function CertificateTemplatesPage() {
           </Button>
         </div>
       </div>
+
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       {/* Templates List or Empty State */}
       {templates.length === 0 ? (
@@ -131,9 +146,7 @@ export default function CertificateTemplatesPage() {
                   Create Template
                 </Link>
               </Button>
-              <Button variant="outline" onClick={handleInitializeDefaults}>
-                Initialize Default Templates
-              </Button>
+
             </div>
           </div>
         </div>

@@ -13,6 +13,8 @@ export async function GET(request: NextRequest) {
         where: { id: auth.user.id },
         select: {
           id: true,
+          firstName: true,
+          lastName: true,
           fullName: true,
           phoneNumber: true,
           email: true,
@@ -74,10 +76,19 @@ export async function PUT(request: NextRequest) {
     if (isAuthError(auth)) return auth;
 
     const body = await request.json();
-    const { fullName, email } = body;
+    const { firstName, lastName, fullName, email } = body;
 
     const updateData: Record<string, unknown> = {};
-    if (fullName) updateData.fullName = fullName;
+    if (firstName !== undefined) updateData.firstName = firstName || null;
+    if (lastName !== undefined) updateData.lastName = lastName || null;
+    // Recompute fullName if either name part was provided
+    if (firstName !== undefined || lastName !== undefined) {
+      const fn = (firstName || "").trim();
+      const ln = (lastName || "").trim();
+      if (fn || ln) updateData.fullName = `${fn} ${ln}`.trim();
+    } else if (fullName) {
+      updateData.fullName = fullName;
+    }
     if (email !== undefined) updateData.email = email || null;
 
     const updatedUser = await prisma.user.update({
@@ -85,6 +96,8 @@ export async function PUT(request: NextRequest) {
       data: updateData,
       select: {
         id: true,
+        firstName: true,
+        lastName: true,
         fullName: true,
         phoneNumber: true,
         email: true,

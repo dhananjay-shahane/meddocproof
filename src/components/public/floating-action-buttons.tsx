@@ -323,7 +323,7 @@ export function FloatingActionButtons() {
           initial={{ scale: 0, opacity: 0, x: -50 }}
           animate={{ scale: 1, opacity: 1, x: 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
-          whileHover={{ scale: 1.1, rotate: [0, 10, -10, 0] }}
+          whileHover={{ scale: 1.1, rotate: [0, 10, -10, 0], transition: { type: "tween", duration: 0.4 } }}
           whileTap={{ scale: 0.9 }}
           className="group relative flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
           title="Call Us"
@@ -400,7 +400,7 @@ export function FloatingActionButtons() {
                     <motion.div
                       className="relative w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm"
                       animate={{ rotate: [0, 5, -5, 0] }}
-                      transition={{ duration: 4, repeat: Infinity }}
+                      transition={{ type: "tween", duration: 4, repeat: Infinity }}
                     >
                       <Sparkles className="w-5 h-5 text-white" />
                       {/* Orbiting dots */}
@@ -415,7 +415,7 @@ export function FloatingActionButtons() {
                         AI Assistant
                         <motion.span
                           animate={{ rotate: [0, 20, -20, 0] }}
-                          transition={{ duration: 2, repeat: Infinity }}
+                          transition={{ type: "tween", duration: 2, repeat: Infinity }}
                         >
                           ✨
                         </motion.span>
@@ -616,14 +616,14 @@ export function FloatingActionButtons() {
                 >
                   <motion.div
                     animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    transition={{ type: "tween", duration: 2, repeat: Infinity }}
                   >
                     <MessageSquare className="w-7 h-7" />
                   </motion.div>
                   <motion.div
                     className="absolute -top-1 -right-1"
                     animate={{ scale: [1, 1.3, 1], rotate: [0, 15, -15, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    transition={{ type: "tween", duration: 2, repeat: Infinity }}
                   >
                     <Sparkles className="w-4 h-4 text-yellow-300" />
                   </motion.div>

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
-import { useNotifications } from "@/hooks/use-notifications";
+import { useHeaderNotifications } from "@/hooks/use-header-notifications";
 import { getInitials } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -56,12 +56,15 @@ const breadcrumbMap: Record<string, string> = {
   "/admin/notifications": "Notifications",
   "/admin/payment-fix": "Payment Fix",
   "/admin/settings": "Settings",
+  "/admin/profile": "Profile",
 };
 
 // Notification type icon mapping
 const getNotificationIcon = (type: string) => {
   switch (type) {
     case "success":
+    case "new_application":
+    case "certificate_applied":
       return <CheckCircle className="h-4 w-4 text-green-500" />;
     case "warning":
       return <AlertCircle className="h-4 w-4 text-yellow-500" />;
@@ -71,6 +74,10 @@ const getNotificationIcon = (type: string) => {
       return <MessageSquare className="h-4 w-4 text-blue-500" />;
     case "consultation":
       return <Stethoscope className="h-4 w-4 text-purple-500" />;
+    case "doctor_registered":
+      return <Stethoscope className="h-4 w-4 text-indigo-500" />;
+    case "user_registered":
+      return <User className="h-4 w-4 text-emerald-500" />;
     default:
       return <Info className="h-4 w-4 text-blue-500" />;
   }
@@ -81,18 +88,23 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Fetch notifications
+  // Prevent hydration mismatch for dynamic notification data
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Fetch notifications using lightweight hook
   const {
-    data: notificationsData,
+    notifications,
     unreadCount,
     loading: notificationsLoading,
     refetch: refetchNotifications,
     markAsRead,
     markAllAsRead,
-  } = useNotifications({ filters: { filter: "all", type: "" }, page: 1, limit: 10 });
-
-  const notifications = notificationsData?.items || [];
+    deleteNotification,
+  } = useHeaderNotifications(10);
 
   const getPageTitle = () => {
     if (breadcrumbMap[pathname]) return breadcrumbMap[pathname];
@@ -153,7 +165,7 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <DropdownMenuTrigger asChild>
             <button className="relative rounded-lg p-2 hover:bg-muted focus:outline-none">
               <Bell className="h-5 w-5 text-muted-foreground" />
-              {unreadCount > 0 && (
+              {mounted && unreadCount > 0 && (
                 <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-white">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
@@ -166,7 +178,7 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
               <div className="flex items-center gap-2">
                 <Bell className="h-4 w-4" />
                 <span className="font-semibold">Notifications</span>
-                {unreadCount > 0 && (
+                {mounted && unreadCount > 0 && (
                   <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     {unreadCount}
                   </span>
@@ -180,7 +192,7 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                 >
                   <RefreshCw className={`h-4 w-4 ${notificationsLoading ? "animate-spin" : ""}`} />
                 </button>
-                {unreadCount > 0 && (
+                {mounted && unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
                     className="flex items-center gap-1 rounded px-2 py-1 text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -252,7 +264,10 @@ export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
                         </button>
                       )}
                       <button
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteNotification(notification.id);
+                        }}
                         className="rounded p-1 hover:bg-destructive/10 hover:text-destructive"
                         title="Delete"
                       >

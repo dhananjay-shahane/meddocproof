@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import api from "@/lib/api";
 import type {
   CertificateApplyFormData,
@@ -106,6 +106,25 @@ export function useCertificateApply() {
   const [coupon, setCoupon] = useState<CouponValidation | null>(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
 
+  // ─── Temporary application tracking ─────────────────────
+  // temporaryAppId is the DB id of the in_progress draft created at Step 0.
+  // We persist it in sessionStorage so a page refresh doesn't spawn a second draft.
+  const STORAGE_KEY = "cert_apply_tmp_id";
+  const [temporaryAppId, setTemporaryAppId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return sessionStorage.getItem(STORAGE_KEY);
+  });
+  // Use a ref so async callbacks always see the latest value
+  const temporaryAppIdRef = useRef<string | null>(temporaryAppId);
+  useEffect(() => {
+    temporaryAppIdRef.current = temporaryAppId;
+    if (temporaryAppId) {
+      sessionStorage.setItem(STORAGE_KEY, temporaryAppId);
+    } else {
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+  }, [temporaryAppId]);
+
   // Derived price
   const selectedTier = useMemo(
     () => PAYMENT_OPTIONS.find((t) => t.id === formData.paymentTier),
@@ -141,9 +160,42 @@ export function useCertificateApply() {
     []
   );
 
-  const nextStep = useCallback(() => {
-    setCurrentStep((prev) => Math.min(prev + 1, 3));
-  }, []);
+  const nextStep = useCallback(async () => {
+    const next = Math.min(currentStep + 1, 3);
+    setCurrentStep(next);
+
+    if (currentStep === 0) {
+      // Step 0 → 1: create the temporary application draft
+      const existingId = temporaryAppIdRef.current;
+      if (!existingId) {
+        try {
+          const res = await api.post("/certificates/apply/temporary", {
+            certificateType: formData.certificateType,
+          });
+          if (res.data?.success) {
+            setTemporaryAppId(res.data.data.id);
+          }
+        } catch {
+          // Non-fatal — tracking is best-effort
+        }
+      }
+    } else if (currentStep === 1 || currentStep === 2) {
+      // Steps 1 & 2: update progress with partial form data
+      const tmpId = temporaryAppIdRef.current;
+      if (tmpId) {
+        try {
+          const { firstName, lastName, phoneNumber, email } = formData;
+          await api.patch("/certificates/apply/progress", {
+            temporaryAppId: tmpId,
+            currentStep: next,
+            formData: { firstName, lastName, phoneNumber, email },
+          });
+        } catch {
+          // Non-fatal — tracking is best-effort
+        }
+      }
+    }
+  }, [currentStep, formData]);
 
   const prevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
@@ -270,6 +322,7 @@ export function useCertificateApply() {
 
       const res = await api.post("/certificates/apply", {
         certificateType: formData.certificateType,
+        temporaryAppId: temporaryAppIdRef.current ?? undefined,
         formData: {
           ...formData,
           totalAmount: finalAmount,
@@ -278,6 +331,8 @@ export function useCertificateApply() {
 
       const appId = res.data.data.id;
       setApplicationId(appId);
+      // Clear the temporary draft reference once fully submitted
+      setTemporaryAppId(null);
       return appId as string;
     } catch (err: unknown) {
       const msg =
@@ -389,6 +444,7 @@ export function useCertificateApply() {
     currentStep,
     formData,
     applicationId,
+    temporaryAppId,
     coupon,
     baseFee,
     specialFee,

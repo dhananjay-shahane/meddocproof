@@ -140,6 +140,10 @@ export interface Application {
   hasMedicalAssessment: boolean;
   paymentCompleted: boolean;
   conversionLikelihood?: number | null;
+  /** Which step (0-3) the user last reached in the application form */
+  currentStep: number;
+  /** Timestamp of user's last interaction with the form */
+  lastActiveAt: string;
   documents?: Document[];
   remarks?: Remark[];
   prescription?: Prescription | null;
@@ -253,6 +257,10 @@ export interface Coupon {
   usedCount: number;
   isActive: boolean;
   expiresAt?: string | null;
+  couponType: string;
+  phoneNumber?: string | null;
+  maxDiscountAmount?: number | null;
+  applicableFor: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -410,13 +418,56 @@ export interface ApplicationTabCounts {
   completed: number;
 }
 
+/** Return type of useTemporaryApplicationsLive */
+export interface TemporaryApplicationsLiveState {
+  items: Application[];
+  total: number;
+  totalPages: number;
+  loading: boolean;
+  error: string | null;
+  connected: boolean;
+  /** Number of users active in the last 2 minutes */
+  activeCount: number;
+  refetch: () => Promise<void>;
+}
+
+export interface CertificateFeeStructure {
+  digital: number;
+  handwritten: number;
+  form1A: number;
+}
+
 export interface DoctorDashboardStats {
-  assignedApplications: number;
-  completedApplications: number;
-  pendingReview: number;
+  // Doctor info
+  doctorName: string;
+  qualification: string;
+  specialization: string;
+  experience: number;
+  isVerified: boolean;
+  
+  // Financial stats
   totalEarnings: number;
   walletBalance: number;
+  pendingAmount: number;
+  pendingWithdrawals: number;
+  
+  // Fee structure
+  consultationFee: number;
+  certificateFeeStructure: CertificateFeeStructure;
+  
+  // Application stats
+  assignedApplications: number;
+  completedApplications: number;
+  completedToday: number;
+  pendingReview: number;
+  totalPatients: number;
+  
+  // Performance metrics
   avgRating: number;
+  responseRate: number;
+  completionRate: number;
+  
+  // Recent applications
   recentApplications: Application[];
 }
 
@@ -539,14 +590,38 @@ export interface DoctorRegistration {
   id: string;
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
+  // Profile
+  profilePhotoUrl: string | null;
+  gender: string | null;
+  dateOfBirth: string | null;
+  bio: string | null;
+  // Professional credentials
   registrationNumber: string;
+  medicalCouncil: string | null;
+  registrationYear: number | null;
   specialization: string;
   qualification: string;
   experience: number;
   hospitalAffiliation: string | null;
-  consultationFee: number | null;
+  // Address
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  pincode: string | null;
+  // Documents
+  medicalLicenseUrl: string | null;
+  govtIdProofUrl: string | null;
+  degreeCertificateUrl: string | null;
+  signatureUrl: string | null;
+  // Terms
+  termsAcceptedAt: string | null;
+  // Status
+  status: DoctorStatus;
+  // Timestamps
   createdAt: string;
+  // Legacy field for backward compatibility
+  consultationFee?: number | null;
 }
 
 // ============================================
@@ -559,11 +634,16 @@ export interface CouponFormData {
   discountValue: number;
   maxUses: number;
   expiresAt: string | null;
+  couponType: "general" | "specific";
+  phoneNumber?: string | null;
+  maxDiscountAmount?: number | null;
+  applicableFor: "all" | "certificates" | "consultations";
 }
 
 export interface CouponFiltersState {
   search: string;
   filter: "all" | "active" | "inactive" | "expired";
+  type?: "all" | "percentage" | "fixed";
   sortBy: string;
   sortOrder: "asc" | "desc";
 }
@@ -660,29 +740,59 @@ export interface DoctorApplicationListItem {
   applicationId: string;
   applicationDisplayId: string;
   certificateType: CertificateType;
+  certificateNumber: string | null;
   status: ApplicationStatus;
+  
+  // User info
   userName: string;
   userPhone: string;
-  hasMedicalAssessment: boolean;
+  userEmail: string;
+  userGender: string | null;
+  userAge: number | null;
+  
+  // Form data fields
+  organization: string | null;
+  leaveReason: string | null;
+  leavePeriodFrom: string | null;
+  leavePeriodTo: string | null;
+  location: string | null;
+  
+  // Consultation info
+  consultationDate: string | null;
+  consultationNotes: string | null;
   consultationCompleted: boolean;
+  
+  // Assessment status
+  hasMedicalAssessment: boolean;
+  
+  // Dates
   assignedAt: string | null;
   createdAt: string;
+}
+
+export interface DoctorApplicationStats {
+  totalApplications: number;
+  pendingReview: number;
+  completed: number;
+  medicalAssessment: number;
+}
+
+export interface DoctorApplicationsResponse {
+  items: DoctorApplicationListItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  stats: DoctorApplicationStats;
 }
 
 export interface DoctorApplicationFiltersState {
   search: string;
   status: string;
   certificateType: string;
+  tab: "pending" | "completed";
   sortBy: string;
   sortOrder: "asc" | "desc";
-}
-
-export interface DoctorApplicationStats {
-  total: number;
-  pending: number;
-  inProgress: number;
-  completed: number;
-  rejected: number;
 }
 
 // Doctor Financials
@@ -707,12 +817,23 @@ export interface EarningsDataPoint {
 export interface DoctorSettingsFormData {
   fullName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
+  profilePhotoUrl: string | null;
+  gender: string | null;
+  dateOfBirth: string | null;
+  bio: string | null;
+  registrationNumber: string;
+  medicalCouncil: string | null;
+  registrationYear: number | null;
   specialization: string;
   qualification: string;
   experience: number;
-  hospitalAffiliation: string;
-  registrationNumber: string;
+  hospitalAffiliation: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  pincode: string | null;
+  signatureUrl: string | null;
 }
 
 export interface DoctorBankDetailsFormData {
@@ -1040,6 +1161,20 @@ export interface AdminSettingsData {
     supportEmail: string;
     supportPhone: string;
     maintenanceMode: boolean;
+  };
+  system: {
+    language: string;
+    certificateExpiryDays: number;
+    autoAssignDoctors: boolean;
+    manualApproval: boolean;
+  };
+  certificates: {
+    sickLeaveEnabled: boolean;
+    medicalForm1aEnabled: boolean;
+    fitnessCertEnabled: boolean;
+    sickLeaveFee: number;
+    medicalForm1aFee: number;
+    fitnessCertFee: number;
   };
   payment: {
     razorpayKeyId: string;

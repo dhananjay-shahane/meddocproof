@@ -24,11 +24,34 @@ export async function GET(request: NextRequest) {
           fullName: true,
           email: true,
           phoneNumber: true,
+          // Profile
+          profilePhotoUrl: true,
+          gender: true,
+          dateOfBirth: true,
+          bio: true,
+          // Professional credentials
           registrationNumber: true,
+          medicalCouncil: true,
+          registrationYear: true,
           specialization: true,
           qualification: true,
           experience: true,
           hospitalAffiliation: true,
+          // Address
+          address: true,
+          city: true,
+          state: true,
+          pincode: true,
+          // Documents
+          medicalLicenseUrl: true,
+          govtIdProofUrl: true,
+          degreeCertificateUrl: true,
+          signatureUrl: true,
+          // Terms
+          termsAcceptedAt: true,
+          // Status
+          status: true,
+          // Timestamps
           createdAt: true,
         },
       }),
@@ -37,6 +60,8 @@ export async function GET(request: NextRequest) {
 
     const items = registrations.map((r) => ({
       ...r,
+      dateOfBirth: r.dateOfBirth?.toISOString() || null,
+      termsAcceptedAt: r.termsAcceptedAt?.toISOString() || null,
       createdAt: r.createdAt.toISOString(),
     }));
 

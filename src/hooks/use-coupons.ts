@@ -39,6 +39,7 @@ export function useCoupons({ filters, page, limit = 20 }: UseCouponsOptions): Us
     params.set("page", String(page));
     params.set("limit", String(limit));
     if (filters.filter !== "all") params.set("filter", filters.filter);
+    if (filters.type && filters.type !== "all") params.set("type", filters.type);
     if (filters.search) params.set("search", filters.search);
     if (filters.sortBy) params.set("sortBy", filters.sortBy);
     if (filters.sortOrder) params.set("sortOrder", filters.sortOrder);

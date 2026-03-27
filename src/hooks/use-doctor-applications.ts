@@ -5,11 +5,20 @@ import api from "@/lib/api";
 import type {
   DoctorApplicationListItem,
   DoctorApplicationFiltersState,
-  PaginatedResponse,
+  DoctorApplicationStats,
 } from "@/types";
 
+interface DoctorApplicationsData {
+  items: DoctorApplicationListItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  stats: DoctorApplicationStats;
+}
+
 interface UseDoctorApplicationsResult {
-  data: PaginatedResponse<DoctorApplicationListItem> | null;
+  data: DoctorApplicationsData | null;
   loading: boolean;
   error: string | null;
   filters: DoctorApplicationFiltersState;
@@ -20,8 +29,7 @@ interface UseDoctorApplicationsResult {
 }
 
 export function useDoctorApplications(): UseDoctorApplicationsResult {
-  const [data, setData] =
-    useState<PaginatedResponse<DoctorApplicationListItem> | null>(null);
+  const [data, setData] = useState<DoctorApplicationsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
@@ -30,6 +38,7 @@ export function useDoctorApplications(): UseDoctorApplicationsResult {
       search: "",
       status: "",
       certificateType: "",
+      tab: "pending",
       sortBy: "createdAt",
       sortOrder: "desc",
     });
@@ -49,6 +58,7 @@ export function useDoctorApplications(): UseDoctorApplicationsResult {
       const params = new URLSearchParams({
         page: String(page),
         limit: "10",
+        tab: filters.tab,
         ...(filters.search && { search: filters.search }),
         ...(filters.status && { status: filters.status }),
         ...(filters.certificateType && {
@@ -60,8 +70,18 @@ export function useDoctorApplications(): UseDoctorApplicationsResult {
       const res = await api.get(`/doctor/applications?${params}`);
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load applications");
+      const e = err as { response?: { data?: { message?: string }, status?: number } };
+      const status = e.response?.status;
+      const message = e.response?.data?.message;
+      
+      if (status === 401) {
+        setError("Session expired. Please login again.");
+      } else if (status === 403) {
+        setError(message || "Access denied. Your account may not be approved.");
+      } else {
+        setError(message || "Failed to load applications");
+      }
+      console.error("Doctor applications fetch error:", status, message);
     } finally {
       setLoading(false);
     }

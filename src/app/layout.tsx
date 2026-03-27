@@ -10,8 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MediProofDocs - Medical Certificate Platform",
-  description: "Medical certificate management and verification platform",
+  title: "MediProofDocs - Online Medical Certificate | Apply, Verify & Download",
+  description: "Get authentic medical certificates online from registered Indian doctors. Apply for sick leave, fitness, work from home, fit-to-fly certificates. Quick digital delivery in 30 minutes. NMC compliant.",
+  keywords: "medical certificate, online medical certificate, sick leave certificate, fitness certificate, doctor certificate, medical certificate verification, work from home certificate, fit to fly certificate, digital medical certificate, online doctor consultation, medical certificate India, NMC compliant certificate",
 };
 
 export default function RootLayout({

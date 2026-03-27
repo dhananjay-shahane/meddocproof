@@ -15,10 +15,29 @@ import {
   Lock,
   Sparkles,
   Activity,
+  ChevronDown,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/logo";
+
+const COUNTRY_CODES = [
+  { code: "+91",  country: "India",          flag: "🇮🇳" },
+  { code: "+1",   country: "USA / Canada",    flag: "🇺🇸" },
+  { code: "+44",  country: "UK",              flag: "🇬🇧" },
+  { code: "+61",  country: "Australia",       flag: "🇦🇺" },
+  { code: "+971", country: "UAE",             flag: "🇦🇪" },
+  { code: "+65",  country: "Singapore",       flag: "🇸🇬" },
+  { code: "+60",  country: "Malaysia",        flag: "🇲🇾" },
+  { code: "+966", country: "Saudi Arabia",    flag: "🇸🇦" },
+  { code: "+974", country: "Qatar",           flag: "🇶🇦" },
+  { code: "+49",  country: "Germany",         flag: "🇩🇪" },
+  { code: "+33",  country: "France",          flag: "🇫🇷" },
+  { code: "+81",  country: "Japan",           flag: "🇯🇵" },
+  { code: "+86",  country: "China",           flag: "🇨🇳" },
+  { code: "+64",  country: "New Zealand",     flag: "🇳🇿" },
+  { code: "+27",  country: "South Africa",    flag: "🇿🇦" },
+];
 
 
 
@@ -38,21 +57,35 @@ function LoginForm() {
   const redirectUrl = searchParams.get("redirect") || "/";
   const { login } = useAuth();
   const [step, setStep] = useState<Step>("phone");
+  const [countryCode, setCountryCode] = useState("+91");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [devOtp, setDevOtp] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const fullPhone = countryCode + phoneNumber.replace(/\D/g, "");
+  const selectedCountry = COUNTRY_CODES.find((c) => c.code === countryCode);
+
+  const validatePhone = () => {
+    const digits = phoneNumber.replace(/\D/g, "");
+    if (countryCode === "+91") return digits.length === 10;
+    return digits.length >= 7 && digits.length <= 15;
+  };
+
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phoneNumber || phoneNumber.replace(/\D/g, "").length < 10) {
-      toast.error("Please enter a valid phone number");
+    if (!validatePhone()) {
+      toast.error(
+        countryCode === "+91"
+          ? "Please enter a valid 10-digit phone number"
+          : "Please enter a valid phone number (7–15 digits)"
+      );
       return;
     }
     setLoading(true);
     try {
-      const res = await api.post("/auth/user/send-otp", { phoneNumber });
+      const res = await api.post("/auth/user/send-otp", { phoneNumber: fullPhone });
       if (res.data.otp) {
         setDevOtp(res.data.otp);
         setOtp(res.data.otp);
@@ -75,7 +108,7 @@ function LoginForm() {
     }
     setLoading(true);
     try {
-      const res = await api.post("/auth/user/verify-otp", { phoneNumber, otp });
+      const res = await api.post("/auth/user/verify-otp", { phoneNumber: fullPhone, otp });
       login(undefined, { ...res.data.user, type: "user" });
       toast.success("Welcome back!");
       router.push(redirectUrl);
@@ -231,7 +264,7 @@ function LoginForm() {
                 <p className="text-sm text-white/60 lg:text-gray-500">
                   {step === "phone"
                     ? "Enter your phone number to continue"
-                    : `Enter the 6-digit code sent to ${phoneNumber}`}
+                    : `Enter the 6-digit code sent to ${countryCode} ${phoneNumber}`}
                 </p>
               </div>
 
@@ -246,24 +279,41 @@ function LoginForm() {
                     onSubmit={handleSendOTP}
                     className="space-y-6"
                   >
-                    {/* Phone Input */}
+                    {/* Phone Number with country code */}
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-white lg:text-gray-700 flex items-center gap-2">
                         <Phone className="w-4 h-4" />
                         Phone Number
                       </label>
-                      <div className="relative group">
+                      <div className="flex gap-2">
+                        {/* Country Code Dropdown */}
+                        <div className="relative">
+                          <select
+                            value={countryCode}
+                            onChange={(e) => setCountryCode(e.target.value)}
+                            className="h-14 pl-3 pr-8 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 appearance-none text-sm font-medium cursor-pointer min-w-[90px]"
+                          >
+                            {COUNTRY_CODES.map((c) => (
+                              <option key={c.code} value={c.code} className="text-gray-900 bg-white">
+                                {c.flag} {c.code}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/50 lg:text-gray-400 pointer-events-none" />
+                        </div>
+                        {/* Local Number */}
                         <input
                           name="phone"
                           type="tel"
-                          placeholder="+91 98765 43210"
+                          placeholder={countryCode === "+91" ? "10-digit number" : "Phone number"}
                           value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                          maxLength={15}
-                          className="w-full h-14 px-4 pl-12 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 placeholder:text-white/30 lg:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 text-lg font-medium"
+                          onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 15))}
+                          className="flex-1 h-14 px-4 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 placeholder:text-white/30 lg:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 text-lg font-medium"
                         />
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 lg:text-gray-400 group-focus-within:text-blue-500 transition-colors" />
                       </div>
+                      <p className="text-xs text-white/40 lg:text-gray-400">
+                        {selectedCountry?.flag} {selectedCountry?.country} &bull; OTP will be sent to {countryCode} {phoneNumber || "XXXXXXXXXX"}
+                      </p>
                     </div>
 
                     {/* Submit Button */}

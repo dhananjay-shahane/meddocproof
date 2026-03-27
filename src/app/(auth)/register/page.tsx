@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   UserPlus,
   Sparkles,
+  ChevronDown,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,24 @@ const steps = [
   { step: 4, title: "Get Certificate", desc: "Receive your valid certificate" },
 ];
 
+const COUNTRY_CODES = [
+  { code: "+91", country: "India",         flag: "🇮🇳" },
+  { code: "+1",  country: "USA / Canada",   flag: "🇺🇸" },
+  { code: "+44", country: "UK",             flag: "🇬🇧" },
+  { code: "+61", country: "Australia",      flag: "🇦🇺" },
+  { code: "+971",country: "UAE",            flag: "🇦🇪" },
+  { code: "+65", country: "Singapore",      flag: "🇸🇬" },
+  { code: "+60", country: "Malaysia",       flag: "🇲🇾" },
+  { code: "+966",country: "Saudi Arabia",   flag: "🇸🇦" },
+  { code: "+974",country: "Qatar",          flag: "🇶🇦" },
+  { code: "+49", country: "Germany",        flag: "🇩🇪" },
+  { code: "+33", country: "France",         flag: "🇫🇷" },
+  { code: "+81", country: "Japan",          flag: "🇯🇵" },
+  { code: "+86", country: "China",          flag: "🇨🇳" },
+  { code: "+64", country: "New Zealand",    flag: "🇳🇿" },
+  { code: "+27", country: "South Africa",   flag: "🇿🇦" },
+];
+
 type Step = "details" | "otp";
 
 export default function RegisterPage() {
@@ -34,28 +53,48 @@ export default function RegisterPage() {
   const { login } = useAuth();
 
   const [step, setStep] = useState<Step>("details");
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [devOtp, setDevOtp] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const fullPhone = countryCode + phoneNumber.replace(/\D/g, "");
+  const displayPhone = `${countryCode} ${phoneNumber}`;
+  const selectedCountry = COUNTRY_CODES.find((c) => c.code === countryCode);
+
+  const validatePhone = () => {
+    const digits = phoneNumber.replace(/\D/g, "");
+    if (countryCode === "+91") return digits.length === 10;
+    return digits.length >= 7 && digits.length <= 15;
+  };
+
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName.trim() || fullName.trim().length < 2) {
-      toast.error("Please enter your full name");
+    if (!firstName.trim() || firstName.trim().length < 1) {
+      toast.error("Please enter your first name");
       return;
     }
-    if (!phoneNumber || phoneNumber.replace(/\D/g, "").length < 10) {
-      toast.error("Please enter a valid phone number");
+    if (!lastName.trim() || lastName.trim().length < 1) {
+      toast.error("Please enter your last name");
+      return;
+    }
+    if (!validatePhone()) {
+      toast.error(
+        countryCode === "+91"
+          ? "Please enter a valid 10-digit phone number"
+          : "Please enter a valid phone number (7–15 digits)"
+      );
       return;
     }
 
     setLoading(true);
     try {
-      const res = await api.post("/auth/user/send-otp", { phoneNumber });
+      const res = await api.post("/auth/user/send-otp", { phoneNumber: fullPhone });
       if (res.data.otp) {
         setDevOtp(res.data.otp);
         setOtp(res.data.otp);
@@ -81,8 +120,9 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const res = await api.post("/auth/user/register", {
-        fullName: fullName.trim(),
-        phoneNumber,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        phoneNumber: fullPhone,
         otp,
       });
       login(undefined, { ...res.data.user, type: "user" });
@@ -255,43 +295,74 @@ export default function RegisterPage() {
                     onSubmit={handleSendOTP}
                     className="space-y-6"
                   >
-                    {/* Full Name Input */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-white lg:text-gray-700 flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        Full Name
-                      </label>
-                      <div className="relative group">
+                    {/* First Name + Last Name — side by side */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-white lg:text-gray-700 flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          First Name
+                        </label>
                         <input
-                          name="fullName"
+                          name="firstName"
                           type="text"
-                          placeholder="Enter your full name"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          maxLength={100}
+                          placeholder="First name"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          maxLength={50}
                           className="w-full h-12 px-4 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 placeholder:text-white/30 lg:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300"
                         />
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-white lg:text-gray-700">
+                          Last Name
+                        </label>
+                        <input
+                          name="lastName"
+                          type="text"
+                          placeholder="Last name"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          maxLength={50}
+                          className="w-full h-12 px-4 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 placeholder:text-white/30 lg:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300"
+                        />
                       </div>
                     </div>
 
-                    {/* Phone Number Input */}
+                    {/* Phone Number with Country Code */}
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-white lg:text-gray-700 flex items-center gap-2">
                         <Phone className="w-4 h-4" />
                         Phone Number
                       </label>
-                      <div className="relative group">
+                      <div className="flex gap-2">
+                        {/* Country Code Dropdown */}
+                        <div className="relative">
+                          <select
+                            value={countryCode}
+                            onChange={(e) => setCountryCode(e.target.value)}
+                            className="h-12 pl-3 pr-8 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 appearance-none text-sm font-medium cursor-pointer min-w-[90px]"
+                          >
+                            {COUNTRY_CODES.map((c) => (
+                              <option key={c.code} value={c.code} className="text-gray-900 bg-white">
+                                {c.flag} {c.code}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/50 lg:text-gray-400 pointer-events-none" />
+                        </div>
+                        {/* Local Number */}
                         <input
                           name="phone"
                           type="tel"
-                          placeholder="Enter your phone number"
+                          placeholder={countryCode === "+91" ? "10-digit number" : "Phone number"}
                           value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                          maxLength={15}
-                          className="w-full h-12 px-4 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 placeholder:text-white/30 lg:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300"
+                          onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 15))}
+                          className="flex-1 h-12 px-4 rounded-xl bg-white/5 lg:bg-gray-50 border border-white/10 lg:border-gray-200 text-white lg:text-gray-900 placeholder:text-white/30 lg:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300"
                         />
                       </div>
+                      <p className="text-xs text-white/40 lg:text-gray-400">
+                        {selectedCountry?.flag} {selectedCountry?.country} &bull; OTP will be sent to {countryCode} {phoneNumber || "XXXXXXXXXX"}
+                      </p>
                     </div>
 
                     {/* Submit Button */}
@@ -369,10 +440,10 @@ export default function RegisterPage() {
                         Registering as
                       </p>
                       <p className="font-semibold text-white lg:text-gray-900">
-                        {fullName}
+                        {firstName} {lastName}
                       </p>
                       <p className="text-xs text-white/40 lg:text-gray-400">
-                        OTP sent to {phoneNumber}
+                        OTP sent to {displayPhone}
                       </p>
                     </div>
 

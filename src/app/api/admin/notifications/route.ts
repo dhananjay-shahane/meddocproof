@@ -12,6 +12,8 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
     const filter = searchParams.get("filter") || "all";
     const type = searchParams.get("type") || "";
+    const doctorId = searchParams.get("doctorId") || "";
+    const userId = searchParams.get("userId") || "";
 
     const baseWhere: Record<string, unknown> = {};
 
@@ -25,16 +27,19 @@ export async function GET(request: NextRequest) {
       baseWhere.type = type;
     }
 
-    // Admin notifications filter (adminId column may not exist in older DB schemas)
-    const adminWhere = {
-      ...baseWhere,
-      OR: [
-        { adminId: { not: null } },
-        { userId: null, doctorId: null, adminId: null },
-      ],
-    };
+    // When doctorId or userId is supplied, filter for that entity's notifications
+    // instead of the default admin-only filter
+    let queryWhere: Record<string, unknown>;
+    if (doctorId) {
+      queryWhere = { ...baseWhere, doctorId };
+    } else if (userId) {
+      queryWhere = { ...baseWhere, userId };
+    } else {
+      // Default: return admin-facing notifications
+      queryWhere = { ...baseWhere, adminId: { not: null } };
+    }
 
-    // Try with adminId filter first; fall back if column doesn't exist in DB yet
+    // Try with queryWhere first; fall back if a column doesn't exist in DB yet
     let notifications: Array<{
       id: string; title: string; message: string; type: string;
       isRead: boolean; userId: string | null; doctorId: string | null;
@@ -45,13 +50,25 @@ export async function GET(request: NextRequest) {
     try {
       [notifications, total, unreadCount] = await Promise.all([
         prisma.notification.findMany({
-          where: adminWhere,
+          where: queryWhere,
+          select: {
+            id: true,
+            title: true,
+            message: true,
+            type: true,
+            isRead: true,
+            userId: true,
+            doctorId: true,
+            adminId: true,
+            metadata: true,
+            createdAt: true,
+          },
           orderBy: { createdAt: "desc" },
           skip: (page - 1) * limit,
           take: limit,
         }),
-        prisma.notification.count({ where: adminWhere }),
-        prisma.notification.count({ where: { ...adminWhere, isRead: false } }),
+        prisma.notification.count({ where: queryWhere }),
+        prisma.notification.count({ where: { ...queryWhere, isRead: false } }),
       ]);
     } catch {
       // adminId column not yet in production DB — use explicit select to exclude it
@@ -91,6 +108,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
+        notifications: items,
         items,
         total,
         page,
@@ -103,6 +121,44 @@ export async function GET(request: NextRequest) {
     console.error("Failed to fetch notifications:", error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch notifications" },
+      { status: 500 }
+    );
+  }
+}
+
+// Mark all admin notifications as read
+export async function PUT(request: NextRequest) {
+  try {
+    const auth = await validateAdminRequest(request);
+    if (auth instanceof NextResponse) return auth;
+
+    // Simplified admin notifications filter - only check adminId IS NOT NULL
+    const adminWhere = {
+      isRead: false,
+      adminId: { not: null },
+    };
+
+    try {
+      await prisma.notification.updateMany({
+        where: adminWhere,
+        data: { isRead: true },
+      });
+    } catch {
+      // adminId column not yet in production DB — fall back to basic filter
+      await prisma.notification.updateMany({
+        where: { isRead: false },
+        data: { isRead: true },
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "All notifications marked as read",
+    });
+  } catch (error) {
+    console.error("Failed to mark all notifications as read:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to mark all notifications as read" },
       { status: 500 }
     );
   }

@@ -43,7 +43,14 @@ import {
   BadgeDollarSign,
   LineChart,
   FileBarChart,
+  User,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface NavChild {
   label: string;
@@ -121,6 +128,13 @@ const getNavItems = (counts: SidebarCounts): NavItem[] => [
   },
   { label: "Coupons", href: "/admin/coupons", icon: Ticket, module: "coupons" },
   // Administration section
+  {
+    label: "Profile",
+    href: "/admin/profile",
+    icon: User,
+    module: "profile",
+    section: "admin",
+  },
   {
     label: "Settings",
     href: "/admin/settings",
@@ -244,75 +258,99 @@ export default function AdminSidebar({
   const mainItems = navItems.filter((item) => item.section !== "admin" && canAccess(item.module));
   const adminItems = navItems.filter((item) => item.section === "admin" && canAccess(item.module));
 
-  const renderNavItem = (item: NavItem) => {
+  const renderNavItem = (item: NavItem, isMobile: boolean = false) => {
     const Icon = item.icon;
     const active = isActive(item.href) || isChildActive(item);
     const expanded = expandedItems.includes(item.label);
     const hasChildren = item.children && item.children.length > 0;
     const count = getCountValue(counts, item.countKey);
 
-    return (
-      <li key={item.label}>
-        <div className="flex items-center">
-          <Link
-            href={hasChildren ? "#" : item.href}
-            onClick={(e) => {
-              if (hasChildren) {
-                e.preventDefault();
-                toggleExpanded(item.label);
-              } else {
-                onMobileClose();
-              }
-            }}
-            className={cn(
-              "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors relative",
-              active
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-primary/5 hover:text-primary",
-              collapsed && "justify-center px-2"
-            )}
-            title={collapsed ? item.label : undefined}
-          >
-            <Icon className="h-4 w-4 shrink-0" />
+    const navContent = (
+      <div className="flex items-center">
+        <Link
+          href={hasChildren ? "#" : item.href}
+          onClick={(e) => {
+            if (hasChildren) {
+              e.preventDefault();
+              toggleExpanded(item.label);
+            } else {
+              onMobileClose();
+            }
+          }}
+          className={cn(
+            "group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 relative",
+            active
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            collapsed && !isMobile && "justify-center px-2"
+          )}
+        >
+          <div className="relative">
+            <Icon className={cn("h-5 w-5 shrink-0", collapsed && !isMobile && "h-5 w-5")} />
             {/* Count badge for collapsed state */}
-            {collapsed && count !== undefined && count > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+            {collapsed && !isMobile && count !== undefined && count > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm">
                 {count > 9 ? "9+" : count}
               </span>
             )}
-            {!collapsed && (
-              <>
-                <span className="flex-1">{item.label}</span>
-                {count !== undefined && count > 0 && (
-                  <span className="ml-auto mr-2 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    {count}
-                  </span>
-                )}
-                {countsLoading && item.countKey && (
-                  <span className="ml-auto mr-2 h-4 w-6 animate-pulse rounded-full bg-muted" />
-                )}
-                {hasChildren && (
-                  <span className="ml-1">
-                    {expanded ? (
-                      <ChevronDown className="h-3.5 w-3.5" />
-                    ) : (
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    )}
-                  </span>
-                )}
-              </>
-            )}
-          </Link>
-        </div>
+          </div>
+          {(!collapsed || isMobile) && (
+            <>
+              <span className="flex-1 truncate">{item.label}</span>
+              {count !== undefined && count > 0 && (
+                <span className={cn(
+                  "ml-auto mr-2 rounded-full px-2 py-0.5 text-xs font-semibold transition-colors",
+                  active
+                    ? "bg-white/20 text-primary-foreground"
+                    : "bg-primary/10 text-primary"
+                )}>
+                  {count}
+                </span>
+              )}
+              {countsLoading && item.countKey && (
+                <span className="ml-auto mr-2 h-4 w-6 animate-pulse rounded-full bg-muted" />
+              )}
+              {hasChildren && (
+                <span className="ml-1">
+                  {expanded ? (
+                    <ChevronDown className="h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4" />
+                  )}
+                </span>
+              )}
+            </>
+          )}
+        </Link>
+      </div>
+    );
+
+    return (
+      <li key={item.label}>
+        {collapsed && !isMobile ? (
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>{navContent}</TooltipTrigger>
+            <TooltipContent side="right" className="flex items-center gap-2">
+              {item.label}
+              {count !== undefined && count > 0 && (
+                <span className="rounded-full bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
+                  {count}
+                </span>
+              )}
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          navContent
+        )}
         {/* Sub-items with animation */}
-        {hasChildren && !collapsed && (
+        {hasChildren && (!collapsed || isMobile) && (
           <div
             className={cn(
               "overflow-hidden transition-all duration-200",
               expanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
             )}
           >
-            <ul className="ml-4 mt-1 space-y-0.5 border-l border-border/50 pl-4">
+            <ul className="ml-4 mt-1 space-y-0.5 border-l-2 border-border/40 pl-4">
               {item.children!.map((child) => {
                 const ChildIcon = child.icon;
                 const childCount = getCountValue(counts, child.countKey);
@@ -324,16 +362,21 @@ export default function AdminSidebar({
                       href={child.href}
                       onClick={onMobileClose}
                       className={cn(
-                        "flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm transition-colors",
+                        "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-all duration-200",
                         childActive
                           ? "font-medium bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
                       )}
                     >
-                      {ChildIcon && <ChildIcon className="h-3.5 w-3.5 shrink-0" />}
+                      {ChildIcon && <ChildIcon className="h-4 w-4 shrink-0" />}
                       <span className="flex-1 truncate">{child.label}</span>
                       {childCount !== undefined && childCount > 0 && (
-                        <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                        <span className={cn(
+                          "ml-auto rounded-full px-2 py-0.5 text-xs font-medium",
+                          childActive
+                            ? "bg-primary/20 text-primary"
+                            : "bg-muted text-muted-foreground"
+                        )}>
                           {childCount}
                         </span>
                       )}
@@ -351,11 +394,16 @@ export default function AdminSidebar({
     );
   };
 
-  const sidebarContent = (
+  const sidebarContent = (isMobile: boolean = false) => (
     <>
       {/* Logo / Header */}
-      <div className="flex h-16 items-center justify-between border-b px-4">
-        {!collapsed && (
+      <div
+        className={cn(
+          "flex h-16 shrink-0 items-center border-b bg-card/50 backdrop-blur-sm",
+          collapsed && !isMobile ? "justify-center px-2" : "justify-between px-4"
+        )}
+      >
+        {(!collapsed || isMobile) && (
           <Link href="/admin" className="flex items-center gap-2">
             <Image
               src="/images/logo.png"
@@ -366,88 +414,123 @@ export default function AdminSidebar({
             />
           </Link>
         )}
-        {collapsed && (
-          <div className="flex w-full flex-col items-center gap-1">
-            <Link href="/admin">
-              <Image
-                src="/images/logo.png"
-                alt="Logo"
-                width={44}
-                height={44}
-                className="h-8 w-auto"
-              />
-            </Link>
-            <button
-              onClick={onToggle}
-              className="rounded-lg p-1 hover:bg-muted"
-              title="Expand sidebar"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+        {collapsed && !isMobile && (
+          <Link href="/admin" className="flex items-center justify-center">
+            <Image
+              src="/images/logo.png"
+              alt="Logo"
+              width={44}
+              height={44}
+              className="h-9 w-auto transition-transform hover:scale-105"
+            />
+          </Link>
         )}
-        {!collapsed && (
+        {!isMobile && (
           <button
             onClick={onToggle}
-            className="rounded-lg p-1.5 hover:bg-muted"
-            title="Collapse sidebar"
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-lg border bg-background shadow-sm transition-all hover:bg-muted",
+              collapsed && "absolute -right-3 top-5 z-10"
+            )}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            <ChevronLeft className="h-5 w-5" />
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
           </button>
         )}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-3">
-        <ul className="space-y-1">
-          {mainItems.map(renderNavItem)}
-        </ul>
+        <TooltipProvider>
+          <ul className="space-y-1">
+            {mainItems.map((item) => renderNavItem(item, isMobile))}
+          </ul>
 
-        {/* Administration Section */}
-        {adminItems.length > 0 && (
-          <>
-            <div className="mt-6 mb-2 px-3">
-              {!collapsed && (
-                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Administration
-                </span>
-              )}
-            </div>
-            <ul className="space-y-1">
-              {adminItems.map(renderNavItem)}
-            </ul>
-          </>
-        )}
+          {/* Administration Section */}
+          {adminItems.length > 0 && (
+            <>
+              <div className="mt-6 mb-2 px-3">
+                {(!collapsed || isMobile) && (
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    Administration
+                  </span>
+                )}
+                {collapsed && !isMobile && (
+                  <div className="mx-auto h-px w-8 bg-border" />
+                )}
+              </div>
+              <ul className="space-y-1">
+                {adminItems.map((item) => renderNavItem(item, isMobile))}
+              </ul>
+            </>
+          )}
+        </TooltipProvider>
       </nav>
 
       {/* User info + Logout */}
-      <div className="border-t p-3">
-        {!collapsed && user && (
-          <div className="mb-2 flex items-center gap-3 rounded-lg px-3 py-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-              {user.type === "admin" ? getInitials(user.fullName) : "A"}
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <p className="truncate text-sm font-medium">
-                {user.type === "admin" ? user.fullName : "Admin"}
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                {user.type === "admin" ? user.role.replace("_", " ") : "Administrator"}
-              </p>
-            </div>
-          </div>
+      <div className={cn("shrink-0 border-t p-3", collapsed && !isMobile && "px-2")}>
+        {user && (
+          <>
+            {collapsed && !isMobile ? (
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <div className="mb-2 flex items-center justify-center">
+                    <div className="flex h-10 w-10 cursor-default items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 text-sm font-bold text-primary-foreground shadow-md ring-2 ring-primary/20">
+                      {user.type === "admin" ? getInitials(user.fullName) : "A"}
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="max-w-[200px]">
+                  <p className="font-semibold">
+                    {user.type === "admin" ? user.fullName : "Admin"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {user.type === "admin" ? user.role.replace("_", " ") : "Administrator"}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <div className="mb-3 flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 text-sm font-bold text-primary-foreground shadow-md ring-2 ring-primary/20">
+                  {user.type === "admin" ? getInitials(user.fullName) : "A"}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">
+                    {user.type === "admin" ? user.fullName : "Admin"}
+                  </p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {user.type === "admin" ? user.role.replace("_", " ") : "Administrator"}
+                  </p>
+                </div>
+              </div>
+            )}
+          </>
         )}
-        <button
-          onClick={logout}
-          className={cn(
-            "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive",
-            collapsed && "justify-center px-2"
-          )}
-          title={collapsed ? "Logout" : undefined}
-        >
-          <LogOut className="h-4 w-4" />
-          {!collapsed && <span>Logout</span>}
-        </button>
+        {collapsed && !isMobile ? (
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={logout}
+                className="flex w-full items-center justify-center rounded-lg px-2 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-destructive/10 hover:text-destructive"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right">Logout</TooltipContent>
+          </Tooltip>
+        ) : (
+          <button
+            onClick={logout}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-destructive/10 hover:text-destructive"
+          >
+            <LogOut className="h-5 w-5" />
+            <span>Logout</span>
+          </button>
+        )}
       </div>
     </>
   );
@@ -455,19 +538,21 @@ export default function AdminSidebar({
   return (
     <>
       {/* Desktop sidebar */}
-      <aside
-        className={cn(
-          "hidden h-screen flex-col border-r bg-card transition-all duration-300 lg:flex",
-          collapsed ? "w-16" : "w-64"
-        )}
-      >
-        {sidebarContent}
-      </aside>
+      <TooltipProvider>
+        <aside
+          className={cn(
+            "relative hidden h-screen flex-col border-r bg-card transition-all duration-300 ease-in-out lg:flex",
+            collapsed ? "w-[70px]" : "w-64"
+          )}
+        >
+          {sidebarContent(false)}
+        </aside>
+      </TooltipProvider>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden"
           onClick={onMobileClose}
         />
       )}
@@ -475,17 +560,17 @@ export default function AdminSidebar({
       {/* Mobile sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r bg-card transition-transform duration-300 lg:hidden",
+          "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r bg-card shadow-2xl transition-transform duration-300 ease-in-out lg:hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <button
           onClick={onMobileClose}
-          className="absolute right-3 top-4 rounded-lg p-1.5 hover:bg-muted"
+          className="absolute right-3 top-4 z-10 rounded-lg p-2 hover:bg-muted"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
-        {sidebarContent}
+        {sidebarContent(true)}
       </aside>
     </>
   );

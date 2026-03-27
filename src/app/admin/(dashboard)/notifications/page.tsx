@@ -15,7 +15,7 @@ export default function NotificationsPage() {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<NotificationFiltersState>(defaultFilters);
 
-  const { data, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications({
+  const { data, unreadCount, loading, markAsRead, markAllAsRead, deleteNotification } = useNotifications({
     filters,
     page,
   });
@@ -38,6 +38,14 @@ export default function NotificationsPage() {
     if (success) toast.success("All notifications marked as read");
   }, [markAllAsRead]);
 
+  const handleDelete = useCallback(
+    async (id: string) => {
+      const success = await deleteNotification(id);
+      if (success) toast.success("Notification deleted");
+    },
+    [deleteNotification]
+  );
+
   return (
     <div className="space-y-6">
       <div>
@@ -55,6 +63,7 @@ export default function NotificationsPage() {
         onPageChange={setPage}
         onMarkAsRead={handleMarkAsRead}
         onMarkAllAsRead={handleMarkAllAsRead}
+        onDelete={handleDelete}
         unreadCount={unreadCount}
       />
     </div>

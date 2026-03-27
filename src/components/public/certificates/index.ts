@@ -20,4 +20,7 @@ export { CertificateSidebar } from './certificate-sidebar';
 export { CertificateSample } from './certificate-sample';
 export { CertificateBenefits } from './certificate-benefits';
 export { CertificateFAQ } from './certificate-faq';
+export { CertificateUseCases } from './certificate-use-cases';
+export { CertificateEligibility } from './certificate-eligibility';
+export { CertificateServiceAreas } from './certificate-service-areas';
 export { RelatedCertificates } from './related-certificates';

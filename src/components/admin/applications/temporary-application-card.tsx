@@ -8,19 +8,18 @@ import {
   Mail,
   Phone,
   FileText,
-  DollarSign,
-  Tag,
   CreditCard,
   Eye,
   MoreHorizontal,
   Mail as MailIcon,
   MessageSquare,
-  Send,
   CheckCircle,
   MessageCircle,
   Check,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+  Loader2,
+  Tag,
+  DollarSign,
+} from "lucide-react";import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,57 +33,64 @@ interface TemporaryApplicationCardProps {
   application: Application;
 }
 
-// Calculate progress step based on form data
-function calculateProgress(app: Application): {
-  currentStep: number;
-  percentage: number;
-  steps: { label: string; completed: boolean }[];
-} {
-  const formData = app.formData as Record<string, unknown>;
-  
-  // Check what's filled
-  const hasPersonalInfo = !!(formData?.fullName || formData?.phoneNumber || formData?.email);
-  const hasCertificateDetails = !!(formData?.certificateType || app.certificateType);
-  const hasDocuments = (app.documents?.length || 0) > 0;
-  const hasPayment = app.paymentCompleted;
+const certTypeLabels: Record<string, string> = {
+  sick_leave: "Sick Leave",
+  fitness: "Fitness",
+  work_from_home: "Work From Home",
+  caretaker: "Caretaker",
+  recovery: "Recovery",
+  fit_to_fly: "Fit to Fly",
+  unfit_to_work: "Unfit to Work",
+  unfit_to_travel: "Unfit to Travel",
+  medical_diagnosis: "Medical Diagnosis",
+};
 
-  const steps = [
-    { label: "Personal Info", completed: hasPersonalInfo },
-    { label: "Certificate Details", completed: hasCertificateDetails },
-    { label: "Documents", completed: hasDocuments },
-    { label: "Payment", completed: hasPayment },
-  ];
+// The 4 steps shown in the tracker
+const STEP_LABELS = [
+  "Cert Type",
+  "Personal Info",
+  "Details & Docs",
+  "Payment",
+];
 
-  const completedCount = steps.filter((s) => s.completed).length;
-  const percentage = Math.round((completedCount / steps.length) * 100);
-  
-  // Current step is the first incomplete one, or last if all complete
-  let currentStep = steps.findIndex((s) => !s.completed);
-  if (currentStep === -1) currentStep = steps.length - 1;
-
-  return { currentStep, percentage, steps };
+// Returns a description for each completed step to show under the label
+function getStepDetail(
+  stepIndex: number,
+  app: Application,
+  formData: Record<string, string | undefined>
+): string | null {
+  if (stepIndex === 0) {
+    return certTypeLabels[app.certificateType] ?? app.certificateType ?? null;
+  }
+  if (stepIndex === 1) {
+    const first = formData?.firstName ?? "";
+    const last = formData?.lastName ?? "";
+    const phone = formData?.phoneNumber ?? app.user?.phoneNumber ?? "";
+    if (first || last) return `${first} ${last}`.trim() + (phone ? ` · ${phone}` : "");
+    return phone || null;
+  }
+  if (stepIndex === 2) return "Documents submitted";
+  if (stepIndex === 3) return "Payment completed";
+  return null;
 }
 
-const certTypeLabels: Record<string, string> = {
-  sick_leave: "sick-leave",
-  fitness: "fitness",
-  work_from_home: "work-from-home",
-  caretaker: "caretaker",
-  recovery: "recovery",
-  fit_to_fly: "fit-to-fly",
-  unfit_to_work: "unfit-to-work",
-  unfit_to_travel: "unfit-to-travel",
-  medical_diagnosis: "medical-diagnosis",
-};
+/** True if the user was active within the last 2 minutes */
+function isActiveNow(lastActiveAt: string): boolean {
+  return Date.now() - new Date(lastActiveAt).getTime() < 2 * 60 * 1000;
+}
 
 export function TemporaryApplicationCard({ application }: TemporaryApplicationCardProps) {
   const router = useRouter();
   const [actionMenuOpen, setActionMenuOpen] = useState(false);
-  
+
   const formData = application.formData as Record<string, string | undefined>;
-  const { currentStep, percentage, steps } = calculateProgress(application);
-  
-  const timeAgo = formatDistanceToNow(new Date(application.updatedAt), { addSuffix: true });
+  // Use the DB-tracked step directly
+  const dbStep: number = application.currentStep ?? 0;
+  const percentage = Math.round((dbStep / (STEP_LABELS.length - 1)) * 100);
+
+  const lastActive = application.lastActiveAt ?? application.updatedAt;
+  const activeNow = isActiveNow(lastActive);
+  const timeAgo = formatDistanceToNow(new Date(lastActive), { addSuffix: true });
 
   const handleViewDetails = () => {
     router.push(`/admin/applications/${application.id}`);
@@ -130,7 +136,9 @@ export function TemporaryApplicationCard({ application }: TemporaryApplicationCa
           </div>
           <div>
             <h3 className="font-semibold text-lg">
-              {formData?.fullName || application.user?.fullName || "Unknown User"}
+              {formData?.firstName
+                ? `${formData.firstName} ${formData.lastName ?? ""}`.trim()
+                : application.user?.fullName ?? "Unknown User"}
             </h3>
             <p className="text-sm text-muted-foreground">
               ID: {application.applicationId || application.id.slice(0, 12)}
@@ -138,63 +146,90 @@ export function TemporaryApplicationCard({ application }: TemporaryApplicationCa
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {/* Activity badge */}
+          {activeNow ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
+              <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
+              Active now
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
+              Last seen {timeAgo}
+            </span>
+          )}
           <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">
             In Progress
           </span>
-          <span className="text-sm text-muted-foreground">{timeAgo}</span>
         </div>
       </div>
 
-      {/* Progress Stepper */}
+      {/* Live Step Tracker */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">Application Progress</p>
-          <p className="text-sm font-medium text-primary">{percentage}% Complete</p>
+          <p className="text-sm font-medium text-primary">Step {dbStep + 1} of {STEP_LABELS.length}</p>
         </div>
-        
-        <div className="flex items-center gap-0">
-          {steps.map((step, index) => (
-            <div key={step.label} className="flex-1 flex items-center">
-              {/* Step Circle */}
-              <div className="flex flex-col items-center">
-                <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-medium ${
-                    step.completed
-                      ? "border-primary bg-primary text-white"
-                      : index === currentStep
-                      ? "border-primary text-primary"
-                      : "border-gray-300 text-gray-400"
-                  }`}
-                >
-                  {step.completed ? (
-                    <Check className="h-4 w-4" />
-                  ) : (
-                    index + 1
+
+        <div className="flex items-start gap-0">
+          {STEP_LABELS.map((label, index) => {
+            const completed = index < dbStep;
+            const isCurrent = index === dbStep;
+            const detail = (completed || isCurrent) ? getStepDetail(index, application, formData) : null;
+
+            return (
+              <div key={label} className="flex-1 flex items-start">
+                {/* Step column */}
+                <div className="flex flex-col items-center min-w-0 w-full">
+                  <div
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-medium transition-colors ${
+                      completed
+                        ? "border-primary bg-primary text-white"
+                        : isCurrent
+                        ? "border-primary text-primary"
+                        : "border-gray-300 text-gray-400"
+                    }`}
+                  >
+                    {completed ? (
+                      <Check className="h-4 w-4" />
+                    ) : isCurrent ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      index + 1
+                    )}
+                  </div>
+                  <span
+                    className={`mt-2 text-xs text-center leading-tight px-1 ${
+                      completed || isCurrent
+                        ? "text-primary font-medium"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {label}
+                  </span>
+                  {detail && (
+                    <span className="mt-1 text-[10px] text-center text-muted-foreground leading-tight px-1 max-w-20 truncate">
+                      {detail}
+                    </span>
                   )}
                 </div>
-                <span
-                  className={`mt-2 text-xs text-center ${
-                    step.completed || index === currentStep
-                      ? "text-primary font-medium"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {step.label}
-                </span>
+
+                {/* Connector Line */}
+                {index < STEP_LABELS.length - 1 && (
+                  <div className="shrink-0 w-6 mt-4">
+                    <div className={`h-0.5 w-full ${completed ? "bg-primary" : "bg-gray-200"}`} />
+                  </div>
+                )}
               </div>
-              
-              {/* Connector Line */}
-              {index < steps.length - 1 && (
-                <div className="flex-1 mx-2">
-                  <div
-                    className={`h-0.5 w-full ${
-                      step.completed ? "bg-primary" : "bg-gray-200"
-                    }`}
-                  />
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
+        </div>
+
+        {/* Progress bar */}
+        <div className="h-1.5 w-full rounded-full bg-gray-100">
+          <div
+            className="h-1.5 rounded-full bg-primary transition-all duration-500"
+            style={{ width: `${percentage}%` }}
+          />
         </div>
       </div>
 
@@ -211,21 +246,14 @@ export function TemporaryApplicationCard({ application }: TemporaryApplicationCa
           <span>
             {formData?.phoneNumber || application.user?.phoneNumber || "N/A"}
           </span>
-          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium">
-            User
-          </span>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <FileText className="h-4 w-4" />
-          <span>{certTypeLabels[application.certificateType] || application.certificateType}</span>
+          <span>{certTypeLabels[application.certificateType] ?? application.certificateType}</span>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <DollarSign className="h-4 w-4" />
-          <span>No amount</span>
-        </div>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <Tag className="h-4 w-4" />
-          <span>No Coupons</span>
+          <span>{application.paymentCompleted ? "Paid" : "Unpaid"}</span>
         </div>
       </div>
 

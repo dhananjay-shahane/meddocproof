@@ -6,6 +6,8 @@ import { toast } from "sonner";
 
 interface UserProfile {
   id: string;
+  firstName: string | null;
+  lastName: string | null;
   fullName: string;
   phoneNumber: string;
   email: string | null;
@@ -100,7 +102,7 @@ export function useUserProfile() {
     }
   }, []);
 
-  const updateProfile = useCallback(async (data: { fullName?: string; email?: string }) => {
+  const updateProfile = useCallback(async (data: { firstName?: string; lastName?: string; fullName?: string; email?: string }) => {
     try {
       const res = await api.put("/user/profile", data);
       if (res.data.success) {

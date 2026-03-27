@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
     const search = searchParams.get("search") || "";
     const filter = searchParams.get("filter") || "all";
+    const type = searchParams.get("type") || "all";
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
 
@@ -19,6 +20,10 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.code = { contains: search, mode: "insensitive" };
+    }
+
+    if (type && type !== "all") {
+      where.discountType = type;
     }
 
     if (filter === "active") {
@@ -103,7 +108,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { code, discountType, discountValue, maxUses, expiresAt } = body;
+    const { code, discountType, discountValue, maxUses, expiresAt, couponType, phoneNumber, maxDiscountAmount, applicableFor } = body;
 
     if (!code || !discountType || discountValue == null) {
       return NextResponse.json(
@@ -142,6 +147,10 @@ export async function POST(request: NextRequest) {
         discountValue: parseFloat(discountValue),
         maxUses: parseInt(maxUses) || 0,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
+        couponType: couponType || "general",
+        phoneNumber: phoneNumber || null,
+        maxDiscountAmount: maxDiscountAmount ? parseFloat(maxDiscountAmount) : null,
+        applicableFor: applicableFor || "all",
       },
     });
 

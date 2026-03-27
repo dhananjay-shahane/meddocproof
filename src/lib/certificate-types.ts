@@ -285,7 +285,7 @@ export const FOOTER_LEGAL_LINKS = [
   { name: "Terms & Conditions", href: "/terms" },
   { name: "Privacy Policy", href: "/privacy" },
   { name: "Refund & Cancellation Policy", href: "/refund-policy" },
-  { name: "Doctor Portal", href: "/doctor/login" },
+  { name: "Work with us as a Doctor", href: "/doctor/register" },
 ];
 
 // Service areas (from client requirements)
@@ -344,6 +344,101 @@ export const SERVICE_AREAS = [
   "New Delhi",
   "Pondicherry",
   "Shimla",
+];
+
+// SEO Keywords: Get Medical Certificate Online in 30 Mins
+export const MEDICAL_CERTIFICATE_KEYWORDS = [
+  { name: "Medical Certificate Online", href: "/#certificates" },
+  { name: "Online Medical Certificate India", href: "/#certificates" },
+  { name: "Medical Certificate in Bangalore", href: "/#certificates" },
+  { name: "Medical Certificate in Delhi", href: "/#certificates" },
+  { name: "Medical Certificate in Mumbai", href: "/#certificates" },
+  { name: "Medical Certificate in Hyderabad", href: "/#certificates" },
+  { name: "Medical Certificate in Chennai", href: "/#certificates" },
+  { name: "Medical Certificate in Kolkata", href: "/#certificates" },
+  { name: "Medical Certificate in Pune", href: "/#certificates" },
+  { name: "Medical Certificate in Ahmedabad", href: "/#certificates" },
+  { name: "Medical Certificate in Jaipur", href: "/#certificates" },
+  { name: "Medical Certificate in Noida", href: "/#certificates" },
+  { name: "Medical Certificate in Lucknow", href: "/#certificates" },
+  { name: "Medical Certificate in Gurgaon", href: "/#certificates" },
+  { name: "Medical Certificate in Surat", href: "/#certificates" },
+  { name: "Medical Certificate in Indore", href: "/#certificates" },
+  { name: "Medical Certificate in Chandigarh", href: "/#certificates" },
+  { name: "Medical Certificate in Bhopal", href: "/#certificates" },
+  { name: "Medical Certificate in Nagpur", href: "/#certificates" },
+  { name: "Medical Certificate in Visakhapatnam", href: "/#certificates" },
+  { name: "Online Doctor Consultation", href: "/#certificates" },
+  { name: "Telemedicine Certificate India", href: "/#certificates" },
+  { name: "Digital Medical Certificate", href: "/#certificates" },
+  { name: "Quick Medical Certificate", href: "/#certificates" },
+  { name: "Medical Certificate for Office", href: "/#certificates" },
+  { name: "Medical Certificate for College", href: "/#certificates" },
+  { name: "Medical Certificate for School", href: "/#certificates" },
+  { name: "Instant Medical Certificate", href: "/#certificates" },
+  { name: "24x7 Medical Certificate", href: "/#certificates" },
+  { name: "Same Day Medical Certificate", href: "/#certificates" },
+];
+
+// SEO Keywords: Certificate Types & Services
+export const CERTIFICATE_SERVICE_KEYWORDS = [
+  { name: "Sick Leave Certificate Online", href: "/apply/sick-leave" },
+  { name: "Fitness Certificate Online", href: "/apply/fitness" },
+  { name: "Work From Home Certificate", href: "/apply/work-from-home" },
+  { name: "Medical Fitness Certificate", href: "/apply/fitness" },
+  { name: "Sick Leave Certificate for Office", href: "/apply/sick-leave" },
+  { name: "Unfit to Travel Certificate", href: "/apply/unfit-to-travel" },
+  { name: "Unfit to Work Certificate", href: "/apply/unfit-to-work" },
+  { name: "Medical Diagnosis Certificate", href: "/apply/medical-diagnosis" },
+  { name: "Caretaker Certificate Online", href: "/apply/caretaker" },
+  { name: "Recovery Certificate Online", href: "/apply/recovery" },
+  { name: "Fit to Fly Certificate India", href: "/apply/fit-to-fly" },
+  { name: "Doctor Certificate for Leave", href: "/apply/sick-leave" },
+  { name: "Online Sick Leave Certificate", href: "/apply/sick-leave" },
+  { name: "WFH Medical Certificate", href: "/apply/work-from-home" },
+  { name: "Fitness Certificate for Job", href: "/apply/fitness" },
+  { name: "Medical Leave Certificate", href: "/apply/sick-leave" },
+  { name: "Certificate from Registered Doctor", href: "/#certificates" },
+  { name: "Verified Medical Certificate", href: "/#certificates" },
+  { name: "Genuine Medical Certificate", href: "/#certificates" },
+  { name: "NMC Compliant Certificate", href: "/#certificates" },
+  { name: "Fever Medical Certificate", href: "/apply/sick-leave" },
+  { name: "Cold & Flu Certificate", href: "/apply/sick-leave" },
+  { name: "Body Pain Medical Certificate", href: "/apply/sick-leave" },
+  { name: "Viral Fever Certificate", href: "/apply/sick-leave" },
+  { name: "Headache Medical Certificate", href: "/apply/sick-leave" },
+  { name: "Medical Certificate for HR", href: "/#certificates" },
+  { name: "Medical Certificate for Employment", href: "/apply/fitness" },
+  { name: "Medical Certificate for Travel", href: "/apply/fit-to-fly" },
+  { name: "Express Medical Certificate", href: "/#certificates" },
+  { name: "Urgent Medical Certificate", href: "/#certificates" },
+];
+
+// Global Office Addresses for footer
+export const GLOBAL_OFFICE_ADDRESSES = [
+  {
+    name: "MediProofDocs, Nariman Point, Marine Drive, Mumbai, Maharashtra, India",
+    city: "Mumbai",
+  },
+];
+
+// SEO Keywords: Additional Popular Searches
+export const ADDITIONAL_KEYWORDS = [
+  { name: "Doctor Consultation Online", href: "/doctor-consultation" },
+  { name: "Get Medical Certificate Fast", href: "/#certificates" },
+  { name: "Medical Certificate Near Me", href: "/#certificates" },
+  { name: "Online Doctor for Certificate", href: "/doctor-consultation" },
+  { name: "Medical Certificate Home Delivery", href: "/#certificates" },
+  { name: "Handwritten Medical Certificate", href: "/#certificates" },
+  { name: "Digital Certificate WhatsApp", href: "/#certificates" },
+  { name: "Medical Certificate with Prescription", href: "/#certificates" },
+  { name: "30 Minute Medical Certificate", href: "/#certificates" },
+  { name: "Registered Doctor Certificate", href: "/#certificates" },
+  { name: "Valid Medical Certificate India", href: "/#certificates" },
+  { name: "Medical Certificate for Leave Application", href: "/apply/sick-leave" },
+  { name: "Online Medical Note", href: "/#certificates" },
+  { name: "Teleconsultation Certificate", href: "/doctor-consultation" },
+  { name: "Medical Certificate PDF Download", href: "/#certificates" },
 ];
 
 // Payment tiers
@@ -515,7 +610,7 @@ export const FAQ_ITEMS = [
   {
     question: "When will I receive my medical certificate?",
     answer:
-      "You will receive your **digital medical certificate within 30–90 minutes** after completing the online doctor consultation. If you choose a **physical copy**, it will be delivered within **8–10 business days**.",
+      "You will receive your **digital medical certificate within 30–60 minutes** after completing the online doctor consultation. If you choose a **physical copy**, it will be delivered within **8–10 business days**.",
   },
   {
     question: "Are online medical certificates valid in India?",

@@ -51,7 +51,8 @@ export default function UserProfilePage() {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useUserNotifications();
   const [activeTab, setActiveTab] = useState<"applications" | "certificates">("applications");
   const [editingProfile, setEditingProfile] = useState(false);
-  const [editName, setEditName] = useState("");
+  const [editFirstName, setEditFirstName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [bellOpen, setBellOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
@@ -89,13 +90,14 @@ export default function UserProfilePage() {
   }
 
   const handleStartEdit = () => {
-    setEditName(profile?.fullName || "");
+    setEditFirstName(profile?.firstName || "");
+    setEditLastName(profile?.lastName || "");
     setEditEmail(profile?.email || "");
     setEditingProfile(true);
   };
 
   const handleSaveProfile = async () => {
-    await updateProfile({ fullName: editName, email: editEmail });
+    await updateProfile({ firstName: editFirstName, lastName: editLastName, email: editEmail });
     setEditingProfile(false);
   };
 
@@ -202,16 +204,24 @@ export default function UserProfilePage() {
               </div>
               {editingProfile ? (
                 <div className="space-y-2">
-                  <input
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    className="rounded-lg border px-3 py-1.5 text-sm"
-                    placeholder="Full Name"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      value={editFirstName}
+                      onChange={(e) => setEditFirstName(e.target.value)}
+                      className="flex-1 rounded-lg border px-3 py-1.5 text-sm"
+                      placeholder="First Name"
+                    />
+                    <input
+                      value={editLastName}
+                      onChange={(e) => setEditLastName(e.target.value)}
+                      className="flex-1 rounded-lg border px-3 py-1.5 text-sm"
+                      placeholder="Last Name"
+                    />
+                  </div>
                   <input
                     value={editEmail}
                     onChange={(e) => setEditEmail(e.target.value)}
-                    className="rounded-lg border px-3 py-1.5 text-sm"
+                    className="w-full rounded-lg border px-3 py-1.5 text-sm"
                     placeholder="Email (optional)"
                   />
                   <div className="flex gap-2">
@@ -225,8 +235,20 @@ export default function UserProfilePage() {
                 </div>
               ) : (
                 <div>
-                  <h2 className="text-xl font-bold">{profile?.fullName}</h2>
-                  <p className="text-sm text-muted-foreground">{profile?.phoneNumber}</p>
+                  <h2 className="text-xl font-bold">
+                    {profile?.firstName && profile?.lastName
+                      ? `${profile.firstName} ${profile.lastName}`
+                      : profile?.fullName}
+                  </h2>
+                  {profile?.firstName && profile?.lastName && (
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium">First:</span> {profile.firstName} &nbsp;
+                      <span className="font-medium">Last:</span> {profile.lastName}
+                    </p>
+                  )}
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    📞 {profile?.phoneNumber}
+                  </p>
                   {profile?.email && (
                     <p className="text-sm text-muted-foreground">{profile.email}</p>
                   )}

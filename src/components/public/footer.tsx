@@ -1,7 +1,15 @@
 "use client";
 
 import { FlickeringFooter } from "@/components/ui/flickering-footer";
-import { FOOTER_QUICK_LINKS, FOOTER_LEGAL_LINKS, SERVICE_AREAS } from "@/lib/certificate-types";
+import { 
+  FOOTER_QUICK_LINKS, 
+  FOOTER_LEGAL_LINKS, 
+  SERVICE_AREAS,
+  MEDICAL_CERTIFICATE_KEYWORDS,
+  CERTIFICATE_SERVICE_KEYWORDS,
+  ADDITIONAL_KEYWORDS,
+  GLOBAL_OFFICE_ADDRESSES
+} from "@/lib/certificate-types";
 import { Facebook, Twitter, Instagram, Linkedin, Mail } from "lucide-react";
 
 export default function PublicFooter() {
@@ -78,6 +86,10 @@ export default function PublicFooter() {
       socialLinks={socialLinks}
       serviceAreas={SERVICE_AREAS}
       gridText="MediProofDocs"
+      medicalCertificateKeywords={MEDICAL_CERTIFICATE_KEYWORDS}
+      certificateServiceKeywords={CERTIFICATE_SERVICE_KEYWORDS}
+      additionalKeywords={ADDITIONAL_KEYWORDS}
+      officeAddresses={GLOBAL_OFFICE_ADDRESSES}
     />
   );
 }

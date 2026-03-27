@@ -8,22 +8,29 @@ import {
   LayoutDashboard,
   FileText,
   Wallet,
+  Users,
   CalendarDays,
-  Bell,
   Settings,
   LogOut,
   ChevronLeft,
+  ChevronRight,
   X,
+  Stethoscope,
 } from "lucide-react";
+import { useDoctorDashboard } from "@/hooks/use-doctor-dashboard";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const navItems = [
-  { label: "Dashboard", href: "/doctor", icon: LayoutDashboard },
-  { label: "Applications", href: "/doctor/applications", icon: FileText },
-  { label: "Financials", href: "/doctor/financials", icon: Wallet },
-  { label: "Availability", href: "/doctor/availability", icon: CalendarDays },
-  { label: "Notifications", href: "/doctor/notifications", icon: Bell },
-  { label: "Settings", href: "/doctor/settings", icon: Settings },
-];
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: number;
+}
 
 interface DoctorSidebarProps {
   collapsed: boolean;
@@ -40,93 +47,216 @@ export default function DoctorSidebar({
 }: DoctorSidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { data } = useDoctorDashboard(0); // No auto-refresh for sidebar
+
+  const navItems: NavItem[] = [
+    { label: "Dashboard", href: "/doctor", icon: LayoutDashboard },
+    {
+      label: "Applications",
+      href: "/doctor/applications",
+      icon: FileText,
+      badge: data?.pendingReview,
+    },
+    { label: "Financials", href: "/doctor/financials", icon: Wallet },
+    { label: "Patients", href: "/doctor/patients", icon: Users },
+    { label: "Availability", href: "/doctor/availability", icon: CalendarDays },
+    { label: "Settings", href: "/doctor/settings", icon: Settings },
+  ];
 
   const isActive = (href: string) => {
     if (href === "/doctor") return pathname === "/doctor";
     return pathname.startsWith(href);
   };
 
-  const sidebarContent = (
+  const NavItemContent = ({ item, active }: { item: NavItem; active: boolean }) => {
+    const Icon = item.icon;
+    
+    const content = (
+      <Link
+        href={item.href}
+        onClick={onMobileClose}
+        className={cn(
+          "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+          active
+            ? "bg-primary text-primary-foreground shadow-sm"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+          collapsed && "justify-center px-2"
+        )}
+      >
+        <div className="relative">
+          <Icon className={cn("h-5 w-5 shrink-0", collapsed && "h-5 w-5")} />
+          {/* Badge on icon when collapsed */}
+          {collapsed && item.badge !== undefined && item.badge > 0 && (
+            <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm">
+              {item.badge > 9 ? "9+" : item.badge}
+            </span>
+          )}
+        </div>
+        {!collapsed && <span className="truncate">{item.label}</span>}
+        {!collapsed && item.badge !== undefined && item.badge > 0 && (
+          <span
+            className={cn(
+              "ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-semibold transition-colors",
+              active
+                ? "bg-white/20 text-primary-foreground"
+                : "bg-primary/10 text-primary"
+            )}
+          >
+            {item.badge}
+          </span>
+        )}
+      </Link>
+    );
+
+    if (collapsed) {
+      return (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>{content}</TooltipTrigger>
+          <TooltipContent side="right" className="flex items-center gap-2">
+            {item.label}
+            {item.badge !== undefined && item.badge > 0 && (
+              <span className="rounded-full bg-primary px-1.5 py-0.5 text-xs text-primary-foreground">
+                {item.badge}
+              </span>
+            )}
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return content;
+  };
+
+  const sidebarContent = (isMobile: boolean = false) => (
     <>
-      {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b px-4">
-        {!collapsed && (
-          <Link href="/doctor" className="text-lg font-bold tracking-tight">
-            Doctor Portal
+      {/* Header */}
+      <div
+        className={cn(
+          "flex h-16 shrink-0 items-center border-b bg-card/50 backdrop-blur-sm",
+          collapsed && !isMobile ? "justify-center px-2" : "justify-between px-4"
+        )}
+      >
+        {(!collapsed || isMobile) && (
+          <Link
+            href="/doctor"
+            className="flex items-center gap-2.5 text-lg font-bold tracking-tight"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <Stethoscope className="h-5 w-5 text-primary" />
+            </div>
+            <span className="bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+              Doctor Portal
+            </span>
           </Link>
         )}
-        <button
-          onClick={onToggle}
-          className="rounded-lg p-1.5 hover:bg-muted"
-        >
-          <ChevronLeft
-            className={cn("h-5 w-5 transition-transform", collapsed && "rotate-180")}
-          />
-        </button>
+        {collapsed && !isMobile && (
+          <Link href="/doctor" className="flex items-center justify-center">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 transition-colors hover:bg-primary/20">
+              <Stethoscope className="h-5 w-5 text-primary" />
+            </div>
+          </Link>
+        )}
+        {!isMobile && (
+          <button
+            onClick={onToggle}
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-lg border bg-background shadow-sm transition-all hover:bg-muted",
+              collapsed && "absolute -right-3 top-5 z-10"
+            )}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </button>
+        )}
       </div>
 
       {/* Doctor profile info */}
-      {!collapsed && user && user.type === "doctor" && (
-        <div className="border-b p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-              {getInitials(user.fullName)}
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <p className="truncate text-sm font-semibold">{user.fullName}</p>
-              <p className="truncate text-xs text-muted-foreground">
-                {user.specialization}
-              </p>
-            </div>
-          </div>
-          <div className="mt-2 flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-green-500" />
-            <span className="text-xs text-muted-foreground">Online</span>
-          </div>
+      {user && user.type === "doctor" && (
+        <div
+          className={cn(
+            "shrink-0 border-b p-4 transition-all duration-200",
+            collapsed && !isMobile && "flex flex-col items-center p-3"
+          )}
+        >
+          {collapsed && !isMobile ? (
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div className="flex h-10 w-10 cursor-default items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 text-sm font-bold text-primary-foreground shadow-md ring-2 ring-primary/20">
+                  {getInitials(user.fullName)}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="max-w-[200px]">
+                <p className="font-semibold">{user.fullName}</p>
+                <p className="text-xs text-muted-foreground">{user.specialization}</p>
+                <span className="mt-1 inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+                  Approved
+                </span>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 text-sm font-bold text-primary-foreground shadow-md ring-2 ring-primary/20">
+                  {getInitials(user.fullName)}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">{user.fullName}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {user.specialization}
+                  </p>
+                </div>
+              </div>
+              <span className="mt-3 inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+                Approved
+              </span>
+            </>
+          )}
         </div>
       )}
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-3">
-        <ul className="space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href);
-            return (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  onClick={onMobileClose}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                    active
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                    collapsed && "justify-center px-2"
-                  )}
-                  title={collapsed ? item.label : undefined}
-                >
-                  <Icon className="h-4 w-4 shrink-0" />
-                  {!collapsed && <span>{item.label}</span>}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <TooltipProvider>
+          <ul className="space-y-1">
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={item.label}>
+                  <NavItemContent item={item} active={active} />
+                </li>
+              );
+            })}
+          </ul>
+        </TooltipProvider>
       </nav>
 
       {/* Logout */}
-      <div className="border-t p-3">
-        <button
-          onClick={logout}
-          className={cn(
-            "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive",
-            collapsed && "justify-center px-2"
-          )}
-        >
-          <LogOut className="h-4 w-4" />
-          {!collapsed && <span>Logout</span>}
-        </button>
+      <div className={cn("shrink-0 border-t p-3", collapsed && !isMobile && "px-2")}>
+        {collapsed && !isMobile ? (
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={logout}
+                className="flex w-full items-center justify-center rounded-lg px-2 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-destructive/10 hover:text-destructive"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right">Logout</TooltipContent>
+          </Tooltip>
+        ) : (
+          <button
+            onClick={logout}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-destructive/10 hover:text-destructive"
+          >
+            <LogOut className="h-5 w-5" />
+            <span>Logout</span>
+          </button>
+        )}
       </div>
     </>
   );
@@ -134,19 +264,21 @@ export default function DoctorSidebar({
   return (
     <>
       {/* Desktop */}
-      <aside
-        className={cn(
-          "hidden h-screen flex-col border-r bg-card transition-all duration-300 lg:flex",
-          collapsed ? "w-16" : "w-64"
-        )}
-      >
-        {sidebarContent}
-      </aside>
+      <TooltipProvider>
+        <aside
+          className={cn(
+            "relative hidden h-screen flex-col border-r bg-card transition-all duration-300 ease-in-out lg:flex",
+            collapsed ? "w-[70px]" : "w-64"
+          )}
+        >
+          {sidebarContent(false)}
+        </aside>
+      </TooltipProvider>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden"
           onClick={onMobileClose}
         />
       )}
@@ -154,17 +286,17 @@ export default function DoctorSidebar({
       {/* Mobile sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r bg-card transition-transform duration-300 lg:hidden",
+          "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r bg-card shadow-2xl transition-transform duration-300 ease-in-out lg:hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <button
           onClick={onMobileClose}
-          className="absolute right-3 top-4 rounded-lg p-1.5 hover:bg-muted"
+          className="absolute right-3 top-4 z-10 rounded-lg p-2 hover:bg-muted"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
-        {sidebarContent}
+        {sidebarContent(true)}
       </aside>
     </>
   );

@@ -5,16 +5,6 @@ import { ShieldCheck, Clock, Globe, Headphones } from 'lucide-react';
 
 /**
  * Certificate Benefits Component
- * 
- * Based on online research of medical certificate service websites,
- * this section displays key trust indicators that increase conversion:
- * 
- * 1. Doctor Verified - Builds credibility with certified professionals
- * 2. Quick Delivery - Addresses urgency concerns
- * 3. Valid Nationwide - Ensures broad acceptance
- * 4. 24/7 Availability - Highlights convenience
- * 
- * These 4 benefits are displayed as cards with icons for visual appeal.
  */
 
 const benefits = [
@@ -72,7 +62,6 @@ interface CertificateBenefitsProps {
 }
 
 export function CertificateBenefits({ features }: CertificateBenefitsProps) {
-  // If specific features are provided, use them; otherwise use default benefits
   const displayBenefits = features && features.length > 0
     ? benefits.slice(0, 4).map((b, i) => ({
         ...b,
@@ -83,7 +72,6 @@ export function CertificateBenefits({ features }: CertificateBenefitsProps) {
   return (
     <section className="py-16 lg:py-24 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +87,6 @@ export function CertificateBenefits({ features }: CertificateBenefitsProps) {
           </p>
         </motion.div>
 
-        {/* Benefits Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {displayBenefits.map((benefit, index) => {
             const colors = colorClasses[benefit.color];
@@ -115,12 +102,9 @@ export function CertificateBenefits({ features }: CertificateBenefitsProps) {
                 className="group"
               >
                 <div className="bg-white rounded-2xl p-6 lg:p-8 border border-gray-100 shadow-sm hover:shadow-lg transition-shadow h-full">
-                  {/* Icon */}
                   <div className={`w-14 h-14 rounded-xl ${colors.bg} ${colors.border} border flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
                     <Icon className={`w-7 h-7 ${colors.text}`} />
                   </div>
-
-                  {/* Content */}
                   <h3 className="text-lg font-bold text-gray-900 mb-3">
                     {benefit.title}
                   </h3>

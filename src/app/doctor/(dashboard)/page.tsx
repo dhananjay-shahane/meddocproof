@@ -37,32 +37,19 @@ export default function DoctorDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Doctor Dashboard
-          </h2>
-          <p className="text-muted-foreground">
-            Overview of your assigned applications and earnings.
-          </p>
-        </div>
-        <button
-          onClick={refetch}
-          className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-accent"
-        >
-          <RefreshCw className="h-4 w-4" />
-          Refresh
-        </button>
-      </div>
-
+      {/* Stats Cards with Welcome Header */}
       <DoctorStatsCards stats={data} />
 
+      {/* Recent Applications and Quick Actions */}
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <DoctorRecentApplications applications={data.recentApplications} />
+          <DoctorRecentApplications
+            applications={data.recentApplications}
+            onRefresh={refetch}
+          />
         </div>
         <div>
-          <DoctorQuickActions recentApplications={data.recentApplications} />
+          <DoctorQuickActions stats={data} />
         </div>
       </div>
     </div>

@@ -15,6 +15,7 @@ import {
   CheckCircle,
   XCircle,
   MessageSquare,
+  Trash2,
 } from "lucide-react";
 import type { NotificationListItem, NotificationFiltersState, PaginatedResponse } from "@/types";
 
@@ -26,6 +27,7 @@ interface NotificationListProps {
   onPageChange: (page: number) => void;
   onMarkAsRead: (id: string) => void;
   onMarkAllAsRead: () => void;
+  onDelete?: (id: string) => void;
   unreadCount: number;
 }
 
@@ -59,6 +61,7 @@ export function NotificationList({
   onPageChange,
   onMarkAsRead,
   onMarkAllAsRead,
+  onDelete,
   unreadCount,
 }: NotificationListProps) {
   if (loading) return <PageLoader />;
@@ -150,16 +153,29 @@ export function NotificationList({
                         </span>
                       </div>
                     </div>
-                    {!notification.isRead && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="mt-2 h-7 text-xs"
-                        onClick={() => onMarkAsRead(notification.id)}
-                      >
-                        Mark as read
-                      </Button>
-                    )}
+                    <div className="mt-2 flex items-center gap-2">
+                      {!notification.isRead && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => onMarkAsRead(notification.id)}
+                        >
+                          Mark as read
+                        </Button>
+                      )}
+                      {onDelete && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+                          onClick={() => onDelete(notification.id)}
+                        >
+                          <Trash2 className="h-3.5 w-3.5 mr-1" />
+                          Delete
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Card>

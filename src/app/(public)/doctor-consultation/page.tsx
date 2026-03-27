@@ -49,18 +49,30 @@ import {
 import { GridPattern } from "@/components/ui/grid-pattern";
 
 const CONSULTATION_HIGHLIGHTS = [
-  "Consult Experienced Doctors",
-  "Get online consultation from qualified MBBS / MD / MS doctors.",
-  "Affordable Consultation",
-  "Online doctor consultation available starting from ₹599.",
-  "Video, Audio, or Chat Consultation",
-  "Choose your preferred way to talk with a doctor online.",
-  "Digital Prescription Provided",
-  "Receive a doctor-issued digital prescription after consultation.",
-  "Government-Registered Doctors",
-  "Consult doctors registered with the National Medical Commission (NMC).",
-  "Telemedicine Guideline Compliant",
-  "Our consultation process follows Indian telemedicine and healthcare standards."
+  {
+    title: "Consult MBBS / MD / MS Doctors Online",
+    description: "Get expert medical advice from qualified and experienced doctors.",
+  },
+  {
+    title: "Affordable Consultation Starting ₹599",
+    description: "Budget-friendly online doctor consultation with transparent pricing.",
+  },
+  {
+    title: "Video, Audio, or Chat – Your Choice",
+    description: "Connect with doctors via your preferred communication mode.",
+  },
+  {
+    title: "Digital Prescription After Every Consult",
+    description: "Receive a valid digital prescription for your treatment.",
+  },
+  {
+    title: "NMC Registered & Verified Doctors",
+    description: "All doctors are registered with the National Medical Commission.",
+  },
+  {
+    title: "Compliant with Telemedicine Guidelines",
+    description: "Safe, secure, and follows Indian healthcare standards.",
+  },
 ];
 
 const DOCTOR_CONSULTATION_TOPICS = [
@@ -457,10 +469,10 @@ export default function DoctorConsultationPage() {
           label: "Book consultation",
           href: "/certificates/apply",
         }}
-        secondaryCta={{
-          label: "Talk to Support",
-          href: "/contact",
-        }}
+        // secondaryCta={{
+        //   label: "Talk to Support",
+        //   href: "/contact",
+        // }}
         usePrimaryIconTheme
         heroFloatingIconStyle="consultation"
         heroImageSrc="/images/hero/docter.png"
@@ -491,15 +503,18 @@ export default function DoctorConsultationPage() {
               </p>
 
               <div className="grid gap-3 mb-8">
-                {CONSULTATION_HIGHLIGHTS.map((item) => (
+                {CONSULTATION_HIGHLIGHTS.map((item, index) => (
                   <div
-                    key={item}
+                    key={index}
                     className="group flex items-start gap-3 rounded-2xl border border-border bg-card px-4 py-3.5 text-foreground shadow-sm hover:shadow-md transition-shadow"
                   >
                     <span className="mt-0.5 shrink-0 rounded-full bg-primary/10 p-1.5">
                       <Check className="w-4 h-4 text-primary" />
                     </span>
-                    <span className="text-sm sm:text-base font-semibold leading-snug">{item}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm sm:text-base font-semibold leading-snug">{item.title}</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground mt-0.5">{item.description}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -511,13 +526,6 @@ export default function DoctorConsultationPage() {
                 >
                   Consult Now
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </Link>
-
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center rounded-2xl border border-primary bg-card px-6 py-3.5 text-base font-semibold text-primary hover:bg-primary/5 transition-colors"
-                >
-                  Talk to Support
                 </Link>
               </div>
             </motion.div>
@@ -574,9 +582,6 @@ export default function DoctorConsultationPage() {
               </h2>
               <p className="mt-1.5 text-sm text-muted-foreground sm:mt-2 sm:text-base lg:text-lg">
                 Consult with top doctors across specialities
-              </p>
-              <p className="mt-3 hidden rounded-full border border-primary/15 bg-white/80 px-4 py-1.5 text-sm font-medium text-primary shadow-sm backdrop-blur-sm sm:inline-flex">
-                26 cards • auto sliding consultation categories
               </p>
             </div>
 
@@ -735,10 +740,6 @@ export default function DoctorConsultationPage() {
             </Carousel>
 
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/85 px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
-                <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                Auto sliding through {CONSULTATION_SPECIALTIES.length} specialities
-              </div>
 
               <div className="flex items-center gap-3">
                 <span className="rounded-full border border-primary/15 bg-white/85 px-4 py-2 text-sm font-semibold text-foreground shadow-sm backdrop-blur-sm">

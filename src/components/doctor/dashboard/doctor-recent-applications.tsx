@@ -1,53 +1,76 @@
 "use client";
 
-import { format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import type { Application } from "@/types";
-import { FileText } from "lucide-react";
+import { FileText, RefreshCw, Eye } from "lucide-react";
 
 interface DoctorRecentApplicationsProps {
   applications: Application[];
+  onRefresh?: () => void;
 }
 
-const statusColors: Record<string, string> = {
-  submitted: "bg-blue-100 text-blue-800",
-  pending: "bg-yellow-100 text-yellow-800",
-  pending_review: "bg-yellow-100 text-yellow-800",
-  pending_doctor_review: "bg-orange-100 text-orange-800",
-  assigned: "bg-indigo-100 text-indigo-800",
-  doctor_assigned: "bg-indigo-100 text-indigo-800",
-  under_review: "bg-purple-100 text-purple-800",
-  processing: "bg-purple-100 text-purple-800",
-  consultation_scheduled: "bg-cyan-100 text-cyan-800",
-  consultation_completed: "bg-teal-100 text-teal-800",
-  completed: "bg-green-100 text-green-800",
-  delivered: "bg-green-100 text-green-800",
-  certificate_delivered: "bg-green-100 text-green-800",
-  rejected: "bg-red-100 text-red-800",
-  cancelled: "bg-gray-100 text-gray-800",
+const statusConfig: Record<
+  string,
+  { label: string; className: string }
+> = {
+  submitted: { label: "Submitted", className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" },
+  pending: { label: "Pending", className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" },
+  pending_review: { label: "Pending", className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" },
+  pending_doctor_review: { label: "Pending Review", className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" },
+  assigned: { label: "Assigned", className: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300" },
+  doctor_assigned: { label: "Assigned", className: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300" },
+  under_review: { label: "Under Review", className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" },
+  processing: { label: "Processing", className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" },
+  consultation_scheduled: { label: "Scheduled", className: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300" },
+  consultation_completed: { label: "Completed", className: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300" },
+  completed: { label: "Approved", className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" },
+  delivered: { label: "Delivered", className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" },
+  certificate_delivered: { label: "Delivered", className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" },
+  rejected: { label: "Rejected", className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" },
+  cancelled: { label: "Cancelled", className: "bg-gray-100 text-gray-700 dark:bg-gray-800/50 dark:text-gray-300" },
 };
 
 const certTypeLabels: Record<string, string> = {
-  sick_leave: "Sick Leave",
-  fitness: "Fitness",
-  work_from_home: "Work From Home",
-  caretaker: "Caretaker",
-  recovery: "Recovery",
-  fit_to_fly: "Fit-to-Fly",
-  unfit_to_work: "Unfit To Work",
-  unfit_to_travel: "Unfit To Travel",
-  medical_diagnosis: "Medical Diagnosis",
+  sick_leave: "sick-leave",
+  fitness: "fitness",
+  work_from_home: "work-from-home",
+  caretaker: "caretaker",
+  recovery: "recovery",
+  fit_to_fly: "fit-to-fly",
+  unfit_to_work: "unfit-to-work",
+  unfit_to_travel: "unfit-to-travel",
+  medical_diagnosis: "medical-diagnosis",
+};
+
+const isPendingStatus = (status: string) => {
+  return [
+    "assigned",
+    "doctor_assigned",
+    "pending_doctor_review",
+    "under_review",
+    "pending",
+    "pending_review",
+  ].includes(status);
 };
 
 export function DoctorRecentApplications({
   applications,
+  onRefresh,
 }: DoctorRecentApplicationsProps) {
   if (!applications.length) {
     return (
       <div className="rounded-xl border bg-card p-6 shadow-sm">
-        <h3 className="text-lg font-semibold">Recent Applications</h3>
-        <div className="mt-8 flex flex-col items-center justify-center text-muted-foreground">
-          <FileText className="mb-2 h-10 w-10 opacity-40" />
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold">Recent Applications</h3>
+            <p className="text-sm text-muted-foreground">
+              Latest certificate applications assigned to you
+            </p>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-col items-center justify-center py-8 text-muted-foreground">
+          <FileText className="mb-2 h-12 w-12 opacity-40" />
           <p className="text-sm">No applications assigned yet</p>
         </div>
       </div>
@@ -55,67 +78,95 @@ export function DoctorRecentApplications({
   }
 
   return (
-    <div className="rounded-xl border bg-card p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Recent Applications</h3>
-        <Link
-          href="/doctor/applications"
-          className="text-sm text-primary hover:underline"
-        >
-          View All
-        </Link>
+    <div className="rounded-xl border bg-card shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <div>
+          <h3 className="text-lg font-semibold">Recent Applications</h3>
+          <p className="text-sm text-muted-foreground">
+            Latest certificate applications assigned to you
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              className="inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </button>
+          )}
+          <Link
+            href="/doctor/applications"
+            className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
+          >
+            View All
+          </Link>
+        </div>
       </div>
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b text-left text-muted-foreground">
-              <th className="pb-3 font-medium">Application ID</th>
-              <th className="pb-3 font-medium">Patient</th>
-              <th className="pb-3 font-medium">Type</th>
-              <th className="pb-3 font-medium">Status</th>
-              <th className="pb-3 font-medium">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications.map((app) => {
-              const user = app.user as
-                | { fullName: string; phoneNumber: string }
-                | undefined;
-              return (
-                <tr key={app.id} className="border-b last:border-0">
-                  <td className="py-3 font-mono text-xs">
-                    {app.applicationId}
-                  </td>
-                  <td className="py-3">
-                    <div className="font-medium">
-                      {user?.fullName ?? "Unknown"}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {user?.phoneNumber ?? ""}
-                    </div>
-                  </td>
-                  <td className="py-3">
-                    {certTypeLabels[app.certificateType] ??
-                      app.certificateType}
-                  </td>
-                  <td className="py-3">
+
+      {/* Applications List */}
+      <div className="divide-y">
+        {applications.map((app) => {
+          const user = app.user as
+            | { fullName: string; phoneNumber: string }
+            | undefined;
+          const status = statusConfig[app.status] ?? {
+            label: app.status.replace(/_/g, " "),
+            className: "bg-gray-100 text-gray-700",
+          };
+          const timeAgo = formatDistanceToNow(new Date(app.createdAt), {
+            addSuffix: false,
+          });
+
+          return (
+            <div
+              key={app.id}
+              className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-muted/30"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                  {user?.fullName?.charAt(0)?.toUpperCase() ?? "?"}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{user?.fullName ?? "Unknown"}</p>
                     <span
-                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                        statusColors[app.status] ??
-                        "bg-gray-100 text-gray-800"
-                      }`}
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${status.className}`}
                     >
-                      {app.status.replace(/_/g, " ")}
+                      {status.label}
                     </span>
-                  </td>
-                  <td className="py-3 text-muted-foreground">
-                    {format(new Date(app.createdAt), "dd MMM yyyy")}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                  </div>
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    {certTypeLabels[app.certificateType] ?? app.certificateType}
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {app.applicationId} • {timeAgo} ago
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {isPendingStatus(app.status) && (
+                  <Link
+                    href={`/doctor/applications/${app.id}`}
+                    className="inline-flex items-center gap-1 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300 dark:hover:bg-amber-900/40"
+                  >
+                    Pending Review
+                  </Link>
+                )}
+                <Link
+                  href={`/doctor/applications/${app.id}`}
+                  className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
+                >
+                  <Eye className="h-4 w-4" />
+                  View
+                </Link>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

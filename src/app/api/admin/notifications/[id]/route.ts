@@ -37,3 +37,36 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const auth = await validateAdminRequest(request);
+  if (auth instanceof NextResponse) return auth;
+
+  try {
+    const { id } = await params;
+
+    const notification = await prisma.notification.findUnique({ where: { id } });
+    if (!notification) {
+      return NextResponse.json(
+        { success: false, message: "Notification not found" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.notification.delete({ where: { id } });
+
+    return NextResponse.json({
+      success: true,
+      message: "Notification deleted",
+    });
+  } catch (error) {
+    console.error("Failed to delete notification:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to delete notification" },
+      { status: 500 }
+    );
+  }
+}

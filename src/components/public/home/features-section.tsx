@@ -17,6 +17,7 @@ const features = [
     eyebrowClass: "border-primary/20 bg-primary/8 text-primary",
     dotClass: "bg-primary",
     glowClass: "bg-primary/6",
+    cardBgClass: "bg-blue-50",
   },
   {
     icon: ShieldCheck,
@@ -30,6 +31,7 @@ const features = [
     eyebrowClass: "border-cyan-200 bg-cyan-50 text-cyan-700",
     dotClass: "bg-cyan-500",
     glowClass: "bg-cyan-400/6",
+    cardBgClass: "bg-cyan-50",
   },
   {
     icon: Sparkles,
@@ -43,6 +45,7 @@ const features = [
     eyebrowClass: "border-emerald-200 bg-emerald-50 text-emerald-700",
     dotClass: "bg-emerald-500",
     glowClass: "bg-emerald-400/6",
+    cardBgClass: "bg-emerald-50",
   },
 ];
 
@@ -78,7 +81,7 @@ export function FeaturesSection() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <CardReveal key={feature.title} delay={index * 0.12}>
-              <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-white shadow-[0_4px_24px_-8px_rgba(15,23,42,0.1)] transition-all duration-300 hover:-translate-y-1.5 hover:border-border hover:shadow-[0_16px_40px_-12px_rgba(15,23,42,0.18)]">
+              <article className={cn("group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 shadow-[0_4px_24px_-8px_rgba(15,23,42,0.1)] transition-all duration-300 hover:-translate-y-1.5 hover:border-border hover:shadow-[0_16px_40px_-12px_rgba(15,23,42,0.18)]", feature.cardBgClass)}>
                 {/* Top accent bar */}
                 <div className={cn("h-1 w-full bg-linear-to-r", feature.accentClass)} />
 

@@ -28,7 +28,6 @@ import {
   Stethoscope,
   Phone,
   PlusCircle,
-  List,
 } from "lucide-react";
 
 const certificateDropdown = {
@@ -58,12 +57,6 @@ const certificateDropdown = {
         { href: "/certificates/medical-diagnosis", label: "Medical Diagnosis Certificate", icon: ClipboardList },
       ],
     },
-    {
-      category: "All Certificates",
-      links: [
-        { href: "/certificates", label: "View All Certificates", icon: List },
-      ],
-    },
   ],
 };
 
@@ -72,7 +65,7 @@ const NAV_LINKS = [
   { name: "Certificates", href: "#", isDropdown: true },
   { name: "Doctor Consultation", href: "/doctor-consultation" },
   { name: "About", href: "/about" },
-  { name: "FAQ", href: "/faq" },
+  { name: "Sample Certificates", href: "/sample-certificates" },
   { name: "Contact Us", href: "/contact" },
 ];
 

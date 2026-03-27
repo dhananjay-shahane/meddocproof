@@ -1,12 +1,17 @@
 /**
- * S3-compatible storage utility
- * Works with AWS S3, Cloudflare R2, MinIO, etc.
- * Configure via environment variables.
+ * Storage utility for MedDocProof
+ * Primary: ImageKit (images, PDFs, documents)
+ * Fallback: Local filesystem (development) or S3-compatible storage
  */
 
-// We use fetch-based S3 presigned URL generation to avoid
-// heavy @aws-sdk dependency. For production, install @aws-sdk/client-s3.
+import { isImageKitUrl, getOptimizedImageUrl } from "./imagekit";
 
+// ImageKit configuration (primary storage)
+const IMAGEKIT_CONFIG = {
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || "",
+};
+
+// Legacy S3 configuration (fallback)
 const STORAGE_CONFIG = {
   endpoint: process.env.STORAGE_ENDPOINT || "",
   bucket: process.env.STORAGE_BUCKET || "meddocproof",
@@ -84,24 +89,43 @@ export function validateFile(
 }
 
 /**
- * Get a public or signed URL for a stored file
+ * Get a public or optimized URL for a stored file
+ * Handles ImageKit URLs, S3 URLs, and local files
  */
 export function getFileUrl(fileKey: string): string {
+  // If it's already a full URL (ImageKit or other), return optimized version
+  if (fileKey.startsWith("http://") || fileKey.startsWith("https://")) {
+    if (isImageKitUrl(fileKey)) {
+      // Return optimized ImageKit URL with auto format
+      return getOptimizedImageUrl(fileKey, { format: "auto", quality: 80 });
+    }
+    return fileKey;
+  }
+
+  // Legacy S3 storage support
   if (STORAGE_CONFIG.publicUrl) {
     return `${STORAGE_CONFIG.publicUrl}/${fileKey}`;
   }
   if (STORAGE_CONFIG.endpoint) {
     return `${STORAGE_CONFIG.endpoint}/${STORAGE_CONFIG.bucket}/${fileKey}`;
   }
-  // Fallback: serve via our API route
+  
+  // Fallback: serve via our API route (local files)
   return `/api/documents/signed-url?key=${encodeURIComponent(fileKey)}`;
 }
 
 /**
- * Check if S3 storage is configured
+ * Check if S3 storage is configured (legacy)
  */
 export function isStorageConfigured(): boolean {
   return !!(STORAGE_CONFIG.endpoint && STORAGE_CONFIG.accessKey && STORAGE_CONFIG.secretKey);
 }
 
-export { STORAGE_CONFIG, ALLOWED_FILE_TYPES, MAX_FILE_SIZES };
+/**
+ * Check if ImageKit is configured
+ */
+export function isImageKitStorageConfigured(): boolean {
+  return !!IMAGEKIT_CONFIG.urlEndpoint;
+}
+
+export { STORAGE_CONFIG, IMAGEKIT_CONFIG, ALLOWED_FILE_TYPES, MAX_FILE_SIZES };

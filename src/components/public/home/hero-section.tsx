@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, CheckCircle, Phone, MessageCircle, Heart, Star, Stethoscope, Video } from "lucide-react";
+import { ArrowRight, CheckCircle, Phone, MessageCircle, Heart, Star, Stethoscope, Video, FileCheck, Calendar, ClipboardList, Shield } from "lucide-react";
 import { FadeIn, Float } from "@/components/ui/fade-in";
 import { GridPattern } from "@/components/ui/grid-pattern";
 import { TypewriterEffect } from "@/components/ui/typewriter";
@@ -72,7 +72,7 @@ export function HeroSection({
   heroFloatingIconStyle = "default",
 }: HeroSectionProps) {
   return (
-    <section className="relative min-h-[85vh] lg:min-h-[90vh] xl:min-h-screen flex items-center overflow-hidden bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
+    <section className="relative min-h-[85vh] lg:min-h-[90vh] xl:min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-rose-50 via-white via-50% to-violet-50">
       {/* Modern Gradient Background */}
       {/* <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-blue-100/50 to-teal-100/40" /> */}
       
@@ -88,6 +88,72 @@ export function HeroSection({
         y={-1}
         className="absolute inset-0 opacity-[0.02]"
       />
+
+      {/* Animated Mesh Gradient Orbs */}
+      <motion.div
+        className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full opacity-40"
+        style={{ background: 'radial-gradient(circle, rgba(244,114,182,0.4) 0%, rgba(244,114,182,0) 70%)' }}
+        animate={{
+          scale: [1, 1.2, 1],
+          x: [0, 50, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      <motion.div
+        className="absolute top-1/3 right-0 w-[500px] h-[500px] rounded-full opacity-35"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(139,92,246,0) 70%)' }}
+        animate={{
+          scale: [1.2, 1, 1.2],
+          y: [0, 30, 0],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+      />
+      <motion.div
+        className="absolute bottom-0 left-1/4 w-[700px] h-[400px] rounded-full opacity-40"
+        style={{ background: 'radial-gradient(circle, rgba(20,184,166,0.5) 0%, rgba(20,184,166,0) 70%)' }}
+        animate={{
+          scale: [1, 1.15, 1],
+          x: [0, -30, 0],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
+
+      {/* Floating Particles */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-2 h-2 rounded-full"
+          style={{
+            background: i % 2 === 0 ? 'rgba(244,114,182,0.6)' : 'rgba(139,92,246,0.6)',
+            left: `${10 + i * 15}%`,
+            top: `${20 + (i % 3) * 25}%`,
+          }}
+          animate={{
+            y: [0, -20, 0],
+            opacity: [0.3, 0.7, 0.3],
+          }}
+          transition={{
+            duration: 3 + i * 0.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.3,
+          }}
+        />
+      ))}
 
       {/* Bottom Right Wave Shape */}
       <div className="absolute bottom-0 right-0 w-full h-100 pointer-events-none">
@@ -165,7 +231,7 @@ export function HeroSection({
                 </span>
               </span>
               <br />
-              <span className="text-slate-600 font-medium text-xl sm:text-2xl lg:text-3xl xl:text-4xl">
+              <span className="text-slate-600 font-medium text-sm sm:text-base lg:text-lg xl:text-xl whitespace-nowrap">
                 {typewriterPrefix}{" "}
                 <TypewriterEffect
                   words={rotatingWords}
@@ -294,15 +360,9 @@ export function HeroSection({
                       className="absolute -top-2 -left-2 z-20 sm:top-0 sm:left-0 md:top-2 md:left-2 lg:top-8 lg:left-2"
                     >
                       <Float duration={5} distance={8}>
-                        {/* <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-full shadow-lg sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-12 lg:w-12 ${
-                            usePrimaryIconTheme
-                              ? "bg-primary text-primary-foreground shadow-primary/30"
-                              : "bg-blue-500 text-white shadow-blue-500/30"
-                          }`}
-                        > */}
-                          <Phone className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
-                        {/* </div> */}
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-rose-400 via-rose-500 to-rose-600 shadow-lg shadow-rose-500/30 sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-12 lg:w-12">
+                          <FileCheck className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white" />
+                        </div>
                       </Float>
                     </motion.div>
 
@@ -313,14 +373,8 @@ export function HeroSection({
                       className="absolute -top-1 right-0 z-20 sm:top-1 sm:right-1 md:top-2 md:right-2 lg:top-4 lg:right-4"
                     >
                       <Float duration={4} distance={6}>
-                        <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-lg shadow-lg sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-11 lg:w-11 ${
-                            usePrimaryIconTheme
-                              ? "bg-primary text-primary-foreground shadow-primary/30"
-                              : "bg-emerald-500 text-white shadow-emerald-500/30"
-                          }`}
-                        >
-                          <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5" />
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-violet-400 via-violet-500 to-purple-600 shadow-lg shadow-violet-500/30 sm:h-10 sm:w-10 md:h-11 md:w-11 lg:h-11 lg:w-11">
+                          <Calendar className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white" />
                         </div>
                       </Float>
                     </motion.div>
@@ -332,18 +386,21 @@ export function HeroSection({
                       className="absolute top-[15%] -left-3 z-20 sm:top-[50%] sm:-left-2 md:top-[1%] md:-left-1 lg:top-1/3 lg:-left-4"
                     >
                       <Float duration={6} distance={10}>
-                        <div
-                          className={`flex h-8 w-8 items-center justify-center rounded-full border-2 shadow-lg sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-12 lg:w-12 ${
-                            usePrimaryIconTheme
-                              ? "bg-primary/10 border-primary/20"
-                              : "bg-slate-100 border-white"
-                          }`}
-                        >
-                          <Stethoscope
-                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 ${
-                              usePrimaryIconTheme ? "text-primary" : "text-orange-500"
-                            }`}
-                          />
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/90 border-2 shadow-lg sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-12 lg:w-12 border-rose-100">
+                          <ClipboardList className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 text-rose-500" />
+                        </div>
+                      </Float>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.8, duration: 0.4 }}
+                      className="absolute bottom-[35%] -right-1 z-20 sm:bottom-[38%] sm:right-0 md:bottom-[40%] md:right-1 lg:bottom-32 lg:right-0"
+                    >
+                      <Float duration={5} distance={7}>
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 via-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30 sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-11 lg:w-11">
+                          <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 text-white" />
                         </div>
                       </Float>
                     </motion.div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import api from "@/lib/api";
 import { ArrowLeft, Plus, Trash2, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -133,8 +134,14 @@ export default function CreateTemplatePage() {
 
     setIsSubmitting(true);
     try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await api.post("/admin/certificates/templates", {
+        name: templateName.trim(),
+        type: certificateType,
+        description: description.trim() || undefined,
+        isActive,
+        formFields: formFields.filter((f) => f.label.trim()),
+        sections: sections.filter((s) => s.title.trim()),
+      });
       toast.success("Template created successfully");
       router.push("/admin/certificates/templates");
     } catch {

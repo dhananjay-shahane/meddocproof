@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { RefreshCw, Search, Filter } from "lucide-react";
-import { useApplications } from "@/hooks/use-applications";
+import { RefreshCw, Search, Filter, Radio } from "lucide-react";
+import { useTemporaryApplicationsLive } from "@/hooks/use-temporary-applications-live";
 import { TemporaryApplicationCard } from "@/components/admin/applications/temporary-application-card";
 import { Pagination } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
@@ -25,11 +25,8 @@ export default function TemporaryApplicationsPage() {
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const { data, loading, refetch } = useApplications({
-    tab: "temporary",
-    filters,
-    page,
-  });
+  const { items, total, totalPages, loading, connected, activeCount, refetch } =
+    useTemporaryApplicationsLive({ filters, page });
 
   const handleSearch = useCallback(() => {
     setFilters((prev) => ({ ...prev, search: searchInput, status: statusFilter }));
@@ -37,9 +34,7 @@ export default function TemporaryApplicationsPage() {
   }, [searchInput, statusFilter]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
+    if (e.key === "Enter") handleSearch();
   };
 
   return (
@@ -47,9 +42,32 @@ export default function TemporaryApplicationsPage() {
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Temporary Applications</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold tracking-tight">Temporary Applications</h1>
+            {/* Live indicator */}
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                connected
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+            >
+              <span
+                className={`inline-block h-1.5 w-1.5 rounded-full ${
+                  connected ? "animate-pulse bg-green-500" : "bg-gray-400"
+                }`}
+              />
+              {connected ? "LIVE" : "Offline"}
+            </span>
+          </div>
           <p className="text-muted-foreground">
-            Manage incomplete and in-progress applications ({data?.total || 0} total)
+            Manage incomplete and in-progress applications ({total} total)
+            {activeCount > 0 && (
+              <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
+                <Radio className="h-3 w-3" />
+                {activeCount} filling now
+              </span>
+            )}
           </p>
         </div>
         <Button variant="outline" onClick={() => refetch()}>
@@ -87,7 +105,7 @@ export default function TemporaryApplicationsPage() {
       {/* Application Cards */}
       {loading ? (
         <PageLoader />
-      ) : !data || data.items.length === 0 ? (
+      ) : !items || items.length === 0 ? (
         <EmptyState
           icon={FileSearch}
           title="No temporary applications found"
@@ -95,17 +113,17 @@ export default function TemporaryApplicationsPage() {
         />
       ) : (
         <div className="space-y-4">
-          {data.items.map((app) => (
+          {items.map((app) => (
             <TemporaryApplicationCard key={app.id} application={app} />
           ))}
         </div>
       )}
 
       {/* Pagination */}
-      {data && data.totalPages > 1 && (
+      {totalPages > 1 && (
         <Pagination
-          currentPage={data.page}
-          totalPages={data.totalPages}
+          currentPage={page}
+          totalPages={totalPages}
           onPageChange={setPage}
         />
       )}

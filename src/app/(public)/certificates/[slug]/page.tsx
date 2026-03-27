@@ -9,8 +9,9 @@ import { getCertificateDescription } from '@/lib/certificate-descriptions';
 import { CertificateHero } from '@/components/public/certificates/certificate-hero';
 import { CertificateSample } from '@/components/public/certificates/certificate-sample';
 import { CertificateBenefits } from '@/components/public/certificates/certificate-benefits';
-import { CertificateFAQ } from '@/components/public/certificates/certificate-faq';
-import { RelatedCertificates } from '@/components/public/certificates/related-certificates';
+import { CertificateUseCases } from '@/components/public/certificates/certificate-use-cases';
+import { CertificateEligibility } from '@/components/public/certificates/certificate-eligibility';
+import { CertificateServiceAreas } from '@/components/public/certificates/certificate-service-areas';
 
 /**
  * Certificate Detail Page
@@ -84,11 +85,15 @@ export default function CertificatePage() {
       {/* Key Benefits Section */}
       <CertificateBenefits features={certInfo.features} />
 
-      {/* FAQ Section - Certificate-specific questions */}
-      <CertificateFAQ slug={slug} />
+      {/* Use Cases - When is this certificate needed */}
+      <CertificateUseCases slug={slug} certTitle={certInfo.title} />
 
-      {/* Related Certificates - Cross-sell other certificate types */}
-      <RelatedCertificates currentSlug={slug} />
+      {/* Eligibility & Requirements */}
+      <CertificateEligibility slug={slug} certTitle={certInfo.title} />
+
+      {/* Service Areas - Cities we serve across India */}
+      <CertificateServiceAreas slug={slug} certTitle={certInfo.title} />
+
     </div>
   );
 }

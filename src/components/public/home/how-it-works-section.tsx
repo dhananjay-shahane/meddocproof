@@ -109,7 +109,7 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-14 lg:py-20 xl:py-24 bg-background relative overflow-hidden">
+    <section className="py-14 lg:py-20 xl:py-24 bg-gradient-to-br from-slate-50 via-white to-rose-50/30 relative overflow-hidden">
       <GridPattern
         width={40}
         height={40}

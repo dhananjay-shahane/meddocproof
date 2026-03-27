@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { validateUserRequest, isAuthError } from "@/lib/api-auth";
 import { Prisma, CertificateType } from "@prisma/client";
 import { createNotification } from "@/lib/notifications";
+import { emitToAdmins } from "@/lib/socket-server";
+import { SOCKET_EVENTS } from "@/lib/socket-events";
 
 /**
  * Generate a human-readable application ID.
@@ -37,9 +39,10 @@ export async function POST(request: NextRequest) {
     if (isAuthError(auth)) return auth;
 
     const body = await request.json();
-    const { certificateType, formData } = body as {
+    const { certificateType, formData, temporaryAppId } = body as {
       certificateType: string;
       formData: Record<string, unknown>;
+      temporaryAppId?: string;
     };
 
     if (!certificateType || !formData) {
@@ -82,25 +85,74 @@ export async function POST(request: NextRequest) {
     const phone = (formData.phoneNumber as string) || "0000";
     const appDisplayId = await generateApplicationId(phone);
 
-    // Create application with Phase 4 columns
-    const application = await prisma.application.create({
-      data: {
-        applicationId: appDisplayId,
-        userId: auth.user.id,
-        certificateType: certificateType as CertificateType,
-        formData: formData as Prisma.InputJsonValue,
-        status: "submitted",
-        paymentTier: (formData.paymentTier as string) || null,
-        documentFormat: (formData.documentFormat as string) || null,
-        specialFormatRequested: Boolean(formData.specialFormatAttestation),
-        specialFormatFee: formData.specialFormatAttestation ? 250 : 0,
-        termsAcceptedAt: formData.termsAccepted ? new Date() : null,
-        otpVerifiedPhone: formData.otpVerified
-          ? (formData.phoneNumber as string)
-          : null,
-        organizationLocatedIn:
-          (formData.organizationLocatedIn as string) || null,
-      },
+    // If a temporaryAppId is provided, update that draft instead of creating
+    let application;
+    if (temporaryAppId) {
+      // Verify ownership before updating
+      const existing = await prisma.application.findFirst({
+        where: { id: temporaryAppId, userId: auth.user.id },
+      });
+      if (existing) {
+        application = await prisma.application.update({
+          where: { id: temporaryAppId },
+          data: {
+            certificateType: certificateType as CertificateType,
+            formData: formData as Prisma.InputJsonValue,
+            status: "submitted",
+            currentStep: 3,
+            lastActiveAt: new Date(),
+            paymentTier: (formData.paymentTier as string) || null,
+            documentFormat: (formData.documentFormat as string) || null,
+            specialFormatRequested: Boolean(formData.specialFormatAttestation),
+            specialFormatFee: formData.specialFormatAttestation ? 250 : 0,
+            termsAcceptedAt: formData.termsAccepted ? new Date() : null,
+            otpVerifiedPhone: formData.otpVerified
+              ? (formData.phoneNumber as string)
+              : null,
+            organizationLocatedIn:
+              (formData.organizationLocatedIn as string) || null,
+          },
+        });
+      }
+    }
+
+    // Fall back to creating a new record if no temporaryAppId or lookup failed
+    if (!application) {
+      application = await prisma.application.create({
+        data: {
+          applicationId: appDisplayId,
+          userId: auth.user.id,
+          certificateType: certificateType as CertificateType,
+          formData: formData as Prisma.InputJsonValue,
+          status: "submitted",
+          currentStep: 3,
+          lastActiveAt: new Date(),
+          paymentTier: (formData.paymentTier as string) || null,
+          documentFormat: (formData.documentFormat as string) || null,
+          specialFormatRequested: Boolean(formData.specialFormatAttestation),
+          specialFormatFee: formData.specialFormatAttestation ? 250 : 0,
+          termsAcceptedAt: formData.termsAccepted ? new Date() : null,
+          otpVerifiedPhone: formData.otpVerified
+            ? (formData.phoneNumber as string)
+            : null,
+          organizationLocatedIn:
+            (formData.organizationLocatedIn as string) || null,
+        },
+      });
+    }
+
+    // Emit socket event so admins know this temporary app is now submitted
+    emitToAdmins(SOCKET_EVENTS.TEMPORARY_COMPLETED, {
+      id: application.id,
+      applicationId: application.applicationId,
+    });
+
+    // Real-time notification for certificate application
+    emitToAdmins(SOCKET_EVENTS.CERTIFICATE_APPLIED, {
+      applicationId: application.applicationId,
+      certificateType,
+      userId: auth.user.id,
+      createdAt: application.createdAt.toISOString(),
     });
 
     // Note: Uploaded file URLs are stored in formData JSON.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAdminTransactions } from "@/hooks/use-admin-transactions";
 import {
   Search,
@@ -12,15 +12,13 @@ import {
   Filter,
   FileText,
   TrendingUp,
-  CheckCircle2,
-  Clock,
-  XCircle,
   RotateCcw,
   ShoppingCart,
   Download,
   Eye,
   ChevronDown,
-  Calendar,
+  CreditCard,
+  ArrowUpDown,
 } from "lucide-react";
 import { format } from "date-fns";
 import type { TransactionFilters } from "@/types";
@@ -32,142 +30,58 @@ const formatCurrency = (amount: number) =>
     minimumFractionDigits: 2,
   }).format(amount);
 
-const certificateTypes = [
-  { value: "", label: "All Certificates" },
-  { value: "sick-leave", label: "Sick Leave Certificate" },
-  { value: "medical-fitness", label: "Medical Fitness Certificate" },
-  { value: "recovery", label: "Recovery Certificate" },
-  { value: "caretaker", label: "Caretaker Certificate" },
+const transactionTypes = [
+  { value: "", label: "All Types" },
+  { value: "payment", label: "Payment" },
+  { value: "refund", label: "Refund" },
+  { value: "doctor_payout", label: "Doctor Payout" },
+  { value: "withdrawal", label: "Withdrawal" },
+  { value: "adjustment", label: "Adjustment" },
 ];
 
 const statusOptions = [
   { value: "", label: "All Status" },
-  { value: "successful", label: "Successful" },
-  { value: "authorized", label: "Authorized" },
+  { value: "completed", label: "Completed" },
+  { value: "pending", label: "Pending" },
   { value: "failed", label: "Failed" },
-  { value: "refunded", label: "Refunded" },
-];
-
-// Mock transaction data matching the screenshot
-const mockTransactions = [
-  {
-    id: "1",
-    date: "15/03/26, 16:19",
-    customerName: "Jeet Majumder",
-    customerEmail: "jeetmajumdar6@gmail.com",
-    certificateType: "Sick Leave Certificate",
-    certificateFormat: "digital-basic",
-    amount: 599.0,
-    gatewayFee: 17.1,
-    doctorFee: 2.5,
-    feeNote: "Gateway + Doctor",
-    status: "successful",
-  },
-  {
-    id: "2",
-    date: "15/03/26, 15:43",
-    customerName: "Sharmavivek65122",
-    customerEmail: "sharmavivek65122@gmail.com",
-    certificateType: "Medical Fitness Certificate",
-    certificateFormat: "digital-basic",
-    amount: 699.0,
-    gatewayFee: 19.96,
-    doctorFee: null,
-    feeNote: "Gateway Fee",
-    status: "successful",
-  },
-  {
-    id: "3",
-    date: "14/03/26, 22:16",
-    customerName: "Gautam",
-    customerEmail: "gautamanalyst33@gmail.com",
-    certificateType: "Medical Fitness Certificate",
-    certificateFormat: "digital-basic",
-    amount: 699.0,
-    gatewayFee: 19.96,
-    doctorFee: 2.0,
-    feeNote: "Gateway + Doctor",
-    status: "successful",
-  },
-  {
-    id: "4",
-    date: "14/03/26, 21:31",
-    customerName: "Deepak Kumar",
-    customerEmail: "dk602743@gmail.com",
-    certificateType: "Medical Fitness Certificate",
-    certificateFormat: "handwritten",
-    amount: 1399.0,
-    gatewayFee: null,
-    doctorFee: null,
-    feeNote: "No Doctor Assigned",
-    status: "failed",
-  },
-  {
-    id: "5",
-    date: "14/03/26, 16:05",
-    customerName: "Ankit.bafna",
-    customerEmail: "ankit.bafna@gmail.com",
-    certificateType: "Medical Fitness Certificate",
-    certificateFormat: "handwritten",
-    amount: 1399.0,
-    gatewayFee: 39.94,
-    doctorFee: 3.0,
-    feeNote: "Gateway + Doctor",
-    status: "successful",
-  },
-  {
-    id: "6",
-    date: "14/03/26, 11:28",
-    customerName: "Namita Mishra",
-    customerEmail: "namitamishra100@gmail.com",
-    certificateType: "Sick Leave Certificate",
-    certificateFormat: "digital-basic",
-    amount: 599.0,
-    gatewayFee: 17.1,
-    doctorFee: 2.5,
-    feeNote: "Gateway + Doctor",
-    status: "successful",
-  },
-  {
-    id: "7",
-    date: "12/03/26, 10:33",
-    customerName: "Tamilselvi G",
-    customerEmail: "gtsece93@gmail.com",
-    certificateType: "Sick Leave Certificate",
-    certificateFormat: "digital-basic",
-    amount: 599.0,
-    gatewayFee: 17.1,
-    doctorFee: 2.0,
-    feeNote: "Gateway + Doctor",
-    status: "successful",
-  },
 ];
 
 export default function TransactionsPage() {
   const { data, loading, error, filters, setFilters, refetch } = useAdminTransactions();
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [certificateFilter, setCertificateFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+
+  // Sync local filter inputs to hook after short debounce
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setFilters({
+        ...filters,
+        search: searchInput || undefined,
+        status: statusFilter || undefined,
+        type: (typeFilter as TransactionFilters["type"]) || undefined,
+        page: 1,
+      });
+    }, 400);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchInput, statusFilter, typeFilter]);
 
   const handleClearFilters = () => {
     setSearchInput("");
     setStatusFilter("");
-    setCertificateFilter("");
+    setTypeFilter("");
     setFilters({ page: 1 });
   };
 
-  // Stats data
-  const stats = {
-    totalTransactions: 568,
-    totalRevenue: 281225.0,
-    netRevenue: 257137.83,
-    successRate: 66.9,
-    successful: 380,
-    authorized: 0,
-    failed: 162,
-    refunds: 26,
-    averageOrder: 740.07,
-  };
+  const totalTransactions = data?.total ?? 0;
+  const totalAmount = data?.stats.totalAmount ?? 0;
+  const paymentCount = data?.stats.paymentCount ?? 0;
+  const refundCount = data?.stats.refundCount ?? 0;
+  const payoutCount = data?.stats.payoutCount ?? 0;
+  const withdrawalCount = data?.stats.withdrawalCount ?? 0;
+  const avgPerPayment = paymentCount > 0 ? totalAmount / paymentCount : 0;
+  const totalPages = Math.ceil(totalTransactions / (filters.limit ?? 20));
 
   return (
     <div className="space-y-6">
@@ -195,6 +109,13 @@ export default function TransactionsPage() {
       </div>
 
       {/* Top Stats Cards - Row 1 */}
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 flex items-center gap-2 text-red-700">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span className="text-sm">{error}</span>
+        </div>
+      )}
+
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {/* Total Transactions */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
@@ -204,7 +125,9 @@ export default function TransactionsPage() {
             </span>
             <FileText className="h-5 w-5 text-gray-400" />
           </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.totalTransactions}</p>
+          <p className="text-3xl font-bold text-gray-900">
+            {loading ? <span className="animate-pulse">—</span> : totalTransactions}
+          </p>
           <p className="text-xs text-gray-500 mt-1">
             All transactions in selected period
           </p>
@@ -218,88 +141,89 @@ export default function TransactionsPage() {
             </span>
             <span className="text-blue-200">₹</span>
           </div>
-          <p className="text-3xl font-bold">{formatCurrency(stats.totalRevenue)}</p>
+          <p className="text-3xl font-bold">
+            {loading ? <span className="opacity-60">—</span> : formatCurrency(totalAmount)}
+          </p>
           <p className="text-xs text-blue-200 mt-1">
-            From 380 successful payments
+            From {paymentCount} payment{paymentCount !== 1 ? "s" : ""}
           </p>
         </div>
 
         {/* Net Revenue */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-blue-600">Net Revenue</span>
+            <span className="text-sm font-medium text-blue-600">Payments</span>
             <TrendingUp className="h-5 w-5 text-green-500" />
           </div>
           <p className="text-3xl font-bold text-green-600">
-            {formatCurrency(stats.netRevenue)}
+            {loading ? <span className="animate-pulse">—</span> : paymentCount}
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            After ₹7967.17 fees, ₹16120.00 refunds
+            Completed payments
           </p>
-        </div>
-
-        {/* Success Rate */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-blue-600">Success Rate</span>
-          </div>
-          <p className="text-3xl font-bold text-gray-900">{stats.successRate}%</p>
-          <p className="text-xs text-gray-500 mt-1">Successful payment rate</p>
-        </div>
-      </div>
-
-      {/* Stats Cards - Row 2 */}
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-        {/* Successful */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600">Successful</span>
-            <CheckCircle2 className="h-5 w-5 text-green-500" />
-          </div>
-          <p className="text-3xl font-bold text-green-600">{stats.successful}</p>
-          <p className="text-xs text-gray-500 mt-1">Captured payments</p>
-        </div>
-
-        {/* Authorized */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600">Authorized</span>
-            <Clock className="h-5 w-5 text-amber-500" />
-          </div>
-          <p className="text-3xl font-bold text-amber-600">{stats.authorized}</p>
-          <p className="text-xs text-gray-500 mt-1">Pending capture</p>
-        </div>
-
-        {/* Failed */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600">Failed</span>
-            <XCircle className="h-5 w-5 text-red-500" />
-          </div>
-          <p className="text-3xl font-bold text-red-600">{stats.failed}</p>
-          <p className="text-xs text-gray-500 mt-1">Payment failures</p>
         </div>
 
         {/* Refunds */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600">Refunds</span>
-            <RotateCcw className="h-5 w-5 text-orange-500" />
+            <span className="text-sm font-medium text-blue-600">Refunds</span>
+            <RotateCcw className="h-5 w-5 text-orange-400" />
           </div>
-          <p className="text-3xl font-bold text-orange-600">{stats.refunds}</p>
-          <p className="text-xs text-gray-500 mt-1">₹16,120.00 refunded</p>
+          <p className="text-3xl font-bold text-gray-900">
+            {loading ? <span className="animate-pulse">—</span> : refundCount}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">Refunded transactions</p>
         </div>
+      </div>
 
-        {/* Average Order */}
+      {/* Stats Cards - Row 2 */}
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
+        {/* Payouts */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-gray-600">Average Order</span>
+            <span className="text-sm font-medium text-gray-600">Payouts</span>
+            <TrendingUp className="h-5 w-5 text-green-500" />
+          </div>
+          <p className="text-3xl font-bold text-green-600">
+            {loading ? <span className="animate-pulse">—</span> : payoutCount}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">Doctor payouts</p>
+        </div>
+
+        {/* Withdrawals */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">Withdrawals</span>
+            <RotateCcw className="h-5 w-5 text-orange-500" />
+          </div>
+          <p className="text-3xl font-bold text-orange-600">
+            {loading ? <span className="animate-pulse">—</span> : withdrawalCount}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">Wallet withdrawals</p>
+        </div>
+
+        {/* Average per payment */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">Avg. Payment</span>
             <ShoppingCart className="h-5 w-5 text-gray-400" />
           </div>
           <p className="text-3xl font-bold text-blue-600">
-            ₹{stats.averageOrder.toFixed(2)}
+            {loading ? <span className="animate-pulse">—</span> : formatCurrency(avgPerPayment)}
           </p>
-          <p className="text-xs text-gray-500 mt-1">Per successful order</p>
+          <p className="text-xs text-gray-500 mt-1">Per payment transaction</p>
+        </div>
+
+        {/* Current page info */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-medium text-gray-600">Page</span>
+            <ArrowUpDown className="h-5 w-5 text-gray-400" />
+          </div>
+          <p className="text-3xl font-bold text-gray-700">
+            {loading ? <span className="animate-pulse">—</span> : `${data?.page ?? 1} / ${totalPages || 1}`}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">Current page of results</p>
         </div>
       </div>
 
@@ -328,7 +252,7 @@ export default function TransactionsPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Order ID, Payment ID, Refund ID, Customer..."
+                placeholder="Transaction ID, description..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="w-full h-11 pl-10 pr-4 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -357,18 +281,18 @@ export default function TransactionsPage() {
             </div>
           </div>
 
-          {/* Certificate Type */}
+          {/* Transaction Type */}
           <div>
             <label className="block text-sm font-medium text-blue-600 mb-1.5">
-              Certificate Type
+              Transaction Type
             </label>
             <div className="relative">
               <select
-                value={certificateFilter}
-                onChange={(e) => setCertificateFilter(e.target.value)}
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
                 className="w-full h-11 px-4 pr-10 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                {certificateTypes.map((type) => (
+                {transactionTypes.map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
                   </option>
@@ -384,13 +308,19 @@ export default function TransactionsPage() {
               Date Range
             </label>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                readOnly
-                value="Dec 15 - Mar 15, 2026"
-                className="w-full h-11 pl-10 pr-4 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+              <select
+                onChange={(e) =>
+                  setFilters({ ...filters, dateRange: e.target.value || undefined, page: 1 })
+                }
+                className="w-full h-11 px-4 pr-10 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">All Time</option>
+                <option value="today">Today</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+                <option value="90d">Last 90 Days</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -409,92 +339,90 @@ export default function TransactionsPage() {
             <thead>
               <tr className="border-b border-gray-200 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                 <th className="px-6 py-4">Date & Time</th>
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Certificate</th>
+                <th className="px-6 py-4">Customer / Doctor</th>
+                <th className="px-6 py-4">Type & Description</th>
                 <th className="px-6 py-4">Amount</th>
-                <th className="px-6 py-4">Fees</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {mockTransactions.map((t) => (
-                <tr key={t.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-gray-500">{t.date}</td>
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {t.customerName}
-                      </p>
-                      <p className="text-xs text-blue-600">{t.customerEmail}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {t.certificateType}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {t.certificateFormat}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-900">
-                    ₹{t.amount.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {t.gatewayFee !== null ? (
-                      <div>
-                        <p className="text-orange-600 font-medium">
-                          ₹{t.gatewayFee.toFixed(2)}
-                        </p>
-                        {t.doctorFee !== null && (
-                          <p className="text-green-600 text-xs">
-                            ₹{t.doctorFee.toFixed(2)}
-                          </p>
-                        )}
-                        <p className="text-xs text-gray-500">{t.feeNote}</p>
-                      </div>
-                    ) : (
-                      <div>
-                        <p className="text-gray-500">N/A</p>
-                        <p className="text-xs text-gray-500">{t.feeNote}</p>
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">
-                    {t.status === "successful" ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                        <CheckCircle2 className="h-3 w-3" />
-                        Successful
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                        <XCircle className="h-3 w-3" />
-                        Failed
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      {t.status === "successful" ? (
-                        <button className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-orange-600 border border-orange-300 rounded-lg hover:bg-orange-50">
-                          <RotateCcw className="h-3 w-3" />
-                          Refund
-                        </button>
-                      ) : (
-                        <button className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50">
-                          <RefreshCw className="h-3 w-3" />
-                          Retry
-                        </button>
-                      )}
-                    </div>
+              {loading && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-blue-500 mx-auto" />
                   </td>
                 </tr>
-              ))}
+              )}
+              {!loading && (data?.transactions ?? []).length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    No transactions found
+                  </td>
+                </tr>
+              )}
+              {!loading &&
+                (data?.transactions ?? []).map((t) => (
+                  <tr key={t.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                      {format(new Date(t.createdAt), "dd/MM/yy, HH:mm")}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <CreditCard className="h-4 w-4 text-gray-400 shrink-0" />
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {t.userName || t.doctorName || "—"}
+                          </p>
+                          <p className="text-xs text-gray-400 uppercase tracking-wide">
+                            {t.userId ? "user" : t.doctorId ? "doctor" : "system"}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div>
+                        <p className="font-medium text-gray-900 capitalize">
+                          {t.type.replace(/_/g, " ")}
+                        </p>
+                        {t.description && (
+                          <p className="text-xs text-gray-500 max-w-48 truncate">
+                            {t.description}
+                          </p>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                      {formatCurrency(t.amount)}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                          t.status === "completed"
+                            ? "bg-green-100 text-green-700"
+                            : t.status === "failed"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {t.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        {t.type === "payment" && t.status === "completed" && (
+                          <button className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-orange-600 border border-orange-300 rounded-lg hover:bg-orange-50">
+                            <RotateCcw className="h-3 w-3" />
+                            Refund
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -502,29 +430,42 @@ export default function TransactionsPage() {
         {/* Pagination */}
         <div className="flex items-center justify-between border-t border-gray-200 px-6 py-4">
           <p className="text-sm text-gray-500">
-            Showing 1–7 of 568 transactions
+            {loading
+              ? "Loading..."
+              : `Showing ${Math.min((filters.page ?? 1 - 1) * (filters.limit ?? 20) + 1, totalTransactions)}–${Math.min((filters.page ?? 1) * (filters.limit ?? 20), totalTransactions)} of ${totalTransactions} transactions`}
           </p>
           <div className="flex items-center gap-2">
             <button
-              disabled
-              className="p-2 rounded-lg border border-gray-300 text-gray-400 cursor-not-allowed"
+              disabled={(filters.page ?? 1) <= 1 || loading}
+              onClick={() => setFilters({ ...filters, page: (filters.page ?? 1) - 1 })}
+              className="p-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-lg">
-              1
-            </span>
-            <span className="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-              2
-            </span>
-            <span className="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-              3
-            </span>
-            <span className="text-gray-500">...</span>
-            <span className="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-              82
-            </span>
-            <button className="p-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              const currentPage = filters.page ?? 1;
+              const start = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
+              const page = start + i;
+              if (page > totalPages) return null;
+              return (
+                <button
+                  key={page}
+                  onClick={() => setFilters({ ...filters, page })}
+                  className={`px-3 py-1 text-sm rounded-lg ${
+                    page === currentPage
+                      ? "font-medium text-white bg-blue-600"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {page}
+                </button>
+              );
+            })}
+            <button
+              disabled={(filters.page ?? 1) >= totalPages || loading}
+              onClick={() => setFilters({ ...filters, page: (filters.page ?? 1) + 1 })}
+              className="p-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+            >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>

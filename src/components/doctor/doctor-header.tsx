@@ -1,13 +1,22 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
 import { useDoctorNotifications } from "@/hooks/use-doctor-notifications";
 import { getInitials } from "@/lib/utils";
-import { Menu, Bell, Check, CheckCheck } from "lucide-react";
+import { Menu, Bell, Check, CheckCheck, Settings, Wallet, LogOut, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { formatDistanceToNow } from "date-fns";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DoctorHeaderProps {
   onMenuClick: () => void;
@@ -23,11 +32,17 @@ const breadcrumbMap: Record<string, string> = {
 
 export default function DoctorHeader({ onMenuClick }: DoctorHeaderProps) {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead } =
     useDoctorNotifications();
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleSignOut = async () => {
+    await logout();
+    router.push("/login");
+  };
 
   const getPageTitle = () => {
     if (breadcrumbMap[pathname]) return breadcrumbMap[pathname];
@@ -140,14 +155,63 @@ export default function DoctorHeader({ onMenuClick }: DoctorHeaderProps) {
         </div>
 
         {user && user.type === "doctor" && (
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-              {getInitials(user.fullName)}
-            </div>
-            <span className="hidden text-sm font-medium md:block">
-              {user.fullName}
-            </span>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-muted focus:outline-none">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                  {getInitials(user.fullName)}
+                </div>
+                <div className="hidden md:block text-left">
+                  <p className="text-sm font-medium">{user.fullName}</p>
+                  <p className="text-xs text-muted-foreground">{user.specialization || "MBBS"}</p>
+                </div>
+                <ChevronDown className="hidden h-4 w-4 text-muted-foreground md:block" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                    {getInitials(user.fullName)}
+                  </div>
+                  <div>
+                    <p className="font-medium">{user.fullName}</p>
+                    <p className="text-xs font-normal text-muted-foreground">{user.specialization || "MBBS"}</p>
+                    <span className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      user.status === "APPROVED" 
+                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                        : user.status === "PENDING"
+                        ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                    }`}>
+                      {user.status === "APPROVED" ? "Approved" : user.status === "PENDING" ? "Pending" : user.status}
+                    </span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/doctor/settings" className="flex items-center gap-2 cursor-pointer">
+                  <Settings className="h-4 w-4" />
+                  Profile Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/doctor/financials" className="flex items-center gap-2 cursor-pointer">
+                  <Wallet className="h-4 w-4" />
+                  Financials
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
     </header>

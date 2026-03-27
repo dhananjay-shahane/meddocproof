@@ -37,6 +37,10 @@ export async function PUT(
     if (body.maxUses !== undefined) updateData.maxUses = parseInt(body.maxUses);
     if (body.isActive !== undefined) updateData.isActive = body.isActive;
     if (body.expiresAt !== undefined) updateData.expiresAt = body.expiresAt ? new Date(body.expiresAt) : null;
+    if (body.applicableFor !== undefined) updateData.applicableFor = body.applicableFor;
+    if (body.couponType !== undefined) updateData.couponType = body.couponType;
+    if (body.phoneNumber !== undefined) updateData.phoneNumber = body.phoneNumber;
+    if (body.maxDiscountAmount !== undefined) updateData.maxDiscountAmount = body.maxDiscountAmount ? parseFloat(body.maxDiscountAmount) : null;
 
     // Validate percentage range
     if (

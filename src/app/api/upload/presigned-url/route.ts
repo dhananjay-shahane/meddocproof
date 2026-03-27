@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateUserRequest, validateDoctorRequest, validateAdminRequest, isAuthError } from "@/lib/api-auth";
-import { generateFileKey, validateFile, isStorageConfigured } from "@/lib/storage";
+import { generateFileKey, validateFile } from "@/lib/storage";
+import { isImageKitConfigured, getImageKitAuthParams, getImageKitFolder } from "@/lib/imagekit";
 
-// POST - Generate a presigned upload URL
+// POST - Generate upload URL or ImageKit auth parameters
 export async function POST(request: NextRequest) {
   try {
     // Accept auth from any role (user, doctor, admin)
@@ -50,16 +51,25 @@ export async function POST(request: NextRequest) {
     // Generate file key
     const fileKey = generateFileKey(userId, fileType, fileName);
 
-    if (isStorageConfigured()) {
-      // In production: generate S3 presigned URL
-      // For now, return a direct upload endpoint
+    // If ImageKit is configured, include auth params for potential client-side uploads
+    if (isImageKitConfigured()) {
+      const authParams = getImageKitAuthParams();
+      const folder = getImageKitFolder(fileType, userId);
+
       return NextResponse.json({
         success: true,
         data: {
           fileKey,
           uploadUrl: `/api/upload/direct`,
           method: "POST",
-          fields: { key: fileKey, contentType },
+          fields: { key: fileKey, contentType, fileType },
+          // ImageKit-specific data for client-side uploads (optional)
+          imagekit: {
+            ...authParams,
+            folder,
+            publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+            urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+          },
         },
       });
     }
@@ -71,7 +81,7 @@ export async function POST(request: NextRequest) {
         fileKey,
         uploadUrl: `/api/upload/direct`,
         method: "POST",
-        fields: { key: fileKey, contentType },
+        fields: { key: fileKey, contentType, fileType },
       },
     });
   } catch (error) {

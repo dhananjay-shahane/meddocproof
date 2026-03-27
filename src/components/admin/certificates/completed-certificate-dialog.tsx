@@ -40,6 +40,7 @@ export function CompletedCertificateDialog({
 }: CompletedCertificateDialogProps) {
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(false);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   const fetchApplication = useCallback(async () => {
     if (!certificateId) return;
@@ -60,8 +61,31 @@ export function CompletedCertificateDialog({
     }
     return () => {
       setApplication(null);
+      setNotifications([]);
     };
   }, [open, certificateId, fetchApplication]);
+
+  useEffect(() => {
+    if (!application?.userId) return;
+    api
+      .get(`/admin/notifications?userId=${application.userId}&limit=10`)
+      .then((res) => {
+        const items: Array<{ id: string; type: string; message: string; createdAt: string }> =
+          res.data?.data?.items ?? res.data?.data?.notifications ?? [];
+        setNotifications(
+          items.map((n) => ({
+            id: n.id,
+            type: n.type,
+            message: n.message,
+            sentTo: application.user?.phoneNumber || application.user?.email || "—",
+            sentAt: n.createdAt,
+          }))
+        );
+      })
+      .catch(() => {
+        // silently fail — notifications are non-critical
+      });
+  }, [application]);
 
   const formatDate = (dateStr: string | null | undefined) => {
     if (!dateStr) return "—";
@@ -209,25 +233,31 @@ export function CompletedCertificateDialog({
             <div>
               <h3 className="text-base font-semibold mb-4">Notifications Sent</h3>
               <div className="space-y-3">
-                {notifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className="flex items-start justify-between rounded-lg border p-4"
-                  >
-                    <div className="flex items-start gap-3">
-                      <MessageSquare className="h-5 w-5 text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="font-medium">{notification.message}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Sent to: {notification.sentTo}
-                        </p>
+                {notifications.length === 0 ? (
+                  <p className="text-sm text-muted-foreground py-2">
+                    No notifications sent for this certificate.
+                  </p>
+                ) : (
+                  notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className="flex items-start justify-between rounded-lg border p-4"
+                    >
+                      <div className="flex items-start gap-3">
+                        <MessageSquare className="h-5 w-5 text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="font-medium">{notification.message}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Sent to: {notification.sentTo}
+                          </p>
+                        </div>
                       </div>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(notification.sentAt)}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(notification.sentAt)}
-                    </p>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

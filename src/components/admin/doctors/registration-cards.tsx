@@ -27,10 +27,12 @@ import {
   MapPin,
   AlertCircle,
   User,
+  FileText,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import api from "@/lib/api";
 import { toast } from "sonner";
+import { DoctorRegistrationDetailsModal } from "@/components/admin/doctors/doctor-registration-details-modal";
 import type { DoctorRegistration, PaginatedResponse } from "@/types";
 
 interface RegistrationCardsProps {
@@ -53,6 +55,10 @@ export function RegistrationCards({
     action: "approve" | "reject";
     doctor: DoctorRegistration | null;
   }>({ open: false, action: "approve", doctor: null });
+  const [detailsModal, setDetailsModal] = useState<{
+    open: boolean;
+    doctor: DoctorRegistration | null;
+  }>({ open: false, doctor: null });
   const [reason, setReason] = useState("");
   const [processing, setProcessing] = useState(false);
 
@@ -100,9 +106,22 @@ export function RegistrationCards({
     }
   };
 
-  // Check if profile is incomplete
+  // Check if profile is incomplete (missing required documents)
   const isProfileIncomplete = (doctor: DoctorRegistration) => {
-    return !doctor.specialization || !doctor.hospitalAffiliation || !doctor.consultationFee;
+    const missingDocs = !doctor.medicalLicenseUrl || !doctor.govtIdProofUrl || 
+                        !doctor.degreeCertificateUrl || !doctor.signatureUrl;
+    const missingBasicInfo = !doctor.specialization || !doctor.registrationNumber;
+    return missingDocs || missingBasicInfo;
+  };
+
+  // Count uploaded documents
+  const getDocCount = (doctor: DoctorRegistration) => {
+    let count = 0;
+    if (doctor.medicalLicenseUrl) count++;
+    if (doctor.govtIdProofUrl) count++;
+    if (doctor.degreeCertificateUrl) count++;
+    if (doctor.signatureUrl) count++;
+    return count;
   };
 
   return (
@@ -210,9 +229,9 @@ export function RegistrationCards({
                 <MapPin className="h-4 w-4" />
                 <span>{doctor.hospitalAffiliation || "Not specified"}</span>
               </div>
-              <div className="text-muted-foreground">
-                <span className="font-medium">Fee:</span>{" "}
-                <span>₹{doctor.consultationFee || 0}</span>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <FileText className="h-4 w-4" />
+                <span>{getDocCount(doctor)}/4 Documents</span>
               </div>
             </div>
 
@@ -233,7 +252,11 @@ export function RegistrationCards({
 
             {/* Action Row */}
             <div className="flex items-center justify-between pt-4 border-t">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setDetailsModal({ open: true, doctor })}
+              >
                 <Eye className="mr-2 h-4 w-4" />
                 View Details
               </Button>
@@ -333,6 +356,14 @@ export function RegistrationCards({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Doctor Registration Details Modal */}
+      <DoctorRegistrationDetailsModal
+        doctor={detailsModal.doctor}
+        open={detailsModal.open}
+        onOpenChange={(open) => setDetailsModal({ open, doctor: detailsModal.doctor })}
+        onActionComplete={onActionComplete}
+      />
     </div>
   );
 }

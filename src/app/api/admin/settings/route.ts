@@ -9,6 +9,16 @@ const DEFAULT_SETTINGS: Record<string, unknown> = {
   "general.supportEmail": "support@medproofdocs.com",
   "general.supportPhone": "+91-9999999999",
   "general.maintenanceMode": false,
+  "system.language": "english",
+  "system.certificateExpiryDays": 30,
+  "system.autoAssignDoctors": true,
+  "system.manualApproval": false,
+  "certificates.sickLeaveEnabled": true,
+  "certificates.medicalForm1aEnabled": true,
+  "certificates.fitnessCertEnabled": false,
+  "certificates.sickLeaveFee": 299,
+  "certificates.medicalForm1aFee": 499,
+  "certificates.fitnessCertFee": 399,
   "payment.razorpayKeyId": "",
   "payment.razorpayKeySecret": "",
   "payment.sickLeaveFee": 599,
@@ -43,6 +53,20 @@ export async function GET(request: NextRequest) {
         supportEmail: settingsMap["general.supportEmail"] as string,
         supportPhone: settingsMap["general.supportPhone"] as string,
         maintenanceMode: settingsMap["general.maintenanceMode"] as boolean,
+      },
+      system: {
+        language: settingsMap["system.language"] as string,
+        certificateExpiryDays: settingsMap["system.certificateExpiryDays"] as number,
+        autoAssignDoctors: settingsMap["system.autoAssignDoctors"] as boolean,
+        manualApproval: settingsMap["system.manualApproval"] as boolean,
+      },
+      certificates: {
+        sickLeaveEnabled: settingsMap["certificates.sickLeaveEnabled"] as boolean,
+        medicalForm1aEnabled: settingsMap["certificates.medicalForm1aEnabled"] as boolean,
+        fitnessCertEnabled: settingsMap["certificates.fitnessCertEnabled"] as boolean,
+        sickLeaveFee: settingsMap["certificates.sickLeaveFee"] as number,
+        medicalForm1aFee: settingsMap["certificates.medicalForm1aFee"] as number,
+        fitnessCertFee: settingsMap["certificates.fitnessCertFee"] as number,
       },
       payment: {
         razorpayKeyId: settingsMap["payment.razorpayKeyId"] as string,
@@ -90,7 +114,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Validate section
-    const validSections = ["general", "payment", "whatsapp", "notifications"];
+    const validSections = ["general", "system", "certificates", "payment", "whatsapp", "notifications"];
     if (!validSections.includes(section)) {
       return NextResponse.json(
         { success: false, message: "Invalid settings section" },

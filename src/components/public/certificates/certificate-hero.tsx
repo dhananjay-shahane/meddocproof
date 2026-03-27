@@ -50,14 +50,24 @@ export function CertificateHero({ certInfo }: CertificateHeroProps) {
               {certInfo.title}
             </motion.h1>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-lg text-gray-600 leading-relaxed mb-8 whitespace-pre-line"
+              className="mb-8"
             >
-              {certInfo.description}
-            </motion.p>
+              <ul className="space-y-3">
+                {certInfo.bulletPoints.map((point, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-600 leading-relaxed">
+                    <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-teal-500" />
+                    <span
+                      className="text-base"
+                      dangerouslySetInnerHTML={{ __html: point }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

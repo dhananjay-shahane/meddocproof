@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Script from "next/script";
 import {
   ArrowLeft,
@@ -48,6 +49,18 @@ import { PaymentTierSelector } from "@/components/certificate-apply/payment-tier
 const MAX_DOB_18 = new Date(Date.now() - 18 * 365.25 * 24 * 60 * 60 * 1000)
   .toISOString()
   .split("T")[0];
+
+const CERT_SVG_MAP: Record<string, string> = {
+  sick_leave: "/svg/CertificatesIcons/SickLeavecertificatesvg.svg",
+  work_from_home: "/svg/CertificatesIcons/WorkfromHomecertificate.svg",
+  caretaker: "/svg/CertificatesIcons/CareTakerCertificate.svg",
+  recovery: "/svg/CertificatesIcons/Recoverycertificate.svg",
+  fitness: "/svg/CertificatesIcons/MedicalFitnessCertificate.svg",
+  fit_to_fly: "/svg/CertificatesIcons/FittoFly.svg",
+  unfit_to_work: "/svg/CertificatesIcons/Unfit%20to%20WorkCertificate.svg",
+  unfit_to_travel: "/svg/CertificatesIcons/UnfittiTravel.svg",
+  medical_diagnosis: "/svg/CertificatesIcons/DiagnosisCertificate.svg",
+};
 import { SpecialAttestationField } from "@/components/certificate-apply/special-attestation-field";
 import { TermsCheckbox } from "@/components/certificate-apply/terms-checkbox";
 import { PriceBreakdown } from "@/components/certificate-apply/price-breakdown";
@@ -316,11 +329,17 @@ function CertificateApplyForm() {
                     <div
                       className={`inline-flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${
                         isSelected
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                          ? "bg-primary/10"
+                          : "bg-muted group-hover:bg-primary/10"
                       }`}
                     >
-                      <cert.icon className="h-5 w-5" />
+                      <Image
+                        src={CERT_SVG_MAP[cert.enumValue] ?? "/svg/Certificatesvg/Sickleave-svgrepo-com.svg"}
+                        alt={cert.name}
+                        width={20}
+                        height={20}
+                        className="h-5 w-5 object-contain"
+                      />
                     </div>
                     <h3 className="mt-3 font-semibold text-foreground">{cert.name}</h3>
                     <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-3">

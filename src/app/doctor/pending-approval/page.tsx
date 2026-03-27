@@ -50,9 +50,6 @@ function PendingApprovalContent() {
 
   useEffect(() => {
     checkStatus();
-    // Poll every 30 seconds
-    const interval = setInterval(checkStatus, 30000);
-    return () => clearInterval(interval);
   }, [checkStatus]);
 
   if (loading) {
@@ -110,13 +107,10 @@ function PendingApprovalContent() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
-                    You&apos;ll be able to log in once approved.
+                    You&apos;ll receive an email notification once your account is approved.
                   </li>
                 </ul>
               </div>
-              <p className="mt-4 text-xs text-muted-foreground">
-                This page auto-refreshes every 30 seconds.
-              </p>
             </div>
           )}
 
@@ -172,11 +166,11 @@ function PendingApprovalContent() {
 
           <div className="mt-6 border-t pt-4">
             <Link
-              href="/doctor/login"
+              href="/"
               className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Login
+              Back to Home
             </Link>
           </div>
         </div>

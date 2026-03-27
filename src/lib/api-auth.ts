@@ -100,6 +100,7 @@ export async function validateDoctorRequest(
   const token = getTokenForRole(request, "doctor");
 
   if (!token) {
+    console.log("Doctor auth: No token found in cookies");
     return NextResponse.json(
       { success: false, message: "Authentication required" },
       { status: 401 }
@@ -108,6 +109,7 @@ export async function validateDoctorRequest(
 
   const payload = await verifyToken(token);
   if (!payload || payload.type !== "doctor") {
+    console.log("Doctor auth: Invalid token or wrong type", payload?.type);
     return NextResponse.json(
       { success: false, message: "Invalid or expired token" },
       { status: 401 }
@@ -128,6 +130,7 @@ export async function validateDoctorRequest(
   });
 
   if (!doctorUser || !doctorUser.isActive) {
+    console.log("Doctor auth: Doctor not found or inactive", payload.id);
     return NextResponse.json(
       { success: false, message: "Doctor account not found or deactivated" },
       { status: 403 }
@@ -135,6 +138,7 @@ export async function validateDoctorRequest(
   }
 
   if (doctorUser.status !== "approved") {
+    console.log("Doctor auth: Doctor not approved", doctorUser.status);
     return NextResponse.json(
       { success: false, message: "Doctor account is not approved" },
       { status: 403 }

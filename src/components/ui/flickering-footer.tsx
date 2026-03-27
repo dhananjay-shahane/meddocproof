@@ -298,6 +298,16 @@ interface SocialLink {
   brandColor?: string;
 }
 
+interface KeywordLink {
+  name: string;
+  href: string;
+}
+
+interface OfficeAddress {
+  name: string;
+  city: string;
+}
+
 interface FlickeringFooterProps {
   logoSrc?: string;
   brandName?: string;
@@ -306,6 +316,10 @@ interface FlickeringFooterProps {
   socialLinks?: SocialLink[];
   serviceAreas?: string[];
   gridText?: string;
+  medicalCertificateKeywords?: KeywordLink[];
+  certificateServiceKeywords?: KeywordLink[];
+  additionalKeywords?: KeywordLink[];
+  officeAddresses?: OfficeAddress[];
 }
 
 const defaultSocialLinks: SocialLink[] = [
@@ -372,13 +386,23 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
   socialLinks = defaultSocialLinks,
   serviceAreas = [],
   gridText = "MediProofDocs",
+  medicalCertificateKeywords = [],
+  certificateServiceKeywords = [],
+  additionalKeywords = [],
+  officeAddresses = [],
 }) => {
   const tablet = useMediaQuery("(max-width: 1024px)");
   const mobile = useMediaQuery("(max-width: 640px)");
 
+  // Display first 15 keywords from each array
+  const displayMedicalKeywords = medicalCertificateKeywords.slice(0, 15);
+  const displayServiceKeywords = certificateServiceKeywords.slice(0, 15);
+  const displayAdditionalKeywords = additionalKeywords.slice(0, 15);
+
   return (
     <footer id="footer" className="w-full pb-0 bg-gradient-to-r from-blue-900 to-teal-900 text-white shadow-[0_-8px_30px_rgb(0,0,0,0.3)]">
       <div className="flex flex-col md:flex-row md:items-start md:justify-between p-4 md:p-6 lg:p-10 max-w-[90rem] mx-auto gap-6 md:gap-8">
+        {/* Left Column: Logo, Description, Social Links + All Footer Links stacked */}
         <div className="flex flex-col items-start justify-start gap-y-4 max-w-xs">
           <Link href="/" className="flex items-center gap-2 md:gap-3">
              <Logo />
@@ -400,29 +424,93 @@ export const FlickeringFooter: React.FC<FlickeringFooterProps> = ({
               </Link>
             ))}
           </div>
-        </div>
-        <div className="pt-0 md:w-2/3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {footerLinks.map((column, columnIndex) => (
-              <ul key={columnIndex} className="flex flex-col gap-y-2">
-                <li className="mb-2 text-sm font-semibold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
-                  {column.title}
+          {/* All footer link columns stacked vertically */}
+          {footerLinks.map((column, columnIndex) => (
+            <ul key={columnIndex} className="flex flex-col gap-y-2 pt-4">
+              <li className="mb-2 text-sm font-semibold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
+                {column.title}
+              </li>
+              {column.links.map((link) => (
+                <li
+                  key={link.id}
+                  className="group inline-flex cursor-pointer items-center justify-start gap-1 text-sm text-white/70"
+                >
+                  <Link href={link.url} className="hover:text-white transition-colors">
+                    {link.title}
+                  </Link>
+                  <div className="flex size-4 items-center justify-center border border-white/20 rounded translate-x-0 transform opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100">
+                    <ChevronRightIcon className="h-3 w-3 text-white" />
+                  </div>
                 </li>
-                {column.links.map((link) => (
-                  <li
-                    key={link.id}
-                    className="group inline-flex cursor-pointer items-center justify-start gap-1 text-sm text-white/70"
-                  >
-                    <Link href={link.url} className="hover:text-white transition-colors">
-                      {link.title}
-                    </Link>
-                    <div className="flex size-4 items-center justify-center border border-white/20 rounded translate-x-0 transform opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100">
-                      <ChevronRightIcon className="h-3 w-3 text-white" />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ))}
+              ))}
+            </ul>
+          ))}
+        </div>
+        {/* Right Side: Keywords Columns */}
+        <div className="pt-0 md:w-2/3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Medical Certificate Keywords Column */}
+            {displayMedicalKeywords.length > 0 && (
+              <div className="flex flex-col">
+                <h3 className="mb-4 text-sm font-bold text-white/90">
+                  Get a Medical Certificates Online in 30 Mins
+                </h3>
+                <ul className="flex flex-col gap-y-2">
+                  {displayMedicalKeywords.map((keyword, index) => (
+                    <li key={index}>
+                      <Link
+                        href={keyword.href}
+                        className="text-sm text-white/70 hover:text-teal-400 transition-colors leading-relaxed"
+                      >
+                        {keyword.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Certificate Services Keywords Column */}
+            {displayServiceKeywords.length > 0 && (
+              <div className="flex flex-col">
+                <h3 className="mb-4 text-sm font-bold text-white/90">
+                  Our Certificate Services
+                </h3>
+                <ul className="flex flex-col gap-y-2">
+                  {displayServiceKeywords.map((keyword, index) => (
+                    <li key={index}>
+                      <Link
+                        href={keyword.href}
+                        className="text-sm text-white/70 hover:text-teal-400 transition-colors leading-relaxed"
+                      >
+                        {keyword.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Additional Keywords Column */}
+            {displayAdditionalKeywords.length > 0 && (
+              <div className="flex flex-col">
+                <h3 className="mb-4 text-sm font-bold text-white/90">
+                  Popular Searches
+                </h3>
+                <ul className="flex flex-col gap-y-2">
+                  {displayAdditionalKeywords.map((keyword, index) => (
+                    <li key={index}>
+                      <Link
+                        href={keyword.href}
+                        className="text-sm text-white/70 hover:text-teal-400 transition-colors leading-relaxed"
+                      >
+                        {keyword.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>

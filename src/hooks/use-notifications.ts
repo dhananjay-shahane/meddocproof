@@ -18,6 +18,7 @@ interface UseNotificationsResult {
   refetch: () => Promise<void>;
   markAsRead: (id: string) => Promise<boolean>;
   markAllAsRead: () => Promise<boolean>;
+  deleteNotification: (id: string) => Promise<boolean>;
 }
 
 export function useNotifications({ filters, page, limit = 20 }: UseNotificationsOptions): UseNotificationsResult {
@@ -67,17 +68,24 @@ export function useNotifications({ filters, page, limit = 20 }: UseNotifications
 
   const markAllAsRead = useCallback(async () => {
     try {
-      // Mark each unread notification as read
-      if (data?.items) {
-        const unreadItems = data.items.filter((n) => !n.isRead);
-        await Promise.all(unreadItems.map((n) => api.put(`/admin/notifications/${n.id}`)));
-      }
+      // Use bulk API endpoint to mark all as read
+      await api.put("/admin/notifications");
       await fetchData();
       return true;
     } catch {
       return false;
     }
-  }, [data, fetchData]);
+  }, [fetchData]);
 
-  return { data, unreadCount, loading, error, refetch: fetchData, markAsRead, markAllAsRead };
+  const deleteNotification = useCallback(async (id: string) => {
+    try {
+      await api.delete(`/admin/notifications/${id}`);
+      await fetchData();
+      return true;
+    } catch {
+      return false;
+    }
+  }, [fetchData]);
+
+  return { data, unreadCount, loading, error, refetch: fetchData, markAsRead, markAllAsRead, deleteNotification };
 }

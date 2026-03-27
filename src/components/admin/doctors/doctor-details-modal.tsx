@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatDate } from "date-fns";
 import {
   Dialog,
@@ -14,7 +14,6 @@ import {
   X,
   FileText,
   Eye,
-  Download,
   ExternalLink,
   RefreshCw,
   Plus,
@@ -25,8 +24,18 @@ import {
   AlertTriangle,
   Upload,
   MessageSquare,
+  Loader2,
 } from "lucide-react";
-import type { Doctor } from "@/types";
+import api from "@/lib/api";
+import type { Doctor, Notification } from "@/types";
+
+interface DoctorDetails extends Doctor {
+  medicalLicenseUrl?: string | null;
+  govtIdProofUrl?: string | null;
+  degreeCertificateUrl?: string | null;
+  signatureUrl?: string | null;
+  approvedAt?: string | null;
+}
 
 interface DoctorDetailsModalProps {
   doctor: Doctor | null;
@@ -36,68 +45,37 @@ interface DoctorDetailsModalProps {
 
 type TabType = "personal" | "performance" | "documents" | "missing" | "communications";
 
-// Mock data for demonstration
-const mockApplicationHistory = [
-  {
-    id: 1,
-    title: "New Registration",
-    description: "Doctor submitted application",
-    date: "Aug 20, 2025, 08:27 PM",
-    icon: "file",
-  },
-  {
-    id: 2,
-    title: "Application Submitted",
-    description: "Application received and under review",
-    date: "Aug 20, 2025, 08:27 PM",
-    icon: "user",
-  },
-  {
-    id: 3,
-    title: "Status: Approved",
-    description: "Application approved by admin",
-    date: "Aug 21, 2025, 09:47 AM",
-    icon: "check",
-    status: "Approved",
-  },
-];
-
-const mockDocuments = [
-  {
-    id: 1,
-    name: "Medical License",
-    filename: "medical-license_1755701847043.jpg",
-  },
-  {
-    id: 2,
-    name: "Bank Passbook",
-    filename: "bank-passbook_1755701849785.jpg",
-  },
-  {
-    id: 3,
-    name: "Profile Photo",
-    filename: "profile-photo_1755701851074.jpg",
-  },
-];
-
-const mockCommunications = [
-  {
-    id: 1,
-    subject: "Please upload required documents",
-    priority: "High",
-    status: "Sent",
-    adminName: "Anil Kumar",
-    message: "upload required documents",
-    date: "Aug 20, 2025, 11:12 AM",
-  },
-];
-
 export function DoctorDetailsModal({
   doctor,
   open,
   onOpenChange,
 }: DoctorDetailsModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>("personal");
+  const [details, setDetails] = useState<DoctorDetails | null>(null);
+  const [communications, setCommunications] = useState<Notification[]>([]);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!open || !doctor?.id) return;
+    setDetailsLoading(true);
+    Promise.all([
+      api.get(`/admin/doctors/${doctor.id}`),
+      api.get(`/admin/notifications?doctorId=${doctor.id}&limit=20`),
+    ])
+      .then(([detailRes, notifRes]) => {
+        setDetails(detailRes.data.data);
+        setCommunications(notifRes.data.data?.notifications ?? []);
+      })
+      .catch(() => {})
+      .finally(() => setDetailsLoading(false));
+  }, [open, doctor?.id]);
+
+  useEffect(() => {
+    if (!open) {
+      setDetails(null);
+      setCommunications([]);
+    }
+  }, [open]);
 
   if (!doctor) return null;
 
@@ -163,11 +141,21 @@ export function DoctorDetailsModal({
 
         {/* Tab Content */}
         <div className="p-6 pt-4">
-          {activeTab === "personal" && <PersonalDetailsTab doctor={doctor} />}
-          {activeTab === "performance" && <PerformanceTab doctor={doctor} />}
-          {activeTab === "documents" && <DocumentsTab doctor={doctor} />}
-          {activeTab === "missing" && <MissingDocumentsTab />}
-          {activeTab === "communications" && <CommunicationsTab doctor={doctor} />}
+          {detailsLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <>
+              {activeTab === "personal" && <PersonalDetailsTab doctor={details ?? doctor} />}
+              {activeTab === "performance" && <PerformanceTab doctor={doctor} />}
+              {activeTab === "documents" && <DocumentsTab doctor={details ?? doctor} />}
+              {activeTab === "missing" && <MissingDocumentsTab />}
+              {activeTab === "communications" && (
+                <CommunicationsTab doctor={doctor} communications={communications} />
+              )}
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>
@@ -175,7 +163,34 @@ export function DoctorDetailsModal({
 }
 
 // Personal Details Tab
-function PersonalDetailsTab({ doctor }: { doctor: Doctor }) {
+function PersonalDetailsTab({ doctor }: { doctor: DoctorDetails }) {
+  const history = [
+    {
+      id: 1,
+      title: "Registration Submitted",
+      description: "Doctor submitted registration application",
+      date: formatDate(doctor.createdAt, "MMM dd, yyyy, hh:mm a"),
+      icon: "file" as const,
+    },
+    ...(doctor.status !== "pending"
+      ? [
+          {
+            id: 2,
+            title: `Status: ${doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1)}`,
+            description:
+              doctor.status === "approved"
+                ? "Application approved by admin"
+                : doctor.status === "rejected"
+                ? "Application rejected by admin"
+                : "Status updated by admin",
+            date: formatDate(doctor.updatedAt, "MMM dd, yyyy, hh:mm a"),
+            icon: "check" as const,
+            status: doctor.status.charAt(0).toUpperCase() + doctor.status.slice(1),
+          },
+        ]
+      : []),
+  ];
+
   return (
     <div className="space-y-6">
       {/* Application History */}
@@ -184,23 +199,22 @@ function PersonalDetailsTab({ doctor }: { doctor: Doctor }) {
           Application History
         </h3>
         <div className="relative">
-          {mockApplicationHistory.map((item, index) => (
+          {history.map((item, index) => (
             <div key={item.id} className="flex gap-4 pb-6 last:pb-0">
               {/* Timeline line */}
-              {index < mockApplicationHistory.length - 1 && (
+              {index < history.length - 1 && (
                 <div className="absolute left-5 top-10 h-[calc(100%-40px)] w-0.5 bg-blue-200" />
               )}
               {/* Icon */}
               <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white">
                 {item.icon === "file" && <FileText className="h-5 w-5" />}
-                {item.icon === "user" && <User className="h-5 w-5" />}
                 {item.icon === "check" && <User className="h-5 w-5" />}
               </div>
               {/* Content */}
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h4 className="font-semibold text-slate-900">{item.title}</h4>
-                  {item.status && (
+                  {"status" in item && item.status && (
                     <span className="rounded-full border border-green-500 px-2 py-0.5 text-xs font-medium text-green-600">
                       {item.status}
                     </span>
@@ -391,7 +405,13 @@ function PerformanceTab({ doctor }: { doctor: Doctor }) {
 }
 
 // Documents Tab
-function DocumentsTab({ doctor }: { doctor: Doctor }) {
+function DocumentsTab({ doctor }: { doctor: DoctorDetails }) {
+  const documents = [
+    { id: 1, name: "Medical License", url: doctor.medicalLicenseUrl },
+    { id: 2, name: "Govt ID Proof", url: doctor.govtIdProofUrl },
+    { id: 3, name: "Degree Certificate", url: doctor.degreeCertificateUrl },
+  ].filter((d) => !!d.url);
+
   return (
     <div className="space-y-6">
       {/* Uploaded Documents */}
@@ -399,38 +419,52 @@ function DocumentsTab({ doctor }: { doctor: Doctor }) {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
           Uploaded Documents
         </h3>
-        <div className="space-y-3">
-          {mockDocuments.map((doc) => (
-            <div
-              key={doc.id}
-              className="flex items-center justify-between rounded-xl border bg-white p-4"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100">
-                  <FileText className="h-5 w-5 text-slate-400" />
+        {documents.length === 0 ? (
+          <div className="rounded-xl border bg-white p-6 text-center text-slate-500">
+            No documents uploaded
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {documents.map((doc) => (
+              <div
+                key={doc.id}
+                className="flex items-center justify-between rounded-xl border bg-white p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100">
+                    <FileText className="h-5 w-5 text-slate-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-900">{doc.name}</p>
+                    <p className="text-sm text-blue-500 max-w-xs truncate">{doc.url}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-slate-900">{doc.name}</p>
-                  <p className="text-sm text-blue-500">{doc.filename}</p>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5"
+                    onClick={() => window.open(doc.url!, "_blank")}
+                  >
+                    <Eye className="h-4 w-4" />
+                    View
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5"
+                    asChild
+                  >
+                    <a href={doc.url!} target="_blank" rel="noreferrer">
+                      <ExternalLink className="h-4 w-4" />
+                      Open
+                    </a>
+                  </Button>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Eye className="h-4 w-4" />
-                  View
-                </Button>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <Download className="h-4 w-4" />
-                  Download
-                </Button>
-                <Button variant="outline" size="sm" className="gap-1.5">
-                  <ExternalLink className="h-4 w-4" />
-                  Open
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Signature with Stamp */}
@@ -443,17 +477,19 @@ function DocumentsTab({ doctor }: { doctor: Doctor }) {
         </div>
         <p className="text-sm text-slate-500 mb-4">Current Signature & Stamp</p>
         <div className="rounded-lg bg-slate-50 p-6 flex flex-col items-center justify-center min-h-38">
-          {/* Placeholder for signature - in real app this would be an image */}
-          <div className="text-center">
-            <div className="font-script text-2xl text-slate-600 mb-2" style={{ fontStyle: "italic" }}>
-              [Signature]
+          {doctor.signatureUrl ? (
+            <img
+              src={doctor.signatureUrl}
+              alt="Doctor signature"
+              className="max-h-28 object-contain"
+            />
+          ) : (
+            <div className="text-center">
+              <p className="text-slate-400 text-sm">No signature uploaded</p>
+              <p className="font-semibold text-blue-700 mt-2">Dr. {doctor.fullName}</p>
+              <p className="text-sm text-slate-600">{doctor.specialization}</p>
             </div>
-            <p className="font-semibold text-blue-700">Dr. {doctor.fullName}</p>
-            <p className="text-sm text-slate-600">{doctor.specialization}</p>
-            <p className="text-sm text-slate-600">
-              Reg No: {doctor.registrationNumber.split(" ")[0]}
-            </p>
-          </div>
+          )}
         </div>
       </div>
     </div>
@@ -494,14 +530,20 @@ function MissingDocumentsTab() {
 }
 
 // Communications Tab
-function CommunicationsTab({ doctor }: { doctor: Doctor }) {
+function CommunicationsTab({
+  doctor,
+  communications,
+}: {
+  doctor: Doctor;
+  communications: Notification[];
+}) {
   return (
     <div className="rounded-xl border bg-white p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-slate-400" />
           <h3 className="text-lg font-semibold text-slate-900">
-            Communications ({mockCommunications.length})
+            Notifications ({communications.length})
           </h3>
         </div>
         <div className="flex items-center gap-2">
@@ -542,28 +584,40 @@ function CommunicationsTab({ doctor }: { doctor: Doctor }) {
 
       {/* Communications List */}
       <div className="space-y-4">
-        {mockCommunications.map((comm) => (
-          <div
-            key={comm.id}
-            className="rounded-xl border border-amber-200 bg-amber-50/50 p-4"
-          >
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
-                <span className="font-medium text-slate-900">{comm.subject}</span>
-                <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-600">
-                  {comm.priority}
-                </span>
-                <span className="rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
-                  {comm.status}
+        {communications.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 mb-4">
+              <MessageSquare className="h-8 w-8 text-slate-300" />
+            </div>
+            <p className="text-slate-500">No notifications sent to this doctor</p>
+          </div>
+        ) : (
+          communications.map((notif) => (
+            <div
+              key={notif.id}
+              className="rounded-xl border border-slate-200 bg-slate-50/50 p-4"
+            >
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                  <span className="font-medium text-slate-900">{notif.title}</span>
+                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+                    {notif.type}
+                  </span>
+                  {!notif.isRead && (
+                    <span className="rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                      New
+                    </span>
+                  )}
+                </div>
+                <span className="text-sm text-slate-400 whitespace-nowrap">
+                  {formatDate(notif.createdAt, "MMM dd, yyyy, hh:mm a")}
                 </span>
               </div>
-              <span className="text-sm text-slate-400">{comm.date}</span>
+              <p className="text-sm text-slate-700">{notif.message}</p>
             </div>
-            <p className="text-sm text-slate-500 mb-1">Admin: {comm.adminName}</p>
-            <p className="text-sm text-slate-700">{comm.message}</p>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

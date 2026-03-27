@@ -45,8 +45,7 @@ export function useAdminPayments(): UseAdminPaymentsResult {
         await api.post(`/admin/payments/withdrawals/${id}`, { action });
         await fetchData();
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
-        throw new Error(e.response?.data?.message || "Failed to process withdrawal");
+        throw new Error(getErrorMessage(err, "Failed to process withdrawal"));
       } finally {
         setProcessing(false);
       }

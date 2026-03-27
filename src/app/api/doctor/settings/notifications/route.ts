@@ -8,8 +8,23 @@ export async function PUT(request: NextRequest) {
     const auth = await validateDoctorRequest(request);
     if (isAuthError(auth)) return auth;
 
-    const preferences = await request.json();
+    const body = await request.json();
     const settingKey = `doctor_notifications_${auth.doctorUser.id}`;
+
+    // Validate that preferences only contain expected boolean fields
+    const allowedKeys = [
+      "emailNotifications",
+      "smsNotifications",
+      "newApplicationAlert",
+      "paymentAlert",
+      "withdrawalAlert",
+    ];
+    const preferences: Record<string, boolean> = {};
+    for (const key of allowedKeys) {
+      if (key in body) {
+        preferences[key] = Boolean(body[key]);
+      }
+    }
 
     await prisma.setting.upsert({
       where: { key: settingKey },

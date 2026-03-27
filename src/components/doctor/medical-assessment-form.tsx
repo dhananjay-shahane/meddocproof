@@ -238,6 +238,8 @@ export function MedicalAssessmentForm({
     setSaving(true);
     try {
       await onSubmit(data);
+    } catch (err: unknown) {
+      console.error("Medical assessment submission error:", err);
     } finally {
       setSaving(false);
     }

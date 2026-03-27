@@ -18,6 +18,24 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // Validate IFSC code format (4 alpha + 0 + 6 alphanumeric)
+    const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+    if (!ifscRegex.test(ifscCode.toUpperCase())) {
+      return NextResponse.json(
+        { success: false, message: "Invalid IFSC code format. Must be 11 characters (e.g., SBIN0001234)" },
+        { status: 400 }
+      );
+    }
+
+    // Validate account number (9-18 digits)
+    const accountRegex = /^\d{9,18}$/;
+    if (!accountRegex.test(accountNumber)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid account number. Must be 9-18 digits" },
+        { status: 400 }
+      );
+    }
+
     const settingKey = `doctor_bank_details_${auth.doctorUser.id}`;
     const bankData = { bankName, accountNumber, ifscCode, accountHolderName };
 

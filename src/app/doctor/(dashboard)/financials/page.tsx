@@ -141,7 +141,7 @@ export default function DoctorFinancialsPage() {
     { label: "completed", value: completedCerts, color: "bg-blue-50 text-blue-700 border-blue-200" },
     { label: "in-progress", value: inProgressCerts, color: "bg-green-50 text-green-700 border-green-200" },
     { label: "total-count", value: totalCertCount, color: "bg-yellow-50 text-yellow-700 border-yellow-200" },
-    { label: "total earnings", value: `₹${totalEarningsAmount.toLocaleString("en-IN")}`, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    { label: "total earnings", value: formatCurrency(totalEarningsAmount), color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
   ];
 
   // Chart data from API

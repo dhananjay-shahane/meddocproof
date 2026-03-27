@@ -39,8 +39,7 @@ export function useAdminPaymentFix(): UseAdminPaymentFixResult {
         await api.post(`/admin/payment-fix/${id}`, { action });
         await fetchData();
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
-        throw new Error(e.response?.data?.message || "Failed to fix payment");
+        throw new Error(getErrorMessage(err, "Failed to fix payment"));
       } finally {
         setFixing(false);
       }

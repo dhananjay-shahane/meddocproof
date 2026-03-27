@@ -58,6 +58,13 @@ export async function PUT(request: NextRequest) {
       markAll?: boolean;
     };
 
+    if (!notificationId && !markAll) {
+      return NextResponse.json(
+        { success: false, message: "Provide notificationId or markAll" },
+        { status: 400 }
+      );
+    }
+
     if (markAll) {
       await prisma.notification.updateMany({
         where: { doctorId, isRead: false },

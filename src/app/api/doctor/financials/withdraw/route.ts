@@ -11,12 +11,15 @@ export async function POST(request: NextRequest) {
     const doctorId = auth.doctorUser.id;
     const { amount } = await request.json();
 
-    if (!amount || amount <= 0) {
+    if (!amount || typeof amount !== "number" || amount <= 0) {
       return NextResponse.json(
-        { success: false, message: "Withdrawal amount must be greater than 0" },
+        { success: false, message: "Withdrawal amount must be a positive number" },
         { status: 400 }
       );
     }
+
+    // Round to 2 decimal places to avoid floating point issues
+    const safeAmount = Math.round(amount * 100) / 100;
 
     const wallet = await prisma.doctorWallet.findUnique({
       where: { doctorId },
@@ -29,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (amount > wallet.balance) {
+    if (safeAmount > wallet.balance) {
       return NextResponse.json(
         { success: false, message: "Insufficient balance" },
         { status: 400 }
@@ -71,7 +74,7 @@ export async function POST(request: NextRequest) {
       prisma.doctorWithdrawal.create({
         data: {
           doctorId,
-          amount,
+          amount: safeAmount,
           status: "pending",
           bankDetails: bankSetting.value as object,
         },
@@ -79,8 +82,8 @@ export async function POST(request: NextRequest) {
       prisma.doctorWallet.update({
         where: { doctorId },
         data: {
-          balance: { decrement: amount },
-          pendingWithdrawals: { increment: amount },
+          balance: { decrement: safeAmount },
+          pendingWithdrawals: { increment: safeAmount },
         },
       }),
     ]);

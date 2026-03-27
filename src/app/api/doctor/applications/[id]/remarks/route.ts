@@ -45,6 +45,13 @@ export async function POST(
       );
     }
 
+    if (message.trim().length > 1000) {
+      return NextResponse.json(
+        { success: false, message: "Remark message must be 1000 characters or less" },
+        { status: 400 }
+      );
+    }
+
     const remark = await prisma.remark.create({
       data: {
         applicationId: id,

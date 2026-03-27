@@ -22,6 +22,21 @@ export async function POST(
       );
     }
 
+    const parsedDate = new Date(consultationDate);
+    if (isNaN(parsedDate.getTime())) {
+      return NextResponse.json(
+        { success: false, message: "Invalid consultation date format" },
+        { status: 400 }
+      );
+    }
+
+    if (parsedDate <= new Date()) {
+      return NextResponse.json(
+        { success: false, message: "Consultation date must be in the future" },
+        { status: 400 }
+      );
+    }
+
     // Verify the application belongs to this doctor
     const application = await prisma.application.findFirst({
       where: {
@@ -41,7 +56,7 @@ export async function POST(
     await prisma.application.update({
       where: { id },
       data: {
-        consultationDate: new Date(consultationDate),
+        consultationDate: parsedDate,
         status: "consultation_scheduled",
       },
     });
@@ -53,7 +68,7 @@ export async function POST(
         addedBy: auth.doctorUser.fullName,
         addedByRole: "doctor",
         doctorId: auth.doctorUser.id,
-        message: `Consultation rescheduled to ${new Date(consultationDate).toLocaleDateString()}${reason ? `. Reason: ${reason}` : ""}`,
+        message: `Consultation rescheduled to ${parsedDate.toLocaleDateString()}${reason ? `. Reason: ${reason}` : ""}`,
       },
     });
 

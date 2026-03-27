@@ -111,7 +111,7 @@ export async function PUT(request: NextRequest) {
       });
     }).filter(Boolean);
 
-    await prisma.$transaction(upsertOps as never[]);
+    await prisma.$transaction(upsertOps as Parameters<typeof prisma.$transaction>[0]);
 
     return NextResponse.json({
       success: true,

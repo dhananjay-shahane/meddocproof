@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 
 export interface DoctorRegistrationFormData {
   // Profile Information
@@ -233,7 +234,6 @@ export function useDoctorRegistration() {
       router.push(`/doctor/pending-approval?email=${encodeURIComponent(formData.email)}`);
       return true;
     } catch (error: unknown) {
-      const { getErrorMessage } = await import("@/lib/utils");
       toast.error(getErrorMessage(error, "Registration failed. Please try again."));
       return false;
     } finally {

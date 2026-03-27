@@ -70,32 +70,35 @@ export async function POST(
       );
     }
 
-    // Generate a unique certificate number
-    let certificateNumber = generateCertificateNumber();
-    let attempts = 0;
-    while (attempts < 5) {
-      const existing = await prisma.application.findUnique({
-        where: { certificateNumber },
-        select: { id: true },
-      });
-      if (!existing) break;
-      certificateNumber = generateCertificateNumber();
-      attempts++;
-    }
-
     // Doctor payout amount — read from admin settings, fallback to ₹200
     const doctorFeeSetting = await prisma.setting.findUnique({
       where: { key: "doctor_fee" },
     });
     const payoutAmount = doctorFeeSetting ? Number(doctorFeeSetting.value) || 200 : 200;
 
-    // Use a transaction for atomicity
+    // Use a transaction for atomicity (including certificate number generation)
     const result = await prisma.$transaction(async (tx) => {
+      // Generate a unique certificate number inside transaction to prevent race conditions
+      let certNumber = generateCertificateNumber();
+      let attempts = 0;
+      while (attempts < 5) {
+        const existing = await tx.application.findUnique({
+          where: { certificateNumber: certNumber },
+          select: { id: true },
+        });
+        if (!existing) break;
+        certNumber = generateCertificateNumber();
+        attempts++;
+      }
+      if (attempts >= 5) {
+        throw new Error("Failed to generate unique certificate number");
+      }
+
       // 1. Update application — issue certificate
       const updatedApp = await tx.application.update({
         where: { id },
         data: {
-          certificateNumber,
+          certificateNumber: certNumber,
           status: "completed",
         },
         select: {
@@ -137,10 +140,10 @@ export async function POST(
           userId: application.userId,
           type: "certificate_issued",
           title: "Certificate Issued",
-          message: `Your ${application.certificateType.replace(/_/g, " ")} certificate has been issued. Certificate number: ${certificateNumber}`,
+          message: `Your ${application.certificateType.replace(/_/g, " ")} certificate has been issued. Certificate number: ${certNumber}`,
           metadata: {
             applicationId: application.applicationId,
-            certificateNumber,
+            certificateNumber: certNumber,
             certificateType: application.certificateType,
           },
         },
@@ -152,7 +155,7 @@ export async function POST(
     return NextResponse.json({
       success: true,
       data: result,
-      message: `Certificate issued successfully. Number: ${certificateNumber}`,
+      message: `Certificate issued successfully. Number: ${result.certificateNumber}`,
     });
   } catch (error) {
     console.error("Issue certificate error:", error);

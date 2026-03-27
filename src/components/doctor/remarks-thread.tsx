@@ -26,6 +26,8 @@ export function RemarksThread({
     try {
       await onAdd(message.trim());
       setMessage("");
+    } catch (err: unknown) {
+      console.error("Failed to add remark:", err);
     } finally {
       setSending(false);
     }

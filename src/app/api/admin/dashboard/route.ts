@@ -124,7 +124,7 @@ export async function GET(request: NextRequest) {
           avgRating: true,
           wallet: { select: { totalEarnings: true } },
         },
-      }).catch(() => [] as { id: string; fullName: string; specialization: string; completedCertificates: number; avgRating: number; wallet: { totalEarnings: number } | null }[]),
+      }).catch(() => []),
       // Failed payments
       prisma.payment.findMany({
         where: { status: "failed" },

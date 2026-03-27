@@ -17,13 +17,17 @@ export function useDoctorAvailability() {
   const [availability, setAvailability] = useState<WeeklySchedule | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchAvailability = useCallback(async () => {
     try {
+      setError(null);
       const res = await api.get("/doctor/availability");
       setAvailability(res.data.data.availability);
-    } catch {
-      console.error("Failed to fetch availability");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to fetch availability";
+      setError(message);
+      console.error("Failed to fetch availability", err);
     } finally {
       setLoading(false);
     }
@@ -68,6 +72,7 @@ export function useDoctorAvailability() {
     availability,
     loading,
     saving,
+    error,
     updateAvailability,
     toggleDay,
     updateDayTime,

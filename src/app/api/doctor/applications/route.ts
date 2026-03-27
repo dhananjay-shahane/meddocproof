@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
     console.log("Doctor applications request from:", doctorId);
     const { searchParams } = new URL(request.url);
 
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1") || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "10") || 10));
     const search = searchParams.get("search") || "";
     const status = (searchParams.get("status") || "") as ApplicationStatus | "";
     const tab = searchParams.get("tab") || "pending"; // "pending" or "completed"
@@ -200,12 +200,8 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Doctor applications list error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    const errorStack = error instanceof Error ? error.stack : "";
-    console.error("Error details:", errorMessage);
-    console.error("Stack trace:", errorStack);
     return NextResponse.json(
-      { success: false, message: `Failed to load applications: ${errorMessage}` },
+      { success: false, message: "Failed to load applications" },
       { status: 500 }
     );
   }

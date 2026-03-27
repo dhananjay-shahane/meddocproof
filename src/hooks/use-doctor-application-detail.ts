@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
+import { toast } from "sonner";
 import type {
   ApplicationDetailData,
   MedicalAssessmentFormData,
@@ -65,7 +67,8 @@ export function useDoctorApplicationDetail(
           return true;
         }
         return false;
-      } catch {
+      } catch (err: unknown) {
+        toast.error(getErrorMessage(err, "Failed to submit assessment"));
         return false;
       } finally {
         setSubmitting(false);
@@ -87,7 +90,8 @@ export function useDoctorApplicationDetail(
           return true;
         }
         return false;
-      } catch {
+      } catch (err: unknown) {
+        toast.error(getErrorMessage(err, "Failed to complete consultation"));
         return false;
       } finally {
         setSubmitting(false);
@@ -107,7 +111,8 @@ export function useDoctorApplicationDetail(
         return true;
       }
       return false;
-    } catch {
+    } catch (err: unknown) {
+      toast.error(getErrorMessage(err, "Failed to issue certificate"));
       return false;
     } finally {
       setSubmitting(false);
@@ -127,7 +132,8 @@ export function useDoctorApplicationDetail(
           return response.data.data;
         }
         return null;
-      } catch {
+      } catch (err: unknown) {
+        toast.error(getErrorMessage(err, "Failed to add remark"));
         return null;
       } finally {
         setSubmitting(false);

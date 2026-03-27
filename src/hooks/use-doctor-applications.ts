@@ -72,7 +72,7 @@ export function useDoctorApplications(): UseDoctorApplicationsResult {
       setData(res.data.data);
     } catch (err: unknown) {
       const message = getErrorMessage(err, "Failed to load applications");
-      const status = typeof err === "object" && err !== null ? (err as { response?: { status?: number } }).response?.status : undefined;
+      const status = typeof err === "object" && err !== null && "response" in err ? (err as { response?: { status?: number } }).response?.status : undefined;
       
       if (status === 401) {
         setError("Session expired. Please login again.");

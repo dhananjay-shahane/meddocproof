@@ -111,13 +111,14 @@ export default function SettingsPage() {
     if (!settings) return;
 
     if (settings.certificates) {
+      const certs = settings.certificates as Record<string, unknown>;
       setCertificateTypes(CERT_META.map((m, i) => {
         const keys = ["sickLeave", "medicalForm1a", "fitnessCert"] as const;
         const k = keys[i];
         return {
           ...m,
-          price: (settings.certificates as Record<string, number>)[`${k}Fee`] ?? [299, 499, 399][i],
-          enabled: (settings.certificates as Record<string, boolean>)[`${k}Enabled`] ?? (i < 2),
+          price: Number(certs[`${k}Fee`]) || [299, 499, 399][i],
+          enabled: typeof certs[`${k}Enabled`] === "boolean" ? certs[`${k}Enabled`] : (i < 2),
         };
       }));
     }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
+import type { ApplicationStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateDoctorRequest, isAuthError } from "@/lib/api-auth";
 
@@ -21,14 +22,14 @@ export async function GET(request: NextRequest) {
     // Build where clause based on tab
     let where: Prisma.ApplicationWhereInput = { assignedDoctorId: doctorId };
 
-    const pendingStatuses = [
+    const pendingStatuses: ApplicationStatus[] = [
       "assigned",
       "doctor_assigned",
       "pending_doctor_review",
       "under_review",
       "consultation_scheduled",
     ];
-    const completedStatuses = ["completed", "delivered", "certificate_delivered"];
+    const completedStatuses: ApplicationStatus[] = ["completed", "delivered", "certificate_delivered"];
 
     switch (tab) {
       case "upcoming":

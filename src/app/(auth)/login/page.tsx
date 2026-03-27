@@ -124,7 +124,7 @@ function LoginForm() {
     <div className="relative min-h-screen w-full overflow-hidden bg-[#0a0a0a] lg:bg-white">
       {/* Mobile Background */}
       <div className="absolute inset-0 lg:hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/50 to-black/80 z-10" />
         <img
           src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&q=80&w=2191"
           alt="Medical background"
@@ -142,8 +142,8 @@ function LoginForm() {
               alt="Modern medical facility"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-black/40" />
           </div>
 
           {/* Animated Orbs */}
@@ -181,7 +181,7 @@ function LoginForm() {
               >
                 <h1 className="text-5xl xl:text-6xl font-bold leading-[1.1] tracking-tight">
                   Welcome
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400">
+                  <span className="block text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-cyan-400 to-emerald-400">
                     Back
                   </span>
                 </h1>
@@ -215,7 +215,7 @@ function LoginForm() {
                         transition={{ delay: 0.5 + idx * 0.1 }}
                         className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-md border border-white/10"
                       >
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-xs font-bold">
+                        <div className="w-7 h-7 rounded-full bg-linear-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-xs font-bold">
                           {item.step}
                         </div>
                         <span className="text-sm text-white/70">{item.text}</span>
@@ -321,7 +321,7 @@ function LoginForm() {
                       type="submit"
                       size="lg"
                       disabled={loading}
-                      className="w-full h-14 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 group text-base"
+                      className="w-full h-14 bg-linear-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 group text-base"
                     >
                       {loading ? (
                         <motion.div
@@ -352,7 +352,7 @@ function LoginForm() {
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/20 to-orange-500/20 p-4 backdrop-blur-sm"
+                        className="rounded-xl border border-amber-500/30 bg-linear-to-br from-amber-500/20 to-orange-500/20 p-4 backdrop-blur-sm"
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-bold text-amber-300 flex items-center gap-1">
@@ -424,7 +424,7 @@ function LoginForm() {
                         type="submit"
                         size="lg"
                         disabled={loading}
-                        className="w-full h-14 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 text-base"
+                        className="w-full h-14 bg-linear-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-300 text-base"
                       >
                         {loading ? (
                           <motion.div

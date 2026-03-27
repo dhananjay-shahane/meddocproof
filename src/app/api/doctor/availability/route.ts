@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateDoctorRequest, isAuthError } from "@/lib/api-auth";
 
@@ -109,9 +110,9 @@ export async function PUT(request: NextRequest) {
           maxSlots: schedule.maxSlots,
         },
       });
-    }).filter(Boolean);
+    }).filter(Boolean) as Prisma.PrismaPromise<unknown>[];
 
-    await prisma.$transaction(upsertOps as Parameters<typeof prisma.$transaction>[0]);
+    await prisma.$transaction(upsertOps);
 
     return NextResponse.json({
       success: true,

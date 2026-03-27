@@ -53,6 +53,14 @@ const isPendingStatus = (status: string) => {
   ].includes(status);
 };
 
+// Helper function to safely cast unknown values for JSX rendering
+const renderUnknown = (value: unknown): string => {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+  if (typeof value === "boolean") return String(value);
+  return String(value || "");
+};
+
 interface DocumentItem {
   id: string;
   fileName: string;
@@ -682,53 +690,53 @@ export default function DoctorApplicationsPage() {
                       <div>
                         <p className="text-xs font-medium text-gray-400">Full Name</p>
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {(selectedApp.formData?.fullName as string) || selectedApp.user?.fullName || "—"}
+                          {renderUnknown(selectedApp.formData?.fullName || selectedApp.user?.fullName || "—")}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-gray-400">Email</p>
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {(selectedApp.formData?.email as string) || selectedApp.user?.email || "—"}
+                          {renderUnknown(selectedApp.formData?.email || selectedApp.user?.email || "—")}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-gray-400">Phone</p>
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {(selectedApp.formData?.phone as string) || selectedApp.user?.phoneNumber || "—"}
+                          {renderUnknown(selectedApp.formData?.phone || selectedApp.user?.phoneNumber || "—")}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-gray-400">Gender</p>
                         <p className="mt-1 text-sm font-medium capitalize text-gray-900">
-                          {(selectedApp.formData?.gender as string) || "N/A"}
+                          {renderUnknown(selectedApp.formData?.gender || "N/A")}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-gray-400">Date of Birth</p>
                         <p className="mt-1 text-sm font-medium text-gray-900">
                           {selectedApp.formData?.dateOfBirth 
-                            ? format(parseISO(selectedApp.formData.dateOfBirth as string), "MMM dd, yyyy") 
+                            ? format(parseISO(renderUnknown(selectedApp.formData.dateOfBirth)), "MMM dd, yyyy") 
                             : "—"}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-gray-400">Age</p>
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {selectedApp.formData?.age ? `${String(selectedApp.formData.age)} years` : "Not specified"}
+                          {selectedApp.formData?.age ? `${renderUnknown(selectedApp.formData.age)} years` : "Not specified"}
                         </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Address */}
-                  {selectedApp.formData?.address && (
+                  {selectedApp.formData?.address ? (
                     <div>
                       <p className="text-xs font-semibold text-gray-900">Address</p>
                       <div className="mt-2 rounded-lg border border-amber-100 bg-amber-50/50 px-4 py-3">
-                        <p className="text-sm text-gray-700">{selectedApp.formData.address as string}</p>
+                        <p className="text-sm text-gray-700">{renderUnknown(selectedApp.formData.address)}</p>
                       </div>
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Certificate Information */}
                   <div>
@@ -765,39 +773,35 @@ export default function DoctorApplicationsPage() {
                           {format(parseISO(selectedApp.createdAt), "MMM dd, yyyy")}
                         </p>
                       </div>
-                      {(selectedApp.formData?.organizationName || selectedApp.formData?.institution || selectedApp.formData?.company) && (
+                      {(selectedApp.formData?.organizationName || selectedApp.formData?.institution || selectedApp.formData?.company) ? (
                         <div>
                           <p className="text-xs font-medium text-gray-400">Organization</p>
                           <p className="mt-1 text-sm font-medium text-gray-900">
-                            {(selectedApp.formData?.organizationName as string) || 
-                             (selectedApp.formData?.institution as string) || 
-                             (selectedApp.formData?.company as string)}
+                            {renderUnknown(selectedApp.formData?.organizationName || selectedApp.formData?.institution || selectedApp.formData?.company)}
                           </p>
                         </div>
-                      )}
-                      {(selectedApp.formData?.symptoms || selectedApp.formData?.reason || selectedApp.formData?.medicalCondition) && (
+                      ) : null}
+                      {(selectedApp.formData?.symptoms || selectedApp.formData?.reason || selectedApp.formData?.medicalCondition) ? (
                         <div>
                           <p className="text-xs font-medium text-gray-400">Leave Reason</p>
                           <p className="mt-1 text-sm font-medium text-gray-900">
-                            {(selectedApp.formData?.symptoms as string) || 
-                             (selectedApp.formData?.reason as string) || 
-                             (selectedApp.formData?.medicalCondition as string)}
+                            {renderUnknown(selectedApp.formData?.symptoms || selectedApp.formData?.reason || selectedApp.formData?.medicalCondition)}
                           </p>
                         </div>
-                      )}
+                      ) : null}
                     </div>
                   </div>
 
                   {/* Leave Period */}
                   {(selectedApp.formData?.startDate || selectedApp.formData?.leaveStartDate) && 
-                   (selectedApp.formData?.endDate || selectedApp.formData?.leaveEndDate) && (
+                   (selectedApp.formData?.endDate || selectedApp.formData?.leaveEndDate) ? (
                     <div>
                       <p className="text-xs font-medium text-gray-400">Leave Period</p>
                       <p className="mt-1 text-sm font-medium text-gray-900">
-                        {format(parseISO((selectedApp.formData?.startDate || selectedApp.formData?.leaveStartDate) as string), "EEEE, MMM dd, yyyy")} to {format(parseISO((selectedApp.formData?.endDate || selectedApp.formData?.leaveEndDate) as string), "EEEE, MMM dd, yyyy")}
+                        {format(parseISO(renderUnknown(selectedApp.formData?.startDate || selectedApp.formData?.leaveStartDate)), "EEEE, MMM dd, yyyy")} to {format(parseISO(renderUnknown(selectedApp.formData?.endDate || selectedApp.formData?.leaveEndDate)), "EEEE, MMM dd, yyyy")}
                       </p>
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Assignment Information */}
                   <div>
@@ -955,7 +959,7 @@ export default function DoctorApplicationsPage() {
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-gray-100 px-6 py-5">
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 p-2.5">
+                <div className="rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 p-2.5">
                   <Stethoscope className="h-5 w-5 text-white" />
                 </div>
                 <div>

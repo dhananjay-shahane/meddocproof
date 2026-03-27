@@ -15,6 +15,9 @@ import {
   Award,
   CheckCircle,
   ArrowRight,
+  FileText,
+  Users,
+  Headphones,
 } from "lucide-react";
 
 const certificates = [
@@ -424,7 +427,7 @@ export function CertificatesIndex() {
                 description: "Every certificate includes doctor registration details and QR code verification.",
               },
               {
-                icon: HeadphonesIcon,
+                icon: Headphones,
                 title: "24/7 Support",
                 description: "Round-the-clock assistance from our dedicated support team.",
               },

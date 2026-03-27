@@ -92,7 +92,7 @@ export default function DoctorFinancialsPage() {
   }
 
   const totalCertificates = data?.earningsChart?.length ?? 0;
-  const completedCerts = data?.recentTransactions?.filter(t => t.type === "CERTIFICATE_EARNING")?.length ?? 0;
+  const completedCerts = data?.recentTransactions?.filter(t => t.type === "doctor_payout")?.length ?? 0;
   const inProgressCerts = 0;
   const totalEarningsAmount = data?.wallet?.totalEarnings ?? 0;
   const totalCertCount = data?.recentTransactions?.length ?? 0;

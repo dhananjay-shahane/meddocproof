@@ -212,10 +212,10 @@ export function useDoctorRegistration() {
         bio: formData.bio || undefined,
         registrationNumber: formData.registrationNumber,
         medicalCouncil: formData.medicalCouncil || undefined,
-        registrationYear: formData.registrationYear ? parseInt(formData.registrationYear) : undefined,
+        registrationYear: formData.registrationYear ? parseInt(formData.registrationYear, 10) || undefined : undefined,
         specialization: formData.specialization,
         qualification: formData.qualification,
-        experience: parseInt(formData.experience),
+        experience: parseInt(formData.experience, 10) || 0,
         hospitalAffiliation: formData.hospitalAffiliation || undefined,
         address: formData.address || undefined,
         city: formData.city || undefined,
@@ -233,8 +233,8 @@ export function useDoctorRegistration() {
       router.push(`/doctor/pending-approval?email=${encodeURIComponent(formData.email)}`);
       return true;
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } };
-      toast.error(err.response?.data?.message || "Registration failed. Please try again.");
+      const { getErrorMessage } = await import("@/lib/utils");
+      toast.error(getErrorMessage(error, "Registration failed. Please try again."));
       return false;
     } finally {
       setIsSubmitting(false);

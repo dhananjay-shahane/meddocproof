@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { TransactionsPageData, TransactionFilters } from "@/types";
 
 interface UseAdminTransactionsResult {
@@ -39,8 +40,7 @@ export function useAdminTransactions(): UseAdminTransactionsResult {
       const res = await api.get(`/admin/transactions?${params.toString()}`);
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load transactions");
+      setError(getErrorMessage(err, "Failed to load transactions"));
     } finally {
       setLoading(false);
     }

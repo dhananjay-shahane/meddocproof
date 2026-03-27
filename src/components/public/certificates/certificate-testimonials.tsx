@@ -84,7 +84,7 @@ export function CertificateTestimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-2xl p-6 lg:p-8 mb-12"
+          className="bg-linear-to-r from-teal-600 to-teal-700 rounded-2xl p-6 lg:p-8 mb-12"
         >
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { DashboardStats } from "@/types";
 
 interface UseDashboardResult {
@@ -23,8 +24,7 @@ export function useDashboard(autoRefreshMs = 60000): UseDashboardResult {
       const res = await api.get("/admin/dashboard");
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load dashboard data");
+      setError(getErrorMessage(err, "Failed to load dashboard data"));
     } finally {
       setLoading(false);
     }

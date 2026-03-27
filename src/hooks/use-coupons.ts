@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type {
   Coupon,
   CouponStats,
@@ -54,8 +55,7 @@ export function useCoupons({ filters, page, limit = 20 }: UseCouponsOptions): Us
       setData(res.data.data);
       if (res.data.stats) setStats(res.data.stats);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load coupons");
+      setError(getErrorMessage(err, "Failed to load coupons"));
     } finally {
       setLoading(false);
     }

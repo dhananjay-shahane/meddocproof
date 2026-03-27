@@ -45,8 +45,14 @@ export async function GET(request: NextRequest) {
     // Date range filter
     if (dateFrom || dateTo) {
       where.createdAt = {};
-      if (dateFrom) where.createdAt.gte = new Date(dateFrom);
-      if (dateTo) where.createdAt.lte = new Date(dateTo + "T23:59:59.999Z");
+      if (dateFrom) {
+        const from = new Date(dateFrom);
+        if (!isNaN(from.getTime())) where.createdAt.gte = from;
+      }
+      if (dateTo) {
+        const to = new Date(dateTo + "T23:59:59.999Z");
+        if (!isNaN(to.getTime())) where.createdAt.lte = to;
+      }
     }
 
     // Search filter

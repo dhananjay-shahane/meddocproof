@@ -3,7 +3,11 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
 if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
-  console.error("FATAL: JWT_SECRET environment variable is not set in production!");
+  throw new Error("FATAL: JWT_SECRET environment variable is not set in production!");
+}
+
+if (!process.env.JWT_SECRET && process.env.NODE_ENV !== "production") {
+  console.warn("[Middleware] JWT_SECRET not set — using insecure dev-only fallback");
 }
 
 const JWT_SECRET = new TextEncoder().encode(

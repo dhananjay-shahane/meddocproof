@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { DoctorRegistration, PaginatedResponse } from "@/types";
 
 interface UseDoctorRegistrationsResult {
@@ -22,8 +23,7 @@ export function useDoctorRegistrations(page = 1, limit = 20): UseDoctorRegistrat
       const res = await api.get(`/admin/doctors/registrations?page=${page}&limit=${limit}`);
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load registrations");
+      setError(getErrorMessage(err, "Failed to load registrations"));
     } finally {
       setLoading(false);
     }

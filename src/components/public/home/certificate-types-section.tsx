@@ -105,20 +105,20 @@ export function CertificateTypesSection() {
     <section id="certificates" className="relative overflow-hidden bg-slate-50 py-24 lg:py-32">
 
       {/* Modern Background Decorations */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:32px_32px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-size-[32px_32px]" />
 
       {/* Gradient Orbs */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.4 }}
         transition={{ duration: 1.5 }}
-        className="pointer-events-none absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-primary/20 to-blue-400/20 blur-[120px]"
+        className="pointer-events-none absolute -left-40 -top-40 h-150 w-150 rounded-full bg-linear-to-r from-primary/20 to-blue-400/20 blur-[120px]"
       />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.3 }}
         transition={{ duration: 1.5, delay: 0.5 }}
-        className="pointer-events-none absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-cyan-400/20 to-primary/20 blur-[120px]"
+        className="pointer-events-none absolute -right-40 bottom-0 h-150 w-150 rounded-full bg-linear-to-r from-cyan-400/20 to-primary/20 blur-[120px]"
       />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
@@ -294,7 +294,7 @@ function CertificateCard({
           {/* Bottom Gradient Bar */}
           <div 
             className={`
-              relative z-10 h-1 w-full bg-gradient-to-r transition-all duration-300
+              relative z-10 h-1 w-full bg-linear-to-r transition-all duration-300
               ${isActive 
                 ? 'from-blue-300 via-blue-400 to-blue-300' 
                 : 'from-primary via-blue-500 to-primary'

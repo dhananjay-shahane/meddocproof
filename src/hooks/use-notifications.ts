@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { NotificationListItem, NotificationFiltersState, PaginatedResponse } from "@/types";
 
 interface UseNotificationsOptions {
@@ -44,8 +45,7 @@ export function useNotifications({ filters, page, limit = 20 }: UseNotifications
       setData(res.data.data);
       if (res.data.unreadCount !== undefined) setUnreadCount(res.data.unreadCount);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load notifications");
+      setError(getErrorMessage(err, "Failed to load notifications"));
     } finally {
       setLoading(false);
     }

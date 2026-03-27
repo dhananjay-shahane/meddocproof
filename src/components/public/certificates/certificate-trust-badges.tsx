@@ -132,7 +132,7 @@ export function CertificateTrustBadges() {
               >
                 <div className={`${colors.bg} ${colors.border} border rounded-2xl p-6 h-full hover:shadow-lg transition-shadow`}>
                   <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 ${colors.iconBg} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                    <div className={`w-12 h-12 ${colors.iconBg} rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
                       <Icon className={`w-6 h-6 ${colors.text}`} />
                     </div>
                     <div>
@@ -156,7 +156,7 @@ export function CertificateTrustBadges() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-6 lg:p-8 text-center"
+          className="mt-12 bg-linear-to-r from-gray-900 to-gray-800 rounded-2xl p-6 lg:p-8 text-center"
         >
           <h3 className="text-xl font-bold text-white mb-3">
             Verify Any Certificate

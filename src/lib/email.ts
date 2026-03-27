@@ -15,6 +15,18 @@ interface EmailOptions {
   text?: string;
 }
 
+/**
+ * Escape HTML special characters to prevent XSS in email templates
+ */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // Check if email is configured
 export function isEmailConfigured(): boolean {
   return !!(
@@ -85,7 +97,7 @@ export const emailTemplates = {
             <h1>Registration Received</h1>
           </div>
           <div class="content">
-            <p>Dear Dr. ${doctorName},</p>
+            <p>Dear Dr. ${escapeHtml(doctorName)},</p>
             <p>Thank you for registering with <strong>MedDocProof</strong>. We have received your application and our admin team is reviewing your credentials.</p>
             
             <div class="highlight">
@@ -97,7 +109,7 @@ export const emailTemplates = {
               </ul>
             </div>
             
-            <p><strong>Your registered email:</strong> ${email}</p>
+            <p><strong>Your registered email:</strong> ${escapeHtml(email)}</p>
             
             <p>If you have any questions, please don't hesitate to contact our support team.</p>
             
@@ -152,10 +164,10 @@ The MedDocProof Team
             <h1>🎉 Account Approved!</h1>
           </div>
           <div class="content">
-            <p>Dear Dr. ${doctorName},</p>
+            <p>Dear Dr. ${escapeHtml(doctorName)},</p>
             <p>Great news! Your MedDocProof account has been <strong>approved</strong>.</p>
             <p>You can now log in to your doctor portal and start accepting certificate requests from patients.</p>
-            <a href="${loginUrl}" class="btn">Login to Your Account</a>
+            <a href="${escapeHtml(loginUrl)}" class="btn">Login to Your Account</a>
             <p style="margin-top: 20px;">If you have any questions, our support team is here to help.</p>
             <p>Welcome aboard!</p>
             <p>Best regards,<br>The MedDocProof Team</p>
@@ -207,9 +219,9 @@ The MedDocProof Team
             <h1>Registration Update</h1>
           </div>
           <div class="content">
-            <p>Dear Dr. ${doctorName},</p>
+            <p>Dear Dr. ${escapeHtml(doctorName)},</p>
             <p>We regret to inform you that your registration with MedDocProof could not be approved at this time.</p>
-            ${reason ? `<div class="reason"><strong>Reason:</strong> ${reason}</div>` : ""}
+            ${reason ? `<div class="reason"><strong>Reason:</strong> ${escapeHtml(reason)}</div>` : ""}
             <p>If you believe this is an error or would like to provide additional documentation, please contact our support team.</p>
             <p>Best regards,<br>The MedDocProof Team</p>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type {
   DoctorApplicationListItem,
   DoctorApplicationFiltersState,
@@ -70,16 +71,15 @@ export function useDoctorApplications(): UseDoctorApplicationsResult {
       const res = await api.get(`/doctor/applications?${params}`);
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string }, status?: number } };
-      const status = e.response?.status;
-      const message = e.response?.data?.message;
+      const message = getErrorMessage(err, "Failed to load applications");
+      const status = typeof err === "object" && err !== null ? (err as { response?: { status?: number } }).response?.status : undefined;
       
       if (status === 401) {
         setError("Session expired. Please login again.");
       } else if (status === 403) {
         setError(message || "Access denied. Your account may not be approved.");
       } else {
-        setError(message || "Failed to load applications");
+        setError(message);
       }
       console.error("Doctor applications fetch error:", status, message);
     } finally {

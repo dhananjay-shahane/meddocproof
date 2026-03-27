@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type {
   CertificateListItem,
   CertificateStats,
@@ -50,8 +51,7 @@ export function useCertificates({ filters, page, limit = 20 }: UseCertificatesOp
       setData(res.data.data);
       if (res.data.stats) setStats(res.data.stats);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load certificates");
+      setError(getErrorMessage(err, "Failed to load certificates"));
     } finally {
       setLoading(false);
     }

@@ -1,26 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { z } from "zod";
+
+const ReviewSchema = z.object({
+  title: z.string().min(1).max(200),
+  message: z.string().min(1).max(2000),
+  date: z.string().refine((d) => !isNaN(new Date(d).getTime()), "Invalid date"),
+  rating: z.number().min(1).max(5).optional().default(5),
+});
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, message, date, rating } = body;
+    const parsed = ReviewSchema.safeParse(body);
 
-    if (!title || !message || !date) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: "Title, message, and date are required" },
+        { success: false, message: parsed.error.issues[0]?.message || "Invalid input" },
         { status: 400 }
       );
     }
 
-    const ratingValue = Math.min(5, Math.max(1, Number(rating) || 5));
+    const { title, message, date, rating } = parsed.data;
 
     await prisma.review.create({
       data: {
         title,
         message,
         date: new Date(date),
-        rating: ratingValue,
+        rating,
         approved: false,
       },
     });

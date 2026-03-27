@@ -1,6 +1,9 @@
-import type { Prisma, PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient, Notification } from "@prisma/client";
 
-type TransactionClient = PrismaClient | Prisma.TransactionClient;
+type TransactionClient = Omit<
+  PrismaClient,
+  "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+>;
 
 interface CreateNotificationParams {
   userId?: string;
@@ -9,15 +12,14 @@ interface CreateNotificationParams {
   type: string;
   title: string;
   message: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Prisma.InputJsonValue;
 }
 
 export async function createNotification(
   client: TransactionClient,
   params: CreateNotificationParams
-) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (client as any).notification.create({
+): Promise<Notification> {
+  return client.notification.create({
     data: {
       userId: params.userId ?? null,
       doctorId: params.doctorId ?? null,
@@ -33,7 +35,7 @@ export async function createNotification(
 export async function createBulkNotifications(
   client: TransactionClient,
   notifications: CreateNotificationParams[]
-) {
+): Promise<Notification[]> {
   return Promise.all(
     notifications.map((n) => createNotification(client, n))
   );

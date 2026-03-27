@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { DoctorFinancialSummary } from "@/types";
 import { toast } from "sonner";
 
@@ -26,8 +27,7 @@ export function useDoctorFinancials(): UseDoctorFinancialsResult {
       const res = await api.get("/doctor/financials");
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load financials");
+      setError(getErrorMessage(err, "Failed to load financials"));
     } finally {
       setLoading(false);
     }
@@ -46,9 +46,8 @@ export function useDoctorFinancials(): UseDoctorFinancialsResult {
         await fetchData();
         return true;
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
         toast.error(
-          e.response?.data?.message || "Failed to submit withdrawal"
+          getErrorMessage(err, "Failed to submit withdrawal")
         );
         return false;
       } finally {

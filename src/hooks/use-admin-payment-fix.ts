@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { PaymentFixItem } from "@/types";
 
 interface UseAdminPaymentFixResult {
@@ -25,8 +26,7 @@ export function useAdminPaymentFix(): UseAdminPaymentFixResult {
       const res = await api.get("/admin/payment-fix");
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load payment issues");
+      setError(getErrorMessage(err, "Failed to load payment issues"));
     } finally {
       setLoading(false);
     }

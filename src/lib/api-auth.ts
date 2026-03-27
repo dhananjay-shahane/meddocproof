@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken, extractToken, type JWTPayload } from "@/lib/auth";
+import type { Permissions } from "@/types";
 import prisma from "@/lib/prisma";
 
 /**
@@ -24,7 +25,7 @@ export interface AdminAuthResult {
     fullName: string;
     email: string;
     role: string;
-    permissions: unknown;
+    permissions: Permissions | null;
   };
 }
 
@@ -52,17 +53,26 @@ export async function validateAdminRequest(
     );
   }
 
-  const adminUser = await prisma.adminUser.findUnique({
-    where: { id: payload.id },
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      role: true,
-      permissions: true,
-      isActive: true,
-    },
-  });
+  let adminUser;
+  try {
+    adminUser = await prisma.adminUser.findUnique({
+      where: { id: payload.id },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+        permissions: true,
+        isActive: true,
+      },
+    });
+  } catch (error) {
+    console.error("Admin auth DB error:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 
   if (!adminUser || !adminUser.isActive) {
     return NextResponse.json(
@@ -71,7 +81,7 @@ export async function validateAdminRequest(
     );
   }
 
-  return { payload, adminUser };
+  return { payload, adminUser: { ...adminUser, permissions: adminUser.permissions as Permissions | null } };
 }
 
 // ============================================
@@ -116,18 +126,27 @@ export async function validateDoctorRequest(
     );
   }
 
-  const doctorUser = await prisma.doctor.findUnique({
-    where: { id: payload.id },
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      status: true,
-      isActive: true,
-      specialization: true,
-      registrationNumber: true,
-    },
-  });
+  let doctorUser;
+  try {
+    doctorUser = await prisma.doctor.findUnique({
+      where: { id: payload.id },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        status: true,
+        isActive: true,
+        specialization: true,
+        registrationNumber: true,
+      },
+    });
+  } catch (error) {
+    console.error("Doctor auth DB error:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 
   if (!doctorUser || !doctorUser.isActive) {
     console.log("Doctor auth: Doctor not found or inactive", payload.id);
@@ -182,16 +201,25 @@ export async function validateUserRequest(
     );
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: payload.id },
-    select: {
-      id: true,
-      fullName: true,
-      phoneNumber: true,
-      email: true,
-      status: true,
-    },
-  });
+  let user;
+  try {
+    user = await prisma.user.findUnique({
+      where: { id: payload.id },
+      select: {
+        id: true,
+        fullName: true,
+        phoneNumber: true,
+        email: true,
+        status: true,
+      },
+    });
+  } catch (error) {
+    console.error("User auth DB error:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 
   if (!user || user.status !== "active") {
     return NextResponse.json(

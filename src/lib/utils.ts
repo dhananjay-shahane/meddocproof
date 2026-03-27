@@ -130,3 +130,19 @@ export function formatStatusLabel(status: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+/**
+ * Extract a human-readable error message from an unknown error.
+ * Handles Axios errors, standard Error objects, and unknown types.
+ */
+export function getErrorMessage(err: unknown, fallback = "An unexpected error occurred"): string {
+  if (typeof err === "object" && err !== null) {
+    // Axios-style error
+    const axiosErr = err as { response?: { data?: { message?: string } }; message?: string };
+    if (axiosErr.response?.data?.message) return axiosErr.response.data.message;
+    if (axiosErr.message) return axiosErr.message;
+  }
+  if (err instanceof Error) return err.message;
+  if (typeof err === "string") return err;
+  return fallback;
+}

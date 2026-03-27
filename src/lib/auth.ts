@@ -1,12 +1,20 @@
 import { SignJWT, jwtVerify } from "jose";
 import { hash, compare } from "bcryptjs";
+import { randomInt } from "crypto";
 
 function getJwtSecret() {
   const secret = process.env.JWT_SECRET;
-  if (!secret && process.env.NODE_ENV === "production") {
-    throw new Error("FATAL: JWT_SECRET environment variable is not set in production!");
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("FATAL: JWT_SECRET environment variable is not set in production!");
+    }
+    if (process.env.NODE_ENV === "test") {
+      return new TextEncoder().encode("test-secret-key-do-not-use");
+    }
+    console.warn("[Auth] JWT_SECRET not set — using insecure dev-only fallback");
+    return new TextEncoder().encode("meddocproof-secret-key-dev-only");
   }
-  return new TextEncoder().encode(secret || "meddocproof-secret-key-dev-only");
+  return new TextEncoder().encode(secret);
 }
 
 const JWT_EXPIRY = "7d";
@@ -17,6 +25,19 @@ export interface JWTPayload {
   phoneNumber?: string;
   role: string;
   type: "admin" | "doctor" | "user";
+}
+
+const VALID_TYPES = new Set(["admin", "doctor", "user"]);
+
+function isJWTPayload(value: unknown): value is JWTPayload {
+  if (typeof value !== "object" || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return (
+    typeof obj.id === "string" &&
+    typeof obj.role === "string" &&
+    typeof obj.type === "string" &&
+    VALID_TYPES.has(obj.type)
+  );
 }
 
 /**
@@ -36,7 +57,8 @@ export async function createToken(payload: JWTPayload): Promise<string> {
 export async function verifyToken(token: string): Promise<JWTPayload | null> {
   try {
     const { payload } = await jwtVerify(token, getJwtSecret());
-    return payload as unknown as JWTPayload;
+    if (!isJWTPayload(payload)) return null;
+    return payload;
   } catch {
     return null;
   }
@@ -68,13 +90,12 @@ export function extractToken(authHeader: string | null): string | null {
 }
 
 /**
- * Generate a random OTP
+ * Generate a random OTP using cryptographically secure random numbers
  */
 export function generateOTP(length: number = 6): string {
-  const digits = "0123456789";
   let otp = "";
   for (let i = 0; i < length; i++) {
-    otp += digits[Math.floor(Math.random() * 10)];
+    otp += randomInt(0, 10).toString();
   }
   return otp;
 }

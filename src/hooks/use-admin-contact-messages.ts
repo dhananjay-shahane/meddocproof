@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 
 export interface AdminContactMessage {
   id: string;
@@ -69,8 +70,7 @@ export function useAdminContactMessages(): UseAdminContactMessagesResult {
         if (res.data.unreadCount !== undefined) setUnreadCount(res.data.unreadCount);
       }
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load contact messages");
+      setError(getErrorMessage(err, "Failed to load contact messages"));
     } finally {
       setLoading(false);
     }

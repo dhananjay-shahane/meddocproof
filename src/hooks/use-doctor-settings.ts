@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type {
   DoctorSettingsFormData,
   DoctorNotificationPreferences,
@@ -39,8 +40,7 @@ export function useDoctorSettings(): UseDoctorSettingsResult {
       const res = await api.get("/doctor/settings");
       setData(res.data.data);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load settings");
+      setError(getErrorMessage(err, "Failed to load settings"));
     } finally {
       setLoading(false);
     }
@@ -59,8 +59,7 @@ export function useDoctorSettings(): UseDoctorSettingsResult {
         await fetchData();
         return true;
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
-        toast.error(e.response?.data?.message || "Failed to update profile");
+        toast.error(getErrorMessage(err, "Failed to update profile"));
         return false;
       } finally {
         setSaving(false);
@@ -80,8 +79,7 @@ export function useDoctorSettings(): UseDoctorSettingsResult {
         toast.success("Password changed successfully");
         return true;
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
-        toast.error(e.response?.data?.message || "Failed to change password");
+        toast.error(getErrorMessage(err, "Failed to change password"));
         return false;
       } finally {
         setSaving(false);
@@ -104,9 +102,8 @@ export function useDoctorSettings(): UseDoctorSettingsResult {
         await fetchData();
         return true;
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
         toast.error(
-          e.response?.data?.message || "Failed to update bank details"
+          getErrorMessage(err, "Failed to update bank details")
         );
         return false;
       } finally {
@@ -125,10 +122,8 @@ export function useDoctorSettings(): UseDoctorSettingsResult {
         await fetchData();
         return true;
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string } } };
         toast.error(
-          e.response?.data?.message ||
-            "Failed to update notification preferences"
+          getErrorMessage(err, "Failed to update notification preferences")
         );
         return false;
       } finally {

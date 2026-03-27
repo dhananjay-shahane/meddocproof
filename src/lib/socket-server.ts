@@ -20,10 +20,12 @@ declare global {
 export function initSocketServer(httpServer: HTTPServer): IOServer {
   if (global._io) return global._io;
 
+  const corsOrigin = process.env.NEXT_PUBLIC_APP_URL;
+
   const io = new IOServer(httpServer, {
     path: "/api/socket/io",
     cors: {
-      origin: process.env.NEXT_PUBLIC_APP_URL || "*",
+      origin: corsOrigin || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : false),
       methods: ["GET", "POST"],
       credentials: true,
     },

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type {
   Application,
   PaginatedResponse,
@@ -67,8 +68,7 @@ export function useApplications({
         setTabCounts(res.data.tabCounts);
       }
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load applications");
+      setError(getErrorMessage(err, "Failed to load applications"));
     } finally {
       setLoading(false);
     }

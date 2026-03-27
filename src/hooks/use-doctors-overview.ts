@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type { Doctor, DoctorsSummary, DoctorFiltersState, PaginatedResponse } from "@/types";
 
 interface UseDoctorsOverviewOptions {
@@ -49,8 +50,7 @@ export function useDoctorsOverview({
       setData(res.data.data);
       if (res.data.summary) setSummary(res.data.summary);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load doctors");
+      setError(getErrorMessage(err, "Failed to load doctors"));
     } finally {
       setLoading(false);
     }

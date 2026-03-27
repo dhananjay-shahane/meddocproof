@@ -31,10 +31,17 @@ app.prepare().then(() => {
   });
 
   // ─── Attach Socket.io ──────────────────────────────────────
+  const corsOrigin = process.env.NEXT_PUBLIC_APP_URL;
+  if (!corsOrigin && !dev) {
+    console.warn(
+      "WARNING: NEXT_PUBLIC_APP_URL is not set. Socket.io CORS will reject all cross-origin requests in production."
+    );
+  }
+
   const io = new IOServer(httpServer, {
     path: "/api/socket/io",
     cors: {
-      origin: process.env.NEXT_PUBLIC_APP_URL || "*",
+      origin: corsOrigin || (dev ? "http://localhost:3000" : false),
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -56,4 +63,18 @@ app.prepare().then(() => {
     console.log(`> Ready on http://${hostname}:${port} [${dev ? "dev" : "prod"}]`);
     console.log(`> Socket.io attached at /api/socket/io`);
   });
+
+  // Graceful shutdown
+  const shutdown = () => {
+    console.log("Shutting down...");
+    io.close();
+    httpServer.close(() => process.exit(0));
+    // Force exit after 10 seconds
+    setTimeout(() => process.exit(1), 10_000).unref();
+  };
+  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", shutdown);
+}).catch((err) => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
 });

@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { generateOTP } from "@/lib/auth";
+import { z } from "zod";
 
 const FAST2SMS_API_KEY = process.env.FAST2SMS_API_KEY;
+
+// E.164 format: + followed by 1-15 digits
+const PhoneSchema = z.object({
+  phoneNumber: z
+    .string()
+    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format"),
+});
+
+// Rate limit: 1 OTP per phone number per 60 seconds
+const OTP_COOLDOWN_MS = 60 * 1000;
 
 async function sendOTPviaSMS(phoneNumber: string, otp: string): Promise<boolean> {
   if (!FAST2SMS_API_KEY) {
@@ -40,12 +51,30 @@ async function sendOTPviaSMS(phoneNumber: string, otp: string): Promise<boolean>
 
 export async function POST(request: NextRequest) {
   try {
-    const { phoneNumber } = await request.json();
+    const body = await request.json();
+    const parsed = PhoneSchema.safeParse(body);
 
-    if (!phoneNumber) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: "Phone number is required" },
+        { success: false, message: parsed.error.issues[0]?.message || "Invalid phone number" },
         { status: 400 }
+      );
+    }
+
+    const { phoneNumber } = parsed.data;
+
+    // Rate limiting: check for recent OTP
+    const recentOtp = await prisma.otpVerification.findFirst({
+      where: {
+        phoneNumber,
+        createdAt: { gt: new Date(Date.now() - OTP_COOLDOWN_MS) },
+      },
+    });
+
+    if (recentOtp) {
+      return NextResponse.json(
+        { success: false, message: "Please wait before requesting another OTP" },
+        { status: 429 }
       );
     }
 

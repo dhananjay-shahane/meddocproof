@@ -115,7 +115,7 @@ export function ContactMessageList({
             <div
               key={msg.id}
               className={`rounded-xl border bg-card p-5 shadow-sm transition-colors ${
-                !msg.read ? "border-primary/20 bg-primary/[2%]" : ""
+                !msg.read ? "border-primary/20 bg-primary/2" : ""
               }`}
             >
               <div className="flex items-start justify-between gap-4">

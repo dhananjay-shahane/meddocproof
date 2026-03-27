@@ -180,7 +180,7 @@ export default function PaymentTransactionsPage() {
         <div className="px-6 pb-4">
           <div className="flex flex-wrap items-center gap-3">
             {/* Search */}
-            <div className="relative flex-1 min-w-[160px] max-w-xs">
+            <div className="relative flex-1 min-w-40 max-w-xs">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"

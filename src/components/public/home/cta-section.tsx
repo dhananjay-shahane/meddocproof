@@ -32,7 +32,7 @@ export const CTASection = ({
   return (
     <section className="relative overflow-hidden bg-linear-to-t from-primary/40 via-primary/40 to-green-500/40">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative flex min-h-[320px] items-center lg:min-h-[420px] xl:min-h-[480px]">
+        <div className="relative flex min-h-80 items-center lg:min-h-105 xl:min-h-120">
           <div className="grid w-full items-center gap-6 lg:grid-cols-2">
             <FadeIn direction="left">
               <div className="max-w-xl py-10 text-center sm:py-12 sm:text-left lg:py-16">
@@ -58,7 +58,7 @@ export const CTASection = ({
 
           <div
             className={cn(
-              "absolute -right-4 bottom-0 z-10 hidden h-[480px] w-[420px] lg:block xl:h-[450px] xl:w-[480px] 2xl:h-[500px] 2xl:w-[540px]",
+              "absolute -right-4 bottom-0 z-10 hidden h-120 w-105 lg:block xl:h-112.5 xl:w-120 2xl:h-125 2xl:w-135",
               imageWrapperClassName
             )}
           >

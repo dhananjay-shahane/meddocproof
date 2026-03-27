@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import type {
   UserListItem,
   UserStats,
@@ -50,8 +51,7 @@ export function useUsers({ filters, page, limit = 50 }: UseUsersOptions): UseUse
       setData(res.data.data);
       if (res.data.stats) setStats(res.data.stats);
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load users");
+      setError(getErrorMessage(err, "Failed to load users"));
     } finally {
       setLoading(false);
     }

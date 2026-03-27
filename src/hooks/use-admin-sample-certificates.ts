@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 
 export interface SampleCertificateItem {
   id: string;
@@ -35,8 +36,7 @@ export function useAdminSampleCertificates(): UseAdminSampleCertificatesResult {
         setSamples(res.data.data);
       }
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load sample certificates");
+      setError(getErrorMessage(err, "Failed to load sample certificates"));
     } finally {
       setLoading(false);
     }

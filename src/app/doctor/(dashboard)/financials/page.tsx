@@ -215,7 +215,7 @@ export default function DoctorFinancialsPage() {
       </div>
 
       {/* Financial Summary */}
-      <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50/50 p-6">
+      <div className="rounded-2xl border border-blue-100 bg-linear-to-br from-blue-50 to-indigo-50/50 p-6">
         <h3 className="text-base font-semibold text-gray-900">Financial Summary</h3>
         <p className="mt-0.5 text-xs text-gray-500">Your wallet calculation breakdown</p>
 
@@ -341,7 +341,7 @@ export default function DoctorFinancialsPage() {
       </div>
 
       {/* Certificate Completion Overview */}
-      <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 p-6">
+      <div className="rounded-2xl border border-blue-100 bg-linear-to-br from-blue-50/50 to-indigo-50/30 p-6">
         <div className="flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-blue-600" />
           <div>

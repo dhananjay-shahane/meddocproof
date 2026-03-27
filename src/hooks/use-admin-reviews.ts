@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 
 export interface AdminReview {
   id: string;
@@ -77,8 +78,7 @@ export function useAdminReviews(): UseAdminReviewsResult {
         if (res.data.stats) setStats(res.data.stats);
       }
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      setError(e.response?.data?.message || "Failed to load reviews");
+      setError(getErrorMessage(err, "Failed to load reviews"));
     } finally {
       setLoading(false);
     }

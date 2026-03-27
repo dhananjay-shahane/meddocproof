@@ -7,11 +7,18 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  const connectionString = process.env.DATABASE_URL || "";
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error(
+      "DATABASE_URL environment variable is not set. Cannot connect to database."
+    );
+  }
+
   const pool = new Pool({
     connectionString,
-    // Render.com (and most hosted Postgres) require SSL for external connections
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    ssl: process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== "false" }
+      : false,
   });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });

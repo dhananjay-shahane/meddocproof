@@ -118,7 +118,7 @@ export default function SettingsPage() {
         return {
           ...m,
           price: Number(certs[`${k}Fee`]) || [299, 499, 399][i],
-          enabled: typeof certs[`${k}Enabled`] === "boolean" ? certs[`${k}Enabled`] : (i < 2),
+          enabled: typeof certs[`${k}Enabled`] === "boolean" ? (certs[`${k}Enabled`] as boolean) : (i < 2),
         };
       }));
     }

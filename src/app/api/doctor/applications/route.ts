@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
+import type { ApplicationStatus, CertificateType } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateDoctorRequest, isAuthError } from "@/lib/api-auth";
 
@@ -18,9 +19,9 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
     const search = searchParams.get("search") || "";
-    const status = searchParams.get("status") || "";
+    const status = (searchParams.get("status") || "") as ApplicationStatus | "";
     const tab = searchParams.get("tab") || "pending"; // "pending" or "completed"
-    const certificateType = searchParams.get("certificateType") || "";
+    const certificateType = (searchParams.get("certificateType") || "") as CertificateType | "";
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = (searchParams.get("sortOrder") || "desc") as "asc" | "desc";
 
@@ -44,11 +45,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (status) {
-      where.status = status;
+      where.status = status as ApplicationStatus;
     }
 
     if (certificateType) {
-      where.certificateType = certificateType;
+      where.certificateType = certificateType as CertificateType;
     }
 
     if (search) {

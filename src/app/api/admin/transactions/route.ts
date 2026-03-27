@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateAdminRequest, isAuthError } from "@/lib/api-auth";
 import type { TransactionType } from "@prisma/client";
@@ -19,8 +20,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
 
     // Build filter
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = {};
+    const where: Prisma.TransactionWhereInput = {};
 
     if (type) where.type = type;
     if (status) where.status = status;

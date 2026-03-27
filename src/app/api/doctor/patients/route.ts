@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateDoctorRequest, isAuthError } from "@/lib/api-auth";
 
@@ -18,8 +19,7 @@ export async function GET(request: NextRequest) {
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
     // Build where clause based on tab
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let where: any = { assignedDoctorId: doctorId };
+    let where: Prisma.ApplicationWhereInput = { assignedDoctorId: doctorId };
 
     const pendingStatuses = [
       "assigned",

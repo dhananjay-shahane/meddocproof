@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateDoctorRequest, isAuthError } from "@/lib/api-auth";
 
@@ -23,8 +24,7 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = (searchParams.get("sortOrder") || "desc") as "asc" | "desc";
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = { assignedDoctorId: doctorId };
+    const where: Prisma.ApplicationWhereInput = { assignedDoctorId: doctorId };
 
     // Filter by tab
     if (tab === "pending") {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateAdminRequest, isAuthError } from "@/lib/api-auth";
 
@@ -11,8 +12,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get("type") || "";
     const active = searchParams.get("active");
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = {};
+    const where: Prisma.CertificateTemplateWhereInput = {};
     if (type) where.type = type;
     if (active === "true") where.isActive = true;
     if (active === "false") where.isActive = false;

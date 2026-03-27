@@ -100,9 +100,9 @@ export async function GET(request: NextRequest) {
       totalDoctors,
       activeDoctors,
       pendingApprovals,
-      totalEarnings: walletAgg._sum.totalEarnings || 0,
-      avgRating: Number((docAgg._avg.avgRating || 0).toFixed(1)),
-      totalCertificatesIssued: docAgg._sum.completedCertificates || 0,
+      totalEarnings: walletAgg._sum?.totalEarnings ?? 0,
+      avgRating: Number((docAgg._avg?.avgRating ?? 0).toFixed(1)),
+      totalCertificatesIssued: docAgg._sum?.completedCertificates ?? 0,
     };
 
     return NextResponse.json({

@@ -128,8 +128,7 @@ export async function POST(
 
     let assessment;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const prismaData = assessmentData as any;
+    const prismaData = assessmentData as Prisma.MedicalAssessmentUncheckedCreateInput;
 
     if (application.medicalAssessmentId) {
       // Update existing assessment
